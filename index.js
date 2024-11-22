@@ -11,9 +11,9 @@ app.set('views', path.join(__dirname, 'views'));
 // ตั้งค่า static directory สำหรับไฟล์ CSS และอื่นๆ
 app.use(express.static(path.join(__dirname, 'public')));
 
-// เส้นทางหลักที่จะแสดงหน้า login
+
 app.get('/', (req, res) => {
-  res.render('login');
+  res.render('AdminRequestList');
 });
 
 const port = 3000;

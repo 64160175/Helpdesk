@@ -1,0 +1,32 @@
+npm init -y
+npm install express
+npm -g install express
+npm install express-session
+npm install -g nodemon
+npm install mysql
+npm install ejs
+
+nodemon index.js
+
+
+---------------------------
+
+#express
+npm install express mysql body-parser ejs
+npm install express-flash
+npm install -g nodemon
+npm install express-session
+npm install bcrypt
+npm install multer --save
+
+nodemon index.js
+
+
+
+#bootstrap
+npm i bootstrap@5.3.3
+
+
+ngrok
+goto CMD
+ngrok http http://localhost:3000
