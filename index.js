@@ -13,7 +13,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 app.get('/', (req, res) => {
-  res.render('AdminRequestList');
+  res.render('UserHome');
 });
 
 const port = 3000;
