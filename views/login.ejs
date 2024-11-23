@@ -20,7 +20,7 @@
                 <div class="container">
                     <div class="row justify-content-center">
                         <div class="col-lg-5">
-                            <br><br>
+                            <br>
                             <h2 class="display-4 text-center mt-4 ">ระบบเบิกอุปกรณ์สำนักงาน</h2>
 
                             <div class="card shadow-lg border-0 rounded-lg mt-5">
@@ -28,20 +28,17 @@
                                     <h3 class="text-center my-2 prompt-regular">เข้าสู่ระบบ</h3>
                                 </div>
                                 <div class="card-body">
-                                    <form>
+                                    <form action="/login" method="POST">
                                         <div class="form-floating mb-3">
-                                            <input class="form-control prompt-light" id="inputusername" type="username"
-                                                placeholder="ชื่อผู้ใช้" />
-                                            <label for="inputEmail" class="prompt-light">ชื่อผู้ใช้</label>
+                                            <input class="form-control prompt-light" id="inputusername" name="username" type="text" placeholder="ชื่อผู้ใช้" required />
+                                            <label for="inputusername" class="prompt-light">ชื่อผู้ใช้</label>
                                         </div>
                                         <div class="form-floating mb-3">
-                                            <input class="form-control prompt-light" id="inputPassword" type="password"
-                                                placeholder="รหัสผ่าน" />
+                                            <input class="form-control prompt-light" id="inputPassword" name="password" type="password" placeholder="รหัสผ่าน" required />
                                             <label for="inputPassword" class="prompt-light">รหัสผ่าน</label>
                                         </div>
-
                                         <div class="text-center">
-                                            <a class="btn btn-primary prompt-medium" href="index.html">เข้าสู่ระบบ</a>
+                                            <button type="submit" class="btn btn-primary prompt-medium">เข้าสู่ระบบ</button>
                                         </div>
                                     </form>
                                 </div>
