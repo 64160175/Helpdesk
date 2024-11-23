@@ -11067,6 +11067,18 @@ body {
   margin-right: 0.5rem;
 }
 
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
 .sb-topnav {
   padding-left: 0;
   height: 56px;
@@ -11074,6 +11086,9 @@ body {
   margin: 10px;
   border-radius: 12px;
   padding-left: 10px;
+  background: linear-gradient(270deg, #25cff2, #2a5298);
+  background-size: 200% 200%;
+  animation: gradientAnimation 10s ease infinite;
 }
 .sb-topnav .navbar-brand {
   width: 225px;
