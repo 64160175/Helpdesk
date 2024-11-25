@@ -5,19 +5,19 @@ exports.login = (req, res) => {
 
   User.findByUsername(username, (err, user) => {
     if (err) {
-      return res.status(500).send('Internal Server Error');
+      return res.render('login', { error: 'เกิดข้อผิดพลาดในระบบ กรุณาลองใหม่อีกครั้ง' });
     }
 
     if (!user) {
-      return res.status(401).send('Invalid username or password');
+      return res.render('login', { error: 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง' });
     }
 
     if (user.u_pass !== password) {
-      return res.status(401).send('Invalid username or password');
+      return res.render('login', { error: 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง' });
     }
 
     if (user.u_status !== 'active') {
-      return res.status(403).send('Account is not active');
+      return res.render('login', { error: 'บัญชีผู้ใช้ไม่ได้เปิดใช้งาน กรุณาติดต่อผู้ดูแลระบบ' });
     }
 
     // Store user information in session
@@ -31,7 +31,7 @@ exports.login = (req, res) => {
       case 'user':
         return res.redirect('/UserHome');
       default:
-        return res.status(403).send('Access Denied');
+        return res.render('login', { error: 'ไม่มีสิทธิ์เข้าถึง กรุณาติดต่อผู้ดูแลระบบ' });
     }
   });
 };

@@ -21,7 +21,7 @@
                 <div class="container">
                     <div class="row justify-content-center">
                         <div class="col-lg-5">
-                            <br>
+
                             <h2 class="display-4 text-center mt-4 ">ระบบเบิกอุปกรณ์สำนักงาน</h2>
 
                             <div class="card shadow-lg border-0 rounded-lg mt-5">
@@ -31,16 +31,24 @@
                                 <div class="card-body">
                                     <form action="/login" method="POST">
                                         <div class="form-floating mb-3">
-                                            <input class="form-control prompt-light" id="inputusername" name="username" type="text" placeholder="ชื่อผู้ใช้" required />
+                                            <input class="form-control prompt-light" id="inputusername" name="username"
+                                                type="text" placeholder="ชื่อผู้ใช้" required />
                                             <label for="inputusername" class="prompt-light">ชื่อผู้ใช้</label>
                                         </div>
                                         <div class="form-floating mb-3">
-                                            <input class="form-control prompt-light" id="inputPassword" name="password" type="password" placeholder="รหัสผ่าน" required />
+                                            <input class="form-control prompt-light" id="inputPassword" name="password"
+                                                type="password" placeholder="รหัสผ่าน" required />
                                             <label for="inputPassword" class="prompt-light">รหัสผ่าน</label>
                                         </div>
                                         <div class="text-center">
-                                            <button type="submit" class="btn btn-primary prompt-medium">เข้าสู่ระบบ</button>
+                                            <button type="submit"
+                                                class="btn btn-primary prompt-medium">เข้าสู่ระบบ</button>
                                         </div>
+                                        <% if (typeof error !=='undefined' && error) { %>
+                                            <div class="text-danger mt-2 text-center">
+                                                <%= error %>
+                                            </div>
+                                            <% } %>
                                     </form>
                                 </div>
                             </div>
