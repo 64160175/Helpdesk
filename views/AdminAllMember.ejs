@@ -90,8 +90,8 @@
                         <li class="breadcrumb-item active">การจัดการบัญชี</li>
                     </ol>
                     <div class="card mb-4">
-                        
-                        
+
+
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table me-1"></i>
@@ -104,22 +104,88 @@
                                             <th>บัญชีผู้ใช้</th>
                                             <th>ชื่อแผนก</th>
                                             <th>บทบาท</th>
+                                            <th>การดำเนินการ</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <% members.forEach(member => { %>
+                                        <% members.forEach(member=> { %>
                                             <tr>
-                                                <td><%= member.u_name %></td>
-                                                <td><%= member.section || 'ไม่ระบุ' %></td>
-                                                <td><%= member.u_type === 'user' ? 'ผู้ขอเบิก' : 'ผู้จัดการ' %></td>
+                                                <td>
+                                                    <%= member.u_name %>
+                                                </td>
+                                                <td>
+                                                    <%= member.section || 'ไม่ระบุ' %>
+                                                </td>
+                                                <td>
+                                                    <%= member.u_type==='user' ? 'ผู้ขอเบิก' : 'ผู้จัดการ' %>
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-danger btn-sm delete-user"
+                                                        data-id="<%= member.id_user %>">ลบ</button>
+                                                </td>
                                             </tr>
-                                        <% }); %>
+                                            <% }); %>
                                     </tbody>
                                 </table>
+
+                                <!-- Modal สำหรับยืนยันการลบ -->
+                                <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog"
+                                    aria-labelledby="confirmModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-confirm" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title">ยืนยันการลบ</h4>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                    aria-hidden="true">&times;</button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>คุณแน่ใจหรือไม่ว่าต้องการลบผู้ใช้นี้?</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-dismiss="modal">ยกเลิก</button>
+                                                <button type="button" class="btn btn-danger"
+                                                    id="confirmDelete">ลบ</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- เพิ่ม JavaScript สำหรับการลบ -->
+                                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                                <script>
+                                    $(document).ready(function () {
+                                        let userIdToDelete;
+
+                                        $('.delete-user').on('click', function () {
+                                            userIdToDelete = $(this).data('id');
+                                            $('#confirmModal').modal('show');
+                                        });
+
+                                        $('#confirmDelete').on('click', function () {
+                                            $.ajax({
+                                                url: '/deleteUser',
+                                                method: 'POST',
+                                                data: { userId: userIdToDelete },
+                                                success: function (response) {
+                                                    if (response.success) {
+                                                        location.reload();
+                                                    } else {
+                                                        alert('เกิดข้อผิดพลาดในการลบผู้ใช้');
+                                                    }
+                                                },
+                                                error: function () {
+                                                    alert('เกิดข้อผิดพลาดในการเชื่อมต่อกับเซิร์ฟเวอร์');
+                                                }
+                                            });
+                                            $('#confirmModal').modal('hide');
+                                        });
+                                    });
+                                </script>
                             </div>
                         </div>
-                        
-                    
+
+
                     </div>
                 </div>
             </main>

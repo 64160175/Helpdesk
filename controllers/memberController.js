@@ -10,6 +10,17 @@ class MemberController {
             res.render('AdminAllMember', { members: results });
         });
     }
+
+    static deleteUser(req, res) {
+        const userId = req.body.userId;
+        MemberModel.deactivateUser(userId, (err, result) => {
+            if (err) {
+                console.error('Error deactivating user:', err);
+                return res.status(500).json({ success: false });
+            }
+            res.json({ success: true });
+        });
+    }
 }
 
 module.exports = MemberController;

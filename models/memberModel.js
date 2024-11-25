@@ -4,6 +4,7 @@ class MemberModel {
     static getAllActiveUsersAndManagers(callback) {
         const query = `
             SELECT 
+                u.id_user,
                 u.u_name,
                 s.section,
                 u.u_type
@@ -13,6 +14,11 @@ class MemberModel {
             ORDER BY u.u_name
         `;
         db.query(query, callback);
+    }
+
+    static deactivateUser(userId, callback) {
+        const query = 'UPDATE tbl_user SET u_status = ? WHERE id_user = ?';
+        db.query(query, ['inactive', userId], callback);
     }
 }
 
