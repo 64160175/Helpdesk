@@ -11067,6 +11067,25 @@ body {
   margin-right: 0.5rem;
 }
 
+@keyframes gradient {
+  0% {
+      background-position: 0% 50%;
+  }
+  50% {
+      background-position: 100% 50%;
+  }
+  100% {
+      background-position: 0% 50%;
+  }
+}
+
+.animated-gradient {
+  background: linear-gradient(-45deg,  #4169E1, #1E90FF,#ffffff,#87CEFA);
+  background-size: 400% 400%;
+  animation: gradient 25s ease infinite;
+  height: 100vh;
+}
+
 @keyframes gradientAnimation {
   0% {
     background-position: 0% 50%;

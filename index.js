@@ -65,6 +65,9 @@ app.get('/UserRequest', isLoggedIn, checkUserType('user'), (req, res) => {
   res.render('UserRequest');
 });
 
+const memberRoutes = require('./routes/memberRoute');
+app.use('/', memberRoutes);
+
 const port = 3000;
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
