@@ -8,4 +8,8 @@ router.get('/AdminRequestList', isLoggedIn, checkUserType('admin'), (req, res) =
   res.render('AdminRequestList');
 });
 
+router.get('/adminAddmember', isLoggedIn, checkUserType('admin'), (req, res) => {
+    res.render('adminAddmember');
+});
+
 module.exports = router;

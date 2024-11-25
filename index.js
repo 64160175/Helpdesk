@@ -22,50 +22,22 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Use body-parser
 app.use(bodyParser.urlencoded({ extended: false }));
 
+//----------------------------------------------------------------------------
 
-
-// Middleware to check if user is logged in
-const isLoggedIn = (req, res, next) => {
-  if (req.session.user) {
-    next();
-  } else {
-    res.redirect('/');
-  }
-};
-
-// Middleware to check user type
-const checkUserType = (type) => {
-  return (req, res, next) => {
-    if (req.session.user && req.session.user.u_type === type) {
-      next();
-    } else {
-      res.status(403).render('403');
-    }
-  };
-};
-
-app.get('/', (req, res) => {
-  res.render('login');
-});
-
-const authRoutes = require('./routes/authRoute');
-app.use('/', authRoutes);
+// Auth routes
+const authRoutes = require('./routes/authRoute'); app.use('/', authRoutes);
 
 //user
-const userRoutes = require('./routes/userRoutes');
-app.use('/', userRoutes);
+const userRoutes = require('./routes/userRoutes'); app.use('/', userRoutes);
 
 //manager
-const managerRoutes = require('./routes/managerRoutes');
-app.use('/', managerRoutes);
+const managerRoutes = require('./routes/managerRoutes'); app.use('/', managerRoutes);
 
 //admin
-const memberRoutes = require('./routes/memberRoute');
-app.use('/', memberRoutes);
+const memberRoutes = require('./routes/memberRoute'); app.use('/', memberRoutes);
+const adminRoutes = require('./routes/adminRoutes'); app.use('/', adminRoutes);
 
-const adminRoutes = require('./routes/adminRoutes');
-app.use('/', adminRoutes);
-
+//--------------------------------------------------------------------------
 
 const port = 3000;
 app.listen(port, () => {
