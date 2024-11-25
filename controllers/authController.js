@@ -1,4 +1,4 @@
-const User = require('../models/authModel'); 
+const User = require('../models/authModel');
 
 exports.login = (req, res) => {
   const { username, password } = req.body;
@@ -7,9 +7,21 @@ exports.login = (req, res) => {
     if (err) {
       return res.status(500).send('Internal Server Error');
     }
-    if (!user || user.u_pass !== password) {
+
+    if (!user) {
       return res.status(401).send('Invalid username or password');
     }
+
+    if (user.u_pass !== password) {
+      return res.status(401).send('Invalid username or password');
+    }
+
+    if (user.u_status !== 'active') {
+      return res.status(403).send('Account is not active');
+    }
+
+    // Store user information in session
+    req.session.user = user;
 
     switch (user.u_type) {
       case 'admin':

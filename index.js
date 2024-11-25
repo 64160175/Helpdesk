@@ -1,22 +1,28 @@
 const express = require('express');
+const session = require('express-session');
 const path = require('path');
 const bodyParser = require('body-parser');
 const app = express();
-const authRoutes = require('./routes/authRoute'); // Corrected the file name
+const authRoutes = require('./routes/authRoute');
 
-// ตั้งค่า view engine เป็น EJS
+// Set up session middleware
+app.use(session({
+  secret: 'your_secret_key',
+  resave: false,
+  saveUninitialized: true
+}));
+
+// Set up view engine
 app.set('view engine', 'ejs');
-
-// ตั้งค่า directory สำหรับ views
 app.set('views', path.join(__dirname, 'views'));
 
-// ตั้งค่า static directory สำหรับไฟล์ CSS และอื่นๆ
+// Set up static directory
 app.use(express.static(path.join(__dirname, 'public')));
 
-// ใช้ body-parser เพื่ออ่านข้อมูลจากฟอร์ม
+// Use body-parser
 app.use(bodyParser.urlencoded({ extended: false }));
 
-// ใช้ routes สำหรับการ login
+// Use auth routes
 app.use('/', authRoutes);
 
 app.get('/', (req, res) => {
