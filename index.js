@@ -3,7 +3,7 @@ const session = require('express-session');
 const path = require('path');
 const bodyParser = require('body-parser');
 const app = express();
-const authRoutes = require('./routes/authRoute');
+
 
 // Set up session middleware
 app.use(session({
@@ -22,8 +22,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Use body-parser
 app.use(bodyParser.urlencoded({ extended: false }));
 
-// Use auth routes
-app.use('/', authRoutes);
+
 
 // Middleware to check if user is logged in
 const isLoggedIn = (req, res, next) => {
@@ -49,24 +48,24 @@ app.get('/', (req, res) => {
   res.render('login');
 });
 
-app.get('/AdminRequestList', isLoggedIn, checkUserType('admin'), (req, res) => {
-  res.render('AdminRequestList');
-});
+const authRoutes = require('./routes/authRoute');
+app.use('/', authRoutes);
 
-app.get('/ManagerRequestList', isLoggedIn, checkUserType('manager'), (req, res) => {
-  res.render('ManagerRequestList');
-});
+//user
+const userRoutes = require('./routes/userRoutes');
+app.use('/', userRoutes);
 
-app.get('/UserHome', isLoggedIn, checkUserType('user'), (req, res) => {
-  res.render('UserHome');
-});
+//manager
+const managerRoutes = require('./routes/managerRoutes');
+app.use('/', managerRoutes);
 
-app.get('/UserRequest', isLoggedIn, checkUserType('user'), (req, res) => {
-  res.render('UserRequest');
-});
-
+//admin
 const memberRoutes = require('./routes/memberRoute');
 app.use('/', memberRoutes);
+
+const adminRoutes = require('./routes/adminRoutes');
+app.use('/', adminRoutes);
+
 
 const port = 3000;
 app.listen(port, () => {
