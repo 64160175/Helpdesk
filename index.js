@@ -7,7 +7,7 @@ const authRoutes = require('./routes/authRoute');
 
 // Set up session middleware
 app.use(session({
-  secret: 'your_secret_key',
+  secret: 'masth2024',
   resave: false,
   saveUninitialized: true
 }));
@@ -25,23 +25,43 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // Use auth routes
 app.use('/', authRoutes);
 
+// Middleware to check if user is logged in
+const isLoggedIn = (req, res, next) => {
+  if (req.session.user) {
+    next();
+  } else {
+    res.redirect('/');
+  }
+};
+
+// Middleware to check user type
+const checkUserType = (type) => {
+  return (req, res, next) => {
+    if (req.session.user && req.session.user.u_type === type) {
+      next();
+    } else {
+      res.status(403).render('403');
+    }
+  };
+};
+
 app.get('/', (req, res) => {
   res.render('login');
 });
 
-app.get('/AdminRequestList', (req, res) => {
+app.get('/AdminRequestList', isLoggedIn, checkUserType('admin'), (req, res) => {
   res.render('AdminRequestList');
 });
 
-app.get('/ManagerRequestList', (req, res) => {
+app.get('/ManagerRequestList', isLoggedIn, checkUserType('manager'), (req, res) => {
   res.render('ManagerRequestList');
 });
 
-app.get('/UserHome', (req, res) => {
+app.get('/UserHome', isLoggedIn, checkUserType('user'), (req, res) => {
   res.render('UserHome');
 });
 
-app.get('/UserRequest', (req, res) => {
+app.get('/UserRequest', isLoggedIn, checkUserType('user'), (req, res) => {
   res.render('UserRequest');
 });
 
