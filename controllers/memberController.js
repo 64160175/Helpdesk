@@ -21,6 +21,27 @@ class MemberController {
             res.json({ success: true });
         });
     }
+
+    static getAddMemberForm(req, res) {
+        MemberModel.getAllSections((err, sections) => {
+            if (err) {
+                console.error('Error fetching sections:', err);
+                return res.status(500).send('Internal Server Error');
+            }
+            res.render('AdminAddMember', { sections: sections });
+        });
+    }
+
+    static addMember(req, res) {
+        const userData = req.body;
+        MemberModel.addMember(userData, (err, result) => {
+            if (err) {
+                console.error('Error adding member:', err);
+                return res.status(500).send('Internal Server Error');
+            }
+            res.redirect('/AdminAllMember');
+        });
+    }
 }
 
 module.exports = MemberController;

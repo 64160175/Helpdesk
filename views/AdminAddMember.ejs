@@ -34,7 +34,8 @@
                     <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
                         data-bs-toggle="dropdown" aria-expanded="false">ADMIN </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="/logout"><i class="fas fa-sign-out-alt fa-fw"></i> ออกจากระบบ</a>
+                        <li><a class="dropdown-item" href="/logout"><i class="fas fa-sign-out-alt fa-fw"></i>
+                                ออกจากระบบ</a>
                         </li>
                     </ul>
                 </li>
@@ -51,7 +52,7 @@
                 <div class="sb-sidenav-menu">
                     <div class="nav">
                         <div class="sb-sidenav-menu-heading">ระบบอนุมัติ</div>
-                        <a class="nav-link" href="index.html">
+                        <a class="nav-link" href="/AdminRequestList">
                             <div class="sb-nav-link-icon"><i class="fas fa-file-alt"></i></div>
                             คำร้องขอ
                         </a>
@@ -67,7 +68,7 @@
                         </a>
 
                         <div class="sb-sidenav-menu-heading">การจัดการ</div>
-                        <a class="nav-link" href="user-management.html">
+                        <a class="nav-link" href="/AdminAllMember">
                             <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
                             ระบบจัดการผู้ใช้งาน
                         </a>
@@ -87,12 +88,105 @@
                 <div class="container-fluid px-4">
                     <h1 class="mt-4">คำร้องขอ</h1>
                     <ol class="breadcrumb mb-4">
-                        <li class="breadcrumb-item">ระบบอนุมัติ</a>
-                        <li class="breadcrumb-item active">คำร้องขอ</li>
+                        <li class="breadcrumb-item">ระบบจัดการผู้ใช้งาน</a>
+                            <a href="/AdminAllMember">
+                        <li class="breadcrumb-item active">การจัดการบัญชี</li></a>
+                        <li class="breadcrumb-item active"></a>เพิ่มผู้ใช้</li>
                     </ol>
+
                     <div class="card mb-4">
                         <div class="card-body">
-                            This page is an example of using the light side navigation option. By appending the
+                            
+                                <i class="fas fa-info-circle me-1"></i>
+                                หมายเหตุ: ในแต่ละแผนกจะมีเพียง 2 บัญชีเท่านั้น ได้แก่ บัญชีผู้อนุมัติ และบัญชีผู้ขอเบิก
+                            
+                        </div>
+                    </div>
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <form action="/addMember" method="post">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group mb-3">
+                                            <label for="username">บัญชีผู้ใช้</label>
+                                            <input type="text" class="form-control" id="username" name="username"
+                                                required placeholder="กรอกชื่อบัญชีผู้ใช้">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group mb-3">
+                                            <label for="password">รหัสผ่าน</label>
+                                            <input type="password" class="form-control" id="password" name="password"
+                                                required placeholder="******">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group mb-3">
+                                            <label for="section">แผนก</label>
+                                            <select class="form-select" id="section" name="section" required>
+                                                <option value="">เลือกแผนก</option>
+                                                <% sections.forEach(function(section) { %>
+                                                    <option value="<%= section.id_emp_section %>">
+                                                        <%= section.section %>
+                                                    </option>
+                                                    <% }); %>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group mb-3">
+                                            <label for="role">บทบาท</label>
+                                            <select class="form-select" id="role" name="role" required
+                                                onchange="toggleAdminFields()">
+                                                <option value="">เลือกบทบาท</option>
+                                                <option value="user">ผู้ขอเบิก</option>
+                                                <option value="manager">ผู้อนุมัติ</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="adminFields" style="display: none;">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group mb-3">
+                                                <label for="f_name">ชื่อ</label>
+                                                <input type="text" class="form-control" id="f_name" name="f_name"
+                                                    placeholder="กรอกชื่อจริง">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group mb-3">
+                                                <label for="l_name">นามสกุล</label>
+                                                <input type="text" class="form-control" id="l_name" name="l_name"
+                                                    placeholder="กรอกนามสกุล">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group mb-3">
+                                        <label for="email">อีเมล</label>
+                                        <input type="email" class="form-control" id="email" name="email"
+                                            placeholder="กรอกอีเมล ******@minebea-as.com">
+                                    </div>
+                                </div>
+
+                                <div class="text-center mt-4">
+                                    <button type="submit" class="btn btn-primary">บันทึก</button>
+                                </div>
+                            </form>
+
+
+                            <script>
+                                function toggleAdminFields() {
+                                    var role = document.getElementById('role').value;
+                                    var adminFields = document.getElementById('adminFields');
+                                    adminFields.style.display = role === 'manager' ? 'block' : 'none';
+                                }
+                            </script>
+
                         </div>
                     </div>
                 </div>

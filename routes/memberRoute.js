@@ -10,4 +10,8 @@ router.get('/AdminAllMember', isLoggedIn, checkUserType('admin'), MemberControll
 // Route สำหรับลบผู้ใช้
 router.post('/deleteUser', isLoggedIn, checkUserType('admin'), MemberController.deleteUser);
 
+// Route สำหรับเพิ่มผู้ใช้ใหม่
+router.get('/AdminAddMember', isLoggedIn, checkUserType('admin'), MemberController.getAddMemberForm);
+router.post('/addMember', isLoggedIn, checkUserType('admin'), MemberController.addMember);
+
 module.exports = router;
