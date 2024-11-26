@@ -1,4 +1,5 @@
 const MemberModel = require('../models/memberModel');
+const db = require('../db'); 
 
 class MemberController {
     static getAllMembers(req, res) {
@@ -43,7 +44,6 @@ class MemberController {
         });
     }
 
-
     static getAdminSectionManage(req, res) {
         MemberModel.getAllSections((err, sections) => {
             if (err) {
@@ -54,7 +54,18 @@ class MemberController {
         });
     }
 
-    
+    //เปลี่ยนเป็นอัปเดตข้อมูล DB สำหรับการลบแผนกในนี้แทน
+    static deleteSection(req, res) {
+        const sectionId = req.body.id_emp_section;
+        const query = 'UPDATE tbl_emp_section SET status = ? WHERE id_emp_section = ?';
+        db.query(query, ['inactive', sectionId], (err, result) => {
+            if (err) {
+                console.error('Error updating section status:', err);
+                return res.status(500).send('Error updating section status');
+            }
+            res.send('Section status updated to inactive');
+        });
+    }
 }
 
 module.exports = MemberController;

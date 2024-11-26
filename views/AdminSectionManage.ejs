@@ -94,15 +94,16 @@
                         <li class="breadcrumb-item active"></a>การจัดการแผนก</li>
                     </ol>
 
-                            <div class="alert alert-info" role="alert">
-                                <i class="fas fa-info-circle me-2"></i>
-                                <strong>หมายเหตุ:</strong>
-                                <ul class="mb-0 mt-2">
-                                    <li>กรุณาตรวจสอบให้มั่นใจก่อนทำการแก้ไขแผนก หากแก้ไขแผนกแล้ว แผนกของผู้อนุมัติและผู้ขอเบิกจะถูกแก้ไขไปด้วย</li>
-                                    <li>การแก้ไขอย่างง่าย: สร้างแผนกใหม่ จากนั้นสร้างบัญชีผู้อนุมัติ และบัญชีผู้ขอเบิกใหม่</li>
-                                </ul>
-                            </div>
-                        
+                    <div class="alert alert-info" role="alert">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>หมายเหตุ:</strong>
+                        <ul class="mb-0 mt-2">
+                            <li>กรุณาตรวจสอบให้มั่นใจก่อนทำการแก้ไขแผนก หากแก้ไขแผนกแล้ว
+                                แผนกของผู้อนุมัติและผู้ขอเบิกจะถูกแก้ไขไปด้วย</li>
+                            <li>การแก้ไขอย่างง่าย: สร้างแผนกใหม่ จากนั้นสร้างบัญชีผู้อนุมัติ และบัญชีผู้ขอเบิกใหม่</li>
+                        </ul>
+                    </div>
+
 
                     <!-- เพิ่มส่วนของการจัดการแผนก -->
                     <div class="card mb-4">
@@ -123,15 +124,23 @@
                                 <tbody>
                                     <% sections.forEach(function(section) { %>
                                         <tr>
-                                            <td><%= section.id_emp_section %></td>
-                                            <td><%= section.section %></td>
-                                            <td><%= section.status %></td>
                                             <td>
-                                                <button class="btn btn-primary btn-sm" onclick="editSection(<%= section.id_emp_section %>)">แก้ไข</button>
-                                                <button class="btn btn-danger btn-sm" onclick="deleteSection(<%= section.id_emp_section %>)">ลบ</button>
+                                                <%= section.id_emp_section %>
+                                            </td>
+                                            <td>
+                                                <%= section.section %>
+                                            </td>
+                                            <td>
+                                                <%= section.status %>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-primary btn-sm"
+                                                    onclick="editSection(<%= section.id_emp_section %>)">แก้ไข</button>
+                                                <button class="btn btn-danger btn-sm"
+                                                    onclick="deleteSection(<%= section.id_emp_section %>)">ลบ</button>
                                             </td>
                                         </tr>
-                                    <% }); %>
+                                        <% }); %>
                                 </tbody>
                             </table>
                         </div>
@@ -141,8 +150,31 @@
                     <button class="btn btn-success mb-4" data-bs-toggle="modal" data-bs-target="#addDepartmentModal">
                         <i class="fas fa-plus-circle me-2"></i>เพิ่มแผนกใหม่
                     </button>
-                    
 
+
+
+                    <!-- ลบ Section -->
+                    <script>
+                        function deleteSection(id_emp_section) {
+                            if (confirm('Are you sure you want to delete this section?')) {
+                                fetch('/member/deleteSection', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify({ id_emp_section })
+                                })
+                                    .then(response => response.text())
+                                    .then(data => {
+                                        alert(data);
+                                        location.reload(); // Reload the page to reflect changes
+                                    })
+                                    .catch(error => console.error('Error:', error));
+                            }
+                        }
+                    </script>
+
+                    <!------------------->
 
                 </div>
             </main>
@@ -153,6 +185,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
         crossorigin="anonymous"></script>
     <script src="js/sidebar.js"></script>
+
 </body>
 
 </html>

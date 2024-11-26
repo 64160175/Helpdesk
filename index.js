@@ -35,6 +35,11 @@ const managerRoutes = require('./routes/managerRoutes'); app.use('/', managerRou
 
 //admin
 const memberRoutes = require('./routes/memberRoute'); app.use('/', memberRoutes);
+
+// ลบแผนก
+app.use(express.json());
+app.use('/member', memberRoutes);
+
 const adminRoutes = require('./routes/adminRoutes'); app.use('/', adminRoutes);
 
 //--------------------------------------------------------------------------
