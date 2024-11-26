@@ -86,7 +86,7 @@
         <div id="layoutSidenav_content">
             <main>
                 <div class="container-fluid px-4">
-                    <h1 class="mt-4">คำร้องขอ</h1>
+                    <h1 class="mt-4">เพิ่มผู้ใช้</h1>
                     <ol class="breadcrumb mb-4">
                         <li class="breadcrumb-item">ระบบจัดการผู้ใช้งาน</a>
                             <a href="/AdminAllMember">
@@ -94,14 +94,15 @@
                         <li class="breadcrumb-item active"></a>เพิ่มผู้ใช้</li>
                     </ol>
 
-                    <div class="card mb-4">
-                        <div class="card-body">
-                            
-                                <i class="fas fa-info-circle me-1"></i>
-                                หมายเหตุ: ในแต่ละแผนกจะมีเพียง 2 บัญชีเท่านั้น ได้แก่ บัญชีผู้อนุมัติ และบัญชีผู้ขอเบิก
-                            
-                        </div>
+
+                    <div class="alert alert-info" role="alert">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>หมายเหตุ:</strong>
+                        <ul class="mb-0 mt-2">
+                            <li>ในแต่ละแผนกจะมีเพียง 2 บัญชีเท่านั้น ได้แก่ บัญชีผู้อนุมัติ และบัญชีผู้ขอเบิก</li>
+                        </ul>
                     </div>
+                    
                     <div class="card mb-4">
                         <div class="card-body">
                             <form action="/addMember" method="post">
