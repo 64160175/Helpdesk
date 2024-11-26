@@ -78,30 +78,14 @@ class MemberModel {
             SELECT 
                 id_emp_section,
                 section,
-                CASE 
-                    WHEN status = 1 THEN 'ใช้งาน'
-                    ELSE 'ไม่ใช้งาน'
-                END AS status
+                'ใช้งาน' AS status
             FROM tbl_emp_section
+            WHERE status = 'active'
             ORDER BY section
         `;
         db.query(query, callback);
     }
 
-    static addSection(sectionName, callback) {
-        const query = 'INSERT INTO tbl_emp_section (section, status) VALUES (?, 1)';
-        db.query(query, [sectionName], callback);
-    }
-
-    static updateSection(id, sectionName, status, callback) {
-        const query = 'UPDATE tbl_emp_section SET section = ?, status = ? WHERE id_emp_section = ?';
-        db.query(query, [sectionName, status, id], callback);
-    }
-
-    static deleteSection(id, callback) {
-        const query = 'UPDATE tbl_emp_section SET status = 0 WHERE id_emp_section = ?';
-        db.query(query, [id], callback);
-    }
 }
 
 module.exports = MemberModel;

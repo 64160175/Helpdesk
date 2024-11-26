@@ -54,38 +54,7 @@ class MemberController {
         });
     }
 
-    static addSection(req, res) {
-        const { sectionName } = req.body;
-        MemberModel.addSection(sectionName, (err, result) => {
-            if (err) {
-                console.error('Error adding section:', err);
-                return res.status(500).send('Internal Server Error');
-            }
-            res.redirect('/AdminSectionManage');
-        });
-    }
-
-    static updateSection(req, res) {
-        const { id, sectionName, status } = req.body;
-        MemberModel.updateSection(id, sectionName, status, (err, result) => {
-            if (err) {
-                console.error('Error updating section:', err);
-                return res.status(500).send('Internal Server Error');
-            }
-            res.redirect('/AdminSectionManage');
-        });
-    }
-
-    static deleteSection(req, res) {
-        const { id } = req.params;
-        MemberModel.deleteSection(id, (err, result) => {
-            if (err) {
-                console.error('Error deleting section:', err);
-                return res.status(500).send('Internal Server Error');
-            }
-            res.redirect('/AdminSectionManage');
-        });
-    }
+    
 }
 
 module.exports = MemberController;
