@@ -193,8 +193,6 @@
                     <!------------------->
 
                     <!--  แก้ไข Section -->
-
-                    <!-- Edit Section Modal -->
                     <div class="modal fade" id="editSectionModal" tabindex="-1" aria-labelledby="editSectionModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
@@ -215,7 +213,6 @@
                             </div>
                         </div>
                     </div>
-
                     <script>
                         function editSection(id_emp_section) {
                             const row = document.querySelector(`tr[data-id="${id_emp_section}"]`);
@@ -245,6 +242,64 @@
                             .catch(error => console.error('Error:', error));
                         });
                     </script>
+
+                    <!------------------->
+                    <!-- เพิ่ม Section -->
+                     <!-- Modal for Adding New Section -->
+                     <div class="modal fade" id="addDepartmentModal" tabindex="-1" aria-labelledby="addDepartmentModalLabel" aria-hidden="true">
+                         <div class="modal-dialog">
+                             <div class="modal-content">
+                                 <div class="modal-header">
+                                     <h5 class="modal-title" id="addDepartmentModalLabel">เพิ่มแผนกใหม่</h5>
+                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                 </div>
+                                 <div class="modal-body">
+                                     <form id="addSectionForm">
+                                         <div class="mb-3">
+                                             <label for="newSectionName" class="form-label">ชื่อแผนกใหม่</label>
+                                             <input type="text" class="form-control" id="newSectionName" required>
+                                         </div>
+                                         <button type="submit" class="btn btn-primary">บันทึก</button>
+                                     </form>
+                                 </div>
+                             </div>
+                         </div>
+                     </div>
+                     
+                     <script>
+                         document.getElementById('addSectionForm').addEventListener('submit', function (e) {
+                             e.preventDefault();
+                             const sectionName = document.getElementById('newSectionName').value;
+                             
+                             fetch('/member/addSection', {
+                                 method: 'POST',
+                                 headers: {
+                                     'Content-Type': 'application/json'
+                                 },
+                                 body: JSON.stringify({ sectionName })
+                             })
+                             .then(response => response.text())
+                             .then(data => {
+                                 Swal.fire(
+                                     'เพิ่มแผนกใหม่!',
+                                     'แผนกของคุณถูกเพิ่มเรียบร้อยแล้ว.',
+                                     'success'
+                                 ).then(() => {
+                                     location.reload();
+                                 });
+                             })
+                             .catch(error => {
+                                 console.error('Error:', error);
+                                 Swal.fire(
+                                     'เกิดข้อผิดพลาด!',
+                                     'ไม่สามารถเพิ่มแผนกได้ กรุณาลองใหม่อีกครั้ง.',
+                                     'error'
+                                 );
+                             });
+                         });
+                     </script>
+
+                     <!-- ------------ -->
                 </div>
             </main>
         </div>

@@ -77,6 +77,17 @@ class MemberController {
             res.send('อัปเดตข้อมูลแผนกสำเร็จ');
         });
     }
+
+    static addSection(req, res) {
+        const sectionName = req.body.sectionName;
+        MemberModel.addSection(sectionName, (err, result) => {
+            if (err) {
+                console.error('Error adding section:', err);
+                return res.status(500).send('Error adding section');
+            }
+            res.send('Section added successfully');
+        });
+    }
 }
 
 module.exports = MemberController;

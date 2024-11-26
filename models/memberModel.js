@@ -28,7 +28,6 @@ class MemberModel {
     }
 
     static addMember(userData, callback) {
-        // ก่อนอื่น เราจะหา id ที่มากที่สุดในตาราง
         const findMaxIdQuery = 'SELECT MAX(id_user) as maxId FROM tbl_user';
         db.query(findMaxIdQuery, (err, result) => {
             if (err) {
@@ -68,11 +67,7 @@ class MemberModel {
     }
 
 
-
-
-
-
-
+    //แผนก
     static getAllSections(callback) {
         const query = `
             SELECT 
@@ -89,6 +84,14 @@ class MemberModel {
     static updateSection(id, sectionName, callback) {
         const query = 'UPDATE tbl_emp_section SET section = ? WHERE id_emp_section = ?';
         db.query(query, [sectionName, id], callback);
+    }
+
+    static addSection(sectionName, callback) {
+        const query = `
+            INSERT INTO tbl_emp_section (section, status) 
+            VALUES (?, 'active')
+        `;
+        db.query(query, [sectionName], callback);
     }
 
 }

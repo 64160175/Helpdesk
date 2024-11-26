@@ -14,8 +14,10 @@ router.post('/deleteUser', isLoggedIn, checkUserType('admin'), MemberController.
 router.get('/AdminAddMember', isLoggedIn, checkUserType('admin'), MemberController.getAddMemberForm);
 router.post('/addMember', isLoggedIn, checkUserType('admin'), MemberController.addMember);
 
-// Route สำหรับแก้ไขแผนก
+// Route สำหรับแผนก
 router.get('/AdminSectionManage', isLoggedIn, checkUserType('admin'), MemberController.getAdminSectionManage);
 router.post('/deleteSection', isLoggedIn, checkUserType('admin'), MemberController.deleteSection);
 router.post('/updateSection', isLoggedIn, checkUserType('admin'), MemberController.updateSection);
+router.post('/addSection', isLoggedIn, checkUserType('admin'), MemberController.addSection);
+
 module.exports = router;
