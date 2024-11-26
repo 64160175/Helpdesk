@@ -17,5 +17,5 @@ router.post('/addMember', isLoggedIn, checkUserType('admin'), MemberController.a
 // Route สำหรับแก้ไขแผนก
 router.get('/AdminSectionManage', isLoggedIn, checkUserType('admin'), MemberController.getAdminSectionManage);
 router.post('/deleteSection', isLoggedIn, checkUserType('admin'), MemberController.deleteSection);
-
+router.post('/updateSection', isLoggedIn, checkUserType('admin'), MemberController.updateSection);
 module.exports = router;

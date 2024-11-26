@@ -86,6 +86,11 @@ class MemberModel {
         db.query(query, callback);
     }
 
+    static updateSection(id, sectionName, callback) {
+        const query = 'UPDATE tbl_emp_section SET section = ? WHERE id_emp_section = ?';
+        db.query(query, [sectionName, id], callback);
+    }
+
 }
 
 module.exports = MemberModel;

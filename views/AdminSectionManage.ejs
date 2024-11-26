@@ -123,24 +123,16 @@
                                 </thead>
                                 <tbody>
                                     <% sections.forEach(function(section) { %>
-                                        <tr>
+                                        <tr data-id="<%= section.id_emp_section %>">
+                                            <td><%= section.id_emp_section %></td>
+                                            <td><%= section.section %></td>
+                                            <td><%= section.status %></td>
                                             <td>
-                                                <%= section.id_emp_section %>
-                                            </td>
-                                            <td>
-                                                <%= section.section %>
-                                            </td>
-                                            <td>
-                                                <%= section.status %>
-                                            </td>
-                                            <td>
-                                                <button class="btn btn-primary btn-sm"
-                                                    onclick="editSection(<%= section.id_emp_section %>)">แก้ไข</button>
-                                                <button class="btn btn-danger btn-sm"
-                                                    onclick="deleteSection(<%= section.id_emp_section %>)">ลบ</button>
+                                                <button class="btn btn-primary btn-sm" onclick="editSection(<%= section.id_emp_section %>)">แก้ไข</button>
+                                                <button class="btn btn-danger btn-sm" onclick="deleteSection(<%= section.id_emp_section %>)">ลบ</button>
                                             </td>
                                         </tr>
-                                        <% }); %>
+                                    <% }); %>
                                 </tbody>
                             </table>
                         </div>
@@ -154,28 +146,105 @@
 
 
                     <!-- ลบ Section -->
+                    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
                     <script>
                         function deleteSection(id_emp_section) {
-                            if (confirm('Are you sure you want to delete this section?')) {
-                                fetch('/member/deleteSection', {
-                                    method: 'POST',
-                                    headers: {
-                                        'Content-Type': 'application/json'
-                                    },
-                                    body: JSON.stringify({ id_emp_section })
-                                })
+                            Swal.fire({
+                                title: 'คุณแน่ใจหรือไม่?',
+                                text: "คุณต้องการที่จะลบแผนกนี้ใช่หรือไม่?",
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'ใช่, ลบเลย!',
+                                cancelButtonText: 'ยกเลิก'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    fetch('/member/deleteSection', {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json'
+                                        },
+                                        body: JSON.stringify({ id_emp_section })
+                                    })
                                     .then(response => response.text())
                                     .then(data => {
-                                        alert(data);
-                                        location.reload(); // Reload the page to reflect changes
+                                        Swal.fire(
+                                            'ลบแล้ว!',
+                                            'แผนกของคุณถูกลบเรียบร้อยแล้ว.',
+                                            'success'
+                                        ).then(() => {
+                                            location.reload();
+                                        });
                                     })
-                                    .catch(error => console.error('Error:', error));
-                            }
+                                    .catch(error => {
+                                        console.error('Error:', error);
+                                        Swal.fire(
+                                            'เกิดข้อผิดพลาด!',
+                                            'ไม่สามารถลบแผนกได้ กรุณาลองใหม่อีกครั้ง.',
+                                            'error'
+                                        );
+                                    });
+                                }
+                            });
                         }
                     </script>
 
                     <!------------------->
 
+                    <!--  แก้ไข Section -->
+
+                    <!-- Edit Section Modal -->
+                    <div class="modal fade" id="editSectionModal" tabindex="-1" aria-labelledby="editSectionModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="editSectionModalLabel">แก้ไขแผนก</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form id="editSectionForm">
+                                        <div class="mb-3">
+                                            <label for="sectionName" class="form-label">ชื่อแผนก</label>
+                                            <input type="text" class="form-control" id="sectionName" required>
+                                        </div>
+                                        <input type="hidden" id="sectionId">
+                                        <button type="submit" class="btn btn-primary">บันทึกการเปลี่ยนแปลง</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <script>
+                        function editSection(id_emp_section) {
+                            const row = document.querySelector(`tr[data-id="${id_emp_section}"]`);
+                            const sectionName = row.querySelector('td:nth-child(2)').innerText;
+                            document.getElementById('sectionName').value = sectionName;
+                            document.getElementById('sectionId').value = id_emp_section;
+                            new bootstrap.Modal(document.getElementById('editSectionModal')).show();
+                        }
+                    
+                        document.getElementById('editSectionForm').addEventListener('submit', function (e) {
+                            e.preventDefault();
+                            const id_emp_section = document.getElementById('sectionId').value;
+                            const sectionName = document.getElementById('sectionName').value;
+                    
+                            fetch('/member/updateSection', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({ id_emp_section, sectionName })
+                            })
+                            .then(response => response.text())
+                            .then(data => {
+                                alert(data);
+                                location.reload();
+                            })
+                            .catch(error => console.error('Error:', error));
+                        });
+                    </script>
                 </div>
             </main>
         </div>

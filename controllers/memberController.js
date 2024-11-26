@@ -66,6 +66,17 @@ class MemberController {
             res.send('Section status updated to inactive');
         });
     }
+
+    static updateSection(req, res) {
+        const { id_emp_section, sectionName } = req.body;
+        MemberModel.updateSection(id_emp_section, sectionName, (err, result) => {
+            if (err) {
+                console.error('Error updating section:', err);
+                return res.status(500).send('Error updating section');
+            }
+            res.send('อัปเดตข้อมูลแผนกสำเร็จ');
+        });
+    }
 }
 
 module.exports = MemberController;
