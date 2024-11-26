@@ -1,5 +1,5 @@
 const MemberModel = require('../models/memberModel');
-const db = require('../db'); 
+const db = require('../db');
 
 class MemberController {
     static getAllMembers(req, res) {

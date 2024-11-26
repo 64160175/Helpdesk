@@ -21,7 +21,7 @@
 
     <!-- Navbar TOP -->
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-blue">
-        <a class="navbar-brand ps-3" href="/UserHome">ระบบเบิกอุปกรณ์สำนักงาน</a>
+        <a class="navbar-brand ps-3" href="/UserHome">ระบบเบิกอุปกรณ์ไอที</a>
 
         <!-- Navbar-->
         <div class="ms-auto">
@@ -30,14 +30,15 @@
                     <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
                         data-bs-toggle="dropdown" aria-expanded="false">แผนก HR&GA </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="/logout"><i class="fas fa-sign-out-alt fa-fw"></i> ออกจากระบบ</a>
+                        <li><a class="dropdown-item" href="/logout"><i class="fas fa-sign-out-alt fa-fw"></i>
+                                ออกจากระบบ</a>
                         </li>
                     </ul>
                 </li>
             </ul>
         </div>
     </nav>
-    
+
     <div id="layoutSidenav_content">
         <!-- MAIN CONTENT -->
         <main>
@@ -49,7 +50,7 @@
                     </button>
                 </div>
                 <br>
-                
+
                 <div class="card mb-4">
                     <div class="card-header">
                         <i class="fas fa-tasks me-1"></i>
@@ -165,23 +166,23 @@
             </div>
         </main>
     </div>
-    
+
     <script>
         function sortTable(columnIndex) {
             const table = document.querySelector("table tbody");
             const rows = Array.from(table.rows);
-    
+
             rows.sort((a, b) => {
                 const cellA = a.cells[columnIndex].innerText;
                 const cellB = b.cells[columnIndex].innerText;
-    
+
                 if (!isNaN(Date.parse(cellA)) && !isNaN(Date.parse(cellB))) {
                     return new Date(cellA) - new Date(cellB);
                 }
-    
+
                 return cellA.localeCompare(cellB, 'th', { numeric: true });
             });
-    
+
             rows.forEach(row => table.appendChild(row));
         }
     </script>
@@ -190,7 +191,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
         crossorigin="anonymous"></script>
     <script src="js/sidebar.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js"
+        crossorigin="anonymous"></script>
     <script src="js/requestTableSort.js"></script>
 </body>
 

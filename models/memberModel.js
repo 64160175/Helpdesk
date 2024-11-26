@@ -33,10 +33,10 @@ class MemberModel {
             if (err) {
                 return callback(err);
             }
-    
+
             const maxId = result[0].maxId || 0;
             const newId = maxId + 1;
-    
+
             const insertQuery = `
                 INSERT INTO tbl_user 
                 (id_user, u_name, u_pass, id_emp_section, u_type, f_name, l_name, email) 
@@ -52,7 +52,7 @@ class MemberModel {
                 userData.l_name || null,
                 userData.email || null
             ];
-            
+
             db.query(insertQuery, values, (error, results) => {
                 if (error) {
                     // ตรวจสอบว่าเป็น error เกี่ยวกับ duplicate entry หรือไม่
