@@ -95,9 +95,44 @@
                         <li class="breadcrumb-item">ระบบอนุมัติ</a>
                         <li class="breadcrumb-item active">คำร้องขอ</li>
                     </ol>
+                    <!-- ... (ส่วนอื่นๆ ของไฟล์ยังคงเหมือนเดิม) ... -->
+                    
                     <div class="card mb-4">
-                        
+                        <div class="card-header">
+                            <i class="fas fa-table me-1"></i>
+                            รายการวัสดุทั้งหมด
+                        </div>
+                        <div class="card-body">
+                            <table id="itemsTable" class="table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>ลำดับ</th>
+                                        <th>ชื่อ</th>
+                                        <th>รูปภาพ</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% items.forEach((item, index) => { %>
+                                        <tr>
+                                            <td><%= index + 1 %></td>
+                                            <td><%= item.i_brand %></td>
+                                            <td>
+                                                <% if (item.i_picture) { %>
+                                                    <img src="data:image/jpeg;base64,<%= item.i_picture.toString('base64') %>" 
+                                                         alt="<%= item.i_name %>" 
+                                                         style="width: 100px; height: 100px; object-fit: cover; object-position: center;">
+                                                <% } else { %>
+                                                    ไม่มีรูปภาพ
+                                                <% } %>
+                                            </td>
+                                        </tr>
+                                    <% }); %>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
+                    
+                    <!-- ... (ส่วนอื่นๆ ของไฟล์ยังคงเหมือนเดิม) ... -->
                 </div>
             </main>
         </div>
@@ -107,6 +142,13 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
         crossorigin="anonymous"></script>
     <script src="js/sidebar.js"></script>
+    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap5.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#itemsTable').DataTable();
+        });
+    </script>
 </body>
 
 </html>
