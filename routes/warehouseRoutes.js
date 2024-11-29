@@ -1,10 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const { isLoggedIn, checkUserType } = require('../middlewares/authMiddleware');
+const multer = require('multer');
+const upload = multer();
 const ItemController = require('../controllers/itemController');
+const { isLoggedIn, checkUserType } = require('../middlewares/authMiddleware');
 
 // Route สำหรับหน้าคลังอุปกรณ์ทั้งหมด
 router.get('/AdminItem', isLoggedIn, checkUserType('admin'), ItemController.getAdminItemPage);
+router.post('/admin/add-item', isLoggedIn, checkUserType('admin'), upload.single('itemPicture'), ItemController.addItem);
 
 // Route สำหรับหน้าสร้างเครื่องปริ้นเตอร์
 router.get('/create-printer', isLoggedIn, checkUserType('admin'), (req, res) => {

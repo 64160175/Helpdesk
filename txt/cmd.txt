@@ -6,6 +6,10 @@ npm install -g nodemon
 npm install mysql
 npm install ejs
 
+
+---------------------------
+npm install express-session
+npm install multer
 nodemon index.js
 
 
