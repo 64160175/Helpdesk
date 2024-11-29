@@ -5,3 +5,7 @@ INSERT INTO tbl_emp_section (id_emp_section, section, status)
 VALUES 
 (1, 'Die Casting', 'active'),
 (2, 'Plastic Operation', 'active');
+
+
+
+INSERT INTO `tbl_item_stock` (`id_item_stock`, `id_add_item`, `type`, `quantity`, `timestamp`) VALUES ('0', '1', NULL, '13', current_timestamp());
