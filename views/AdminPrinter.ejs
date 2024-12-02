@@ -95,9 +95,53 @@
                         <li class="breadcrumb-item">ระบบอนุมัติ</a>
                         <li class="breadcrumb-item active">คำร้องขอ</li>
                     </ol>
+                    <!-- ... (ส่วนหัวของไฟล์ HTML) ... -->
+                    
                     <div class="card mb-4">
-                        .
+                        <div class="card-header">
+                            <i class="fas fa-print me-1"></i>
+                            รายการเครื่องปริ้นเตอร์
+                            <div class="float-end">
+                                <button class="btn btn-primary btn-sm" onclick="addSerial()">
+                                    <i class="fas fa-plus"></i> เพิ่ม Serial Number
+                                </button>
+                                <button class="btn btn-success btn-sm" onclick="addNewPrinter()">
+                                    <i class="fas fa-plus-circle"></i> เพิ่มเครื่องปริ้นรุ่นใหม่
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <table id="printerTable" class="table table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>ลำดับที่</th>
+                                        <th>ชื่อปริ้นเตอร์</th>
+                                        <th>Serial Number</th>
+                                        <th>แผนก</th>
+                                        <th>สถานะ</th>
+                                        <th>การจัดการ</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% printers.forEach((printer, index) => { %>
+                                        <tr>
+                                            <td><%= index + 1 %></td>
+                                            <td><%= printer.p_brand %></td>
+                                            <td><%= printer.p_serial %></td>
+                                            <td><%= printer.section %></td>
+                                            <td><%= printer.p_status %></td>
+                                            <td>
+                                                <button class="btn btn-primary btn-sm" onclick="editPrinter(<%= printer.id_add_printer %>)">แก้ไข</button>
+                                                <button class="btn btn-danger btn-sm" onclick="deletePrinter(<%= printer.id_add_printer %>)">ลบ</button>
+                                            </td>
+                                        </tr>
+                                    <% }); %>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
+                    
+                    <!-- ... (ส่วนท้ายของไฟล์ HTML) ... -->
                 </div>
             </main>
         </div>
