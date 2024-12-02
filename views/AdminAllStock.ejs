@@ -97,7 +97,30 @@
                     </ol>
                     <div class="card mb-4">
                         <div class="card-body">
-                            This page is an example of using the light side navigation option. By appending the
+                            <table id="itemsTable" class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>ลำดับที่</th>
+                                        <th>ชื่อวัสดุทั่วไป</th>
+                                        <th>ประเภท/สี</th>
+                                        <th>จำนวนคงเหลือ</th>
+                                        <th>การดำเนินการ</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% items.forEach((item, index) => { %>
+                                        <tr>
+                                            <td><%= index + 1 %></td>
+                                            <td><%= item.i_brand %></td>
+                                            <td><%= item.type || '-' %></td>
+                                            <td><%= item.quantity %></td>
+                                            <td>
+                                                <button class="btn btn-primary btn-sm" onclick="showAddStockModal('<%= item.id_item_stock %>')">เพิ่ม Stock</button>
+                                            </td>
+                                        </tr>
+                                    <% }); %>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -105,6 +128,65 @@
         </div>
     </div>
 
+
+
+    <!-- MODAL -->
+    <div class="modal fade" id="addStockModal" tabindex="-1" aria-labelledby="addStockModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addStockModalLabel">เพิ่ม Stock</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="itemId">
+                    <div class="mb-3">
+                        <label for="quantity" class="form-label">จำนวนที่ต้องการเพิ่ม</label>
+                        <input type="number" class="form-control" id="quantity" min="1">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+                    <button type="button" class="btn btn-primary" onclick="addStock()">เพิ่ม</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function showAddStockModal(itemId) {
+            document.getElementById('itemId').value = itemId;
+            var modal = new bootstrap.Modal(document.getElementById('addStockModal'));
+            modal.show();
+        }
+    
+        function addStock() {
+            var itemId = document.getElementById('itemId').value;
+            var quantity = document.getElementById('quantity').value;
+    
+            fetch('/updateStock', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ id: itemId, quantity: quantity }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Stock updated successfully');
+                    location.reload();
+                } else {
+                    alert('Error updating stock');
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                alert('Error updating stock');
+            });
+        }
+    </script>
+    <!-- ------------------ -->
     <!-- SCRIPT -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
         crossorigin="anonymous"></script>
