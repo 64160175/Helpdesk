@@ -16,5 +16,5 @@ router.get('/AdminItem', isLoggedIn, checkUserType('admin'), ItemController.getA
 router.post('/admin/add-item', isLoggedIn, checkUserType('admin'), upload.single('itemPicture'), ItemController.addItem);
 
 // Route สำหรับเพิ่มเครื่องปริ้นเตอร์
-
+router.get('/AdminPrinter', isLoggedIn, checkUserType('admin'), );
 module.exports = router;

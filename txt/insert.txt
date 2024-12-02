@@ -9,3 +9,22 @@ VALUES
 
 
 INSERT INTO `tbl_item_stock` (`id_item_stock`, `id_add_item`, `type`, `quantity`, `timestamp`) VALUES ('0', '1', NULL, '13', current_timestamp());
+
+//ปริ้นเตอร์
+INSERT INTO `tbl_add_printer` (`id_add_printer`, `p_brand`) VALUES ('1', 'Epson test');
+
+INSERT INTO `tbl_printer` (`id_printer`, `id_p_brand`, `p_serial`, `id_emp_section`, `p_status`) VALUES ('1', '1', 'X59J000213', '5', 'active');
+
+
+ALTER TABLE `tbl_printer_stock` ADD `toner_c` INT NOT NULL AFTER `id_p_brand`,
+ ADD `toner_c_quantity` INT NOT NULL AFTER `toner_c`, 
+ ADD `toner_m` INT NOT NULL AFTER `toner_c_quantity`,
+  ADD `toner_m_quantity` INT NOT NULL AFTER `toner_m`, 
+  ADD `toner_y` INT NOT NULL AFTER `toner_m_quantity`,
+   ADD `toner_y_quantity` INT NOT NULL AFTER `toner_y`,
+    ADD `toner_k` INT NOT NULL AFTER `toner_y_quantity`,
+     ADD `toner_k_quantity` INT NOT NULL AFTER `toner_k`,
+      ADD `waste_toner` INT NOT NULL AFTER `toner_k_quantity`,
+       ADD `waste_toner_quantity` INT NOT NULL AFTER `waste_toner`,
+        ADD `drum` INT NOT NULL AFTER `waste_toner_quantity`, 
+        ADD `drum_quantity` INT NOT NULL AFTER `drum`;
