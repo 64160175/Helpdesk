@@ -3,7 +3,7 @@ const router = express.Router();
 const multer = require('multer');
 const upload = multer();
 const ItemController = require('../controllers/itemController');
-const printerController = require('../controllers/printerController');
+const PrinterController = require('../controllers/printerController');
 const { isLoggedIn, checkUserType } = require('../middlewares/authMiddleware');
 const WarehouseController = require('../controllers/warehouseController');
 
@@ -17,7 +17,8 @@ router.get('/AdminItem', isLoggedIn, checkUserType('admin'), ItemController.getA
 router.post('/admin/add-item', isLoggedIn, checkUserType('admin'), upload.single('itemPicture'), ItemController.addItem);
 
 // Route สำหรับเพิ่มเครื่องปริ้นเตอร์
-router.get('/AdminPrinter', isLoggedIn, checkUserType('admin'), printerController.getAllPrinters);
-router.post('/add-printer', isLoggedIn, checkUserType('admin'), express.json(), printerController.addPrinter);
+router.get('/AdminPrinter', isLoggedIn, checkUserType('admin'), PrinterController.getAllPrinters);
+router.post('/add-printer', isLoggedIn, checkUserType('admin'), express.json(), PrinterController.addPrinter);
+router.post('/delete-printer/:id', PrinterController.deletePrinter); // New route for deleting
 
 module.exports = router;
