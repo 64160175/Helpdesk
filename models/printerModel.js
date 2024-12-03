@@ -8,6 +8,7 @@ class PrinterModel {
                 FROM tbl_printer p
                 JOIN tbl_add_printer ap ON p.id_p_brand = ap.id_add_printer
                 JOIN tbl_emp_section es ON p.id_emp_section = es.id_emp_section
+                WHERE p.p_status = 'active' 
                 ORDER BY p.id_printer
             `;
             db.query(query, (error, results) => {
@@ -18,6 +19,8 @@ class PrinterModel {
             });
         });
     }
+    
+    
 
     static addPrinter(printerBrand) {
         return new Promise((resolve, reject) => {
@@ -44,6 +47,21 @@ class PrinterModel {
             });
         });
     }
+
+
+    static updatePrinterStatus(printerId, status) {
+      return new Promise((resolve, reject) => {
+          const sql = `UPDATE tbl_printer SET p_status = ? WHERE id_printer = ?`; 
+          db.query(sql, [status, printerId], (err, result) => {
+            if (err) {
+                  reject(err);
+              } else {
+                  resolve(result);
+              }
+          });
+
+      });
+  }
 }
 
 

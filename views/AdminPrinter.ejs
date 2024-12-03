@@ -90,10 +90,10 @@
         <div id="layoutSidenav_content">
             <main>
                 <div class="container-fluid px-4">
-                    <h1 class="mt-4">คำร้องขอ</h1>
+                    <h1 class="mt-4">เพิ่มเครื่องปริ้นรุ่นใหม่</h1>
                     <ol class="breadcrumb mb-4">
-                        <li class="breadcrumb-item">ระบบอนุมัติ</a>
-                        <li class="breadcrumb-item active">คำร้องขอ</li>
+                        <li class="breadcrumb-item">ระบบคลังอุปกรณ์</a>
+                        <li class="breadcrumb-item active">เพิ่มเครื่องปริ้นรุ่นใหม่</li>
                     </ol>
                     <!-- ... (ส่วนหัวของไฟล์ HTML) ... -->
 
@@ -115,7 +115,7 @@
                                 <thead>
                                     <tr>
                                         <th>ลำดับที่</th>
-                                        <th>ชื่อปริ้นเตอร์</th>
+                                        <th>รุ่นเครื่องปริ้นเตอร์</th>
                                         <th>Serial Number</th>
                                         <th>แผนก</th>
                                         <th>สถานะ</th>
@@ -141,10 +141,9 @@
                                                 <%= printer.p_status %>
                                             </td>
                                             <td>
-                                                <button class="btn btn-primary btn-sm"
-                                                    onclick="editPrinter(<%= printer.id_add_printer %>)">แก้ไข</button>
                                                 <button class="btn btn-danger btn-sm"
-                                                    onclick="deletePrinter(<%= printer.id_add_printer %>)">ลบ</button>
+                                                    onclick="deletePrinter(<%= printer.id_printer %>)">ลบ</button>
+
                                             </td>
                                         </tr>
                                         <% }); %>
@@ -152,8 +151,6 @@
                             </table>
                         </div>
                     </div>
-
-                    <!-- ... (ส่วนท้ายของไฟล์ HTML) ... -->
                 </div>
             </main>
         </div>
@@ -173,7 +170,8 @@
                     <form id="addPrinterForm">
                         <div class="mb-3">
                             <label for="printerBrand" class="form-label">ชื่อปริ้นเตอร์</label>
-                            <input type="text" class="form-control" id="printerBrand" required  placeholder="เช่น: Fuji รุ่น C3060">
+                            <input type="text" class="form-control" id="printerBrand" required
+                                placeholder="เช่น: Fuji รุ่น C3060">
                         </div>
                     </form>
                 </div>
@@ -210,6 +208,24 @@
                 })
                 .catch(error => console.error('Error:', error));
         }
+
+        function deletePrinter(printerId) {
+            if (confirm('คุณแน่ใจที่จะลบเครื่องปริ้นเตอร์นี้?')) {
+                fetch(`/delete-printer/${printerId}`, { method: 'POST' })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            location.reload();
+                        } else {
+                            alert(data.message || 'Error deleting printer');
+                        }
+                    })
+                    .catch(error => {
+                        window.location.href = '/error';
+                    });
+            }
+        }
+
     </script>
 
 
