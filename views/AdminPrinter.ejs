@@ -62,13 +62,13 @@
                             คลังอุปกรณ์ทั้งหมด
                         </a>
                         <a class="nav-link" href="/AdminPrinter">
-                                <div class="sb-nav-link-icon"><i class="fas fa-plus-circle"></i></div>
-                                สร้างเครื่องปริ้นเตอร์
-                            </a>
-                            <a class="nav-link" href="/AdminItem">
-                                <div class="sb-nav-link-icon"><i class="fas fa-plus-circle"></i></div>
-                                สร้างวัสดุทั่วไป
-                            </a>
+                            <div class="sb-nav-link-icon"><i class="fas fa-plus-circle"></i></div>
+                            สร้างเครื่องปริ้นเตอร์
+                        </a>
+                        <a class="nav-link" href="/AdminItem">
+                            <div class="sb-nav-link-icon"><i class="fas fa-plus-circle"></i></div>
+                            สร้างวัสดุทั่วไป
+                        </a>
 
 
                         <div class="sb-sidenav-menu-heading">การจัดการ</div>
@@ -96,7 +96,7 @@
                         <li class="breadcrumb-item active">คำร้องขอ</li>
                     </ol>
                     <!-- ... (ส่วนหัวของไฟล์ HTML) ... -->
-                    
+
                     <div class="card mb-4">
                         <div class="card-header">
                             <i class="fas fa-print me-1"></i>
@@ -123,29 +123,95 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <% printers.forEach((printer, index) => { %>
+                                    <% printers.forEach((printer, index)=> { %>
                                         <tr>
-                                            <td><%= index + 1 %></td>
-                                            <td><%= printer.p_brand %></td>
-                                            <td><%= printer.p_serial %></td>
-                                            <td><%= printer.section %></td>
-                                            <td><%= printer.p_status %></td>
                                             <td>
-                                                <button class="btn btn-primary btn-sm" onclick="editPrinter(<%= printer.id_add_printer %>)">แก้ไข</button>
-                                                <button class="btn btn-danger btn-sm" onclick="deletePrinter(<%= printer.id_add_printer %>)">ลบ</button>
+                                                <%= index + 1 %>
+                                            </td>
+                                            <td>
+                                                <%= printer.p_brand %>
+                                            </td>
+                                            <td>
+                                                <%= printer.p_serial %>
+                                            </td>
+                                            <td>
+                                                <%= printer.section %>
+                                            </td>
+                                            <td>
+                                                <%= printer.p_status %>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-primary btn-sm"
+                                                    onclick="editPrinter(<%= printer.id_add_printer %>)">แก้ไข</button>
+                                                <button class="btn btn-danger btn-sm"
+                                                    onclick="deletePrinter(<%= printer.id_add_printer %>)">ลบ</button>
                                             </td>
                                         </tr>
-                                    <% }); %>
+                                        <% }); %>
                                 </tbody>
                             </table>
                         </div>
                     </div>
-                    
+
                     <!-- ... (ส่วนท้ายของไฟล์ HTML) ... -->
                 </div>
             </main>
         </div>
     </div>
+
+
+    <!-- Add this modal code before the closing </body> tag -->
+    <div class="modal fade" id="addPrinterModal" tabindex="-1" aria-labelledby="addPrinterModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addPrinterModalLabel">เพิ่มเครื่องปริ้นรุ่นใหม่</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addPrinterForm">
+                        <div class="mb-3">
+                            <label for="printerBrand" class="form-label">ชื่อปริ้นเตอร์</label>
+                            <input type="text" class="form-control" id="printerBrand" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+                    <button type="button" class="btn btn-primary" onclick="submitAddPrinter()">บันทึก</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function addNewPrinter() {
+            var addPrinterModal = new bootstrap.Modal(document.getElementById('addPrinterModal'));
+            addPrinterModal.show();
+        }
+
+        function submitAddPrinter() {
+            const printerBrand = document.getElementById('printerBrand').value;
+            fetch('/add-printer', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ printerBrand })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        location.reload();
+                    } else {
+                        alert('Error adding printer');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    </script>
+
 
     <!-- SCRIPT -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"

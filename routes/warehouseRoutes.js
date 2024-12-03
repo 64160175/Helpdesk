@@ -18,5 +18,6 @@ router.post('/admin/add-item', isLoggedIn, checkUserType('admin'), upload.single
 
 // Route สำหรับเพิ่มเครื่องปริ้นเตอร์
 router.get('/AdminPrinter', isLoggedIn, checkUserType('admin'), printerController.getAllPrinters);
+router.post('/add-printer', isLoggedIn, checkUserType('admin'), express.json(), printerController.addPrinter);
 
 module.exports = router;

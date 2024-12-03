@@ -1,6 +1,7 @@
 const db = require('../db');
 
 const Printer = {
+  // Get all printers from the database
   getAllPrinters: () => {
     return new Promise((resolve, reject) => {
       const query = `
@@ -19,7 +20,18 @@ const Printer = {
     });
   },
 
-  // เพิ่มฟังก์ชันอื่นๆ ตามความต้องการ เช่น addPrinter, updatePrinter, deletePrinter
+  // Add a new printer to the database
+  addPrinter: (printerBrand) => {
+    return new Promise((resolve, reject) => {
+      const query = 'INSERT INTO tbl_add_printer (p_brand) VALUES (?)';
+      db.query(query, [printerBrand], (error, results) => {
+        if (error) {
+          return reject(error);
+        }
+        resolve(results);
+      });
+    });
+  }
 };
 
 module.exports = Printer;
