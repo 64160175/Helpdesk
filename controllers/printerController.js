@@ -1,15 +1,18 @@
 const PrinterModel = require('../models/printerModel');
 
 class PrinterController {
-    static async getAllPrinters(req, res) {
-        try {
-            const printers = await PrinterModel.getAllPrinters();
-            res.render('AdminPrinter', { printers });
-        } catch (error) {
-            console.error('Error fetching printers:', error);
-            res.status(500).send('Internal Server Error');
-        }
+  static async getAllPrinters(req, res) {
+    try {
+        const printers = await PrinterModel.getAllPrinters();
+        const printerBrands = await PrinterModel.getAllPrinterBrands(); // Fetch all printer brands
+        const sections = await PrinterModel.getAllSections(); // Fetch all sections
+
+        res.render('AdminPrinter', { printers, printerBrands, sections }); // Pass all three
+    } catch (error) {
+        console.error('Error fetching printers:', error);
+        res.status(500).json({ success: false, message: 'Internal server error' });
     }
+}
 
     static async addPrinter(req, res) {
         try {
@@ -44,6 +47,18 @@ class PrinterController {
             res.status(500).json({ success: false, message: 'Internal server error' });
         }
     }
+
+    static async addPrinterSerial(req, res) {
+      try {
+          const { id_p_brand, p_serial, id_emp_section } = req.body;
+
+          const result = await PrinterModel.addPrinterSerial(id_p_brand, p_serial, id_emp_section);
+          res.json({ success: true });
+      } catch (error) {
+          console.error("Error adding printer serial:", error);
+          res.status(500).json({ success: false, message: "Failed to add printer serial" });
+      }
+  }
 }
 
 

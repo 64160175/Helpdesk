@@ -157,7 +157,7 @@
     </div>
 
 
-    <!-- Add this modal code before the closing </body> tag -->
+    <!-- addPrinterModal -->
     <div class="modal fade" id="addPrinterModal" tabindex="-1" aria-labelledby="addPrinterModalLabel"
         aria-hidden="true">
         <div class="modal-dialog">
@@ -178,6 +178,46 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
                     <button type="button" class="btn btn-primary" onclick="submitAddPrinter()">บันทึก</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- addSerialModal -->
+    <div class="modal fade" id="addSerialModal" tabindex="-1" aria-labelledby="addSerialModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addSerialModalLabel">เพิ่ม Serial Number</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addSerialForm">
+                        <div class="mb-3">
+                            <label for="printerBrandSelect" class="form-label">ชื่อปริ้นเตอร์</label>
+                            <select class="form-select" id="printerBrandSelect" required>
+                                <% printerBrands.forEach(brand => { %>
+                                    <option value="<%= brand.id_add_printer %>"><%= brand.p_brand %></option>
+                                <% }); %>
+                                
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="serialNumber" class="form-label">Serial Number</label>
+                            <input type="text" class="form-control" id="serialNumber" required>
+                        </div>
+                         <div class="mb-3">
+                            <label for="sectionSelect" class="form-label">แผนก</label>
+                            <select class="form-select" id="sectionSelect" required>
+                                <% sections.forEach(section => { %>
+                                    <option value="<%= section.id_emp_section %>"><%= section.section %></option>
+                                <% }); %>
+                            </select>
+                        </div>
+    
+    
+                        <button type="submit" class="btn btn-primary">บันทึก</button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -225,6 +265,39 @@
                     });
             }
         }
+
+
+        function addSerial() {
+        new bootstrap.Modal(document.getElementById('addSerialModal')).show();
+    }
+
+    document.getElementById('addSerialForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const id_p_brand = document.getElementById('printerBrandSelect').value;
+        const p_serial = document.getElementById('serialNumber').value;
+        const id_emp_section = document.getElementById('sectionSelect').value;
+
+        fetch('/add-printer-serial', {  // New route for adding serial
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ id_p_brand, p_serial, id_emp_section })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+               location.reload(); // Or redirect, if needed
+            } else {
+                alert(data.message || 'Error adding serial number.'); // Provide feedback
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while adding the serial number.'); // Display error
+        });
+    });
 
     </script>
 

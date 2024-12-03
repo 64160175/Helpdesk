@@ -19,6 +19,6 @@ router.post('/admin/add-item', isLoggedIn, checkUserType('admin'), upload.single
 // Route สำหรับเพิ่มเครื่องปริ้นเตอร์
 router.get('/AdminPrinter', isLoggedIn, checkUserType('admin'), PrinterController.getAllPrinters);
 router.post('/add-printer', isLoggedIn, checkUserType('admin'), express.json(), PrinterController.addPrinter);
-router.post('/delete-printer/:id', PrinterController.deletePrinter); // New route for deleting
-
+router.post('/delete-printer/:id', PrinterController.deletePrinter); 
+router.post('/add-printer-serial', PrinterController.addPrinterSerial);
 module.exports = router;
