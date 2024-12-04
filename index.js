@@ -35,7 +35,7 @@ const managerRoutes = require('./routes/managerRoutes'); app.use('/', managerRou
 
 //admin
 const memberRoutes = require('./routes/memberRoute'); app.use('/', memberRoutes);
-const warehouseRoutes = require('./routes/warehouseRoutes'); app.use('/', warehouseRoutes);
+const warehouseRoutes = require('./routes/warehouseRoute'); app.use('/', warehouseRoutes);
 
 // ลบแผนก
 app.use(express.json());

@@ -30,10 +30,10 @@ class PrinterModel {
         if (error) {
           return reject(error);
         }
-        
+
         const latestId = results[0].maxId || 0;
         const newId = latestId + 1;
-        
+
         // Now insert the new printer with the incremented ID
         const insertQuery = 'INSERT INTO tbl_add_printer (id_add_printer, p_brand) VALUES (?, ?)';
         db.query(insertQuery, [newId, printerBrand], (error, results) => {
@@ -77,9 +77,10 @@ class PrinterModel {
 
   static addPrinterSerial(id_p_brand, p_serial, id_emp_section) {
     return new Promise((resolve, reject) => {
-      const sql = `INSERT INTO tbl_printer (id_p_brand, p_serial, id_emp_section, p_status) VALUES (?, ?, ?, 'active')`; // Set p_status to 'active'
+      const sql = `INSERT INTO tbl_printer (id_p_brand, p_serial, id_emp_section, p_status) VALUES (?, ?, ?, 'active')`;
       db.query(sql, [id_p_brand, p_serial, id_emp_section], (err, result) => {
         if (err) {
+          console.error('SQL Error:', err);
           reject(err);
         } else {
           resolve(result);
@@ -91,29 +92,29 @@ class PrinterModel {
 
   static getAllPrinterBrands() {
     return new Promise((resolve, reject) => {
-        const sql = 'SELECT * FROM tbl_add_printer';
-        db.query(sql, (err, results) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(results);
-            }
-        });
+      const sql = 'SELECT * FROM tbl_add_printer';
+      db.query(sql, (err, results) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(results);
+        }
+      });
     });
-}
+  }
 
-static getAllSections() {
+  static getAllSections() {
     return new Promise((resolve, reject) => {
-        const sql = 'SELECT * FROM tbl_emp_section WHERE status = "active"';  // Add WHERE clause
-        db.query(sql, (err, results) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(results);
-            }
-        });
+      const sql = 'SELECT * FROM tbl_emp_section WHERE status = "active"';
+      db.query(sql, (err, results) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(results);
+        }
+      });
     });
-}
+  }
 
 }
 

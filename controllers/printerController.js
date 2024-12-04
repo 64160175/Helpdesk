@@ -49,16 +49,37 @@ class PrinterController {
     }
 
     static async addPrinterSerial(req, res) {
-      try {
-          const { id_p_brand, p_serial, id_emp_section } = req.body;
+        try {
+            console.log('Received body:', req.body); // Log ข้อมูลที่ได้รับ
 
-          const result = await PrinterModel.addPrinterSerial(id_p_brand, p_serial, id_emp_section);
-          res.json({ success: true });
-      } catch (error) {
-          console.error("Error adding printer serial:", error);
-          res.status(500).json({ success: false, message: "Failed to add printer serial" });
-      }
-  }
+            const { id_p_brand, p_serial, id_emp_section } = req.body;
+
+            if (!id_p_brand || !p_serial || !id_emp_section) {
+                return res.status(400).json({ 
+                    success: false, 
+                    message: "Missing required fields",
+                    receivedData: req.body
+                });
+            }
+
+            const result = await PrinterModel.addPrinterSerial(id_p_brand, p_serial, id_emp_section);
+            res.json({ success: true, message: "Printer serial added successfully" });
+        } catch (error) {
+            console.error("Error adding printer serial:", error);
+            res.status(500).json({ success: false, message: "Failed to add printer serial", error: error.message });
+        }
+    }
+
+    static async getAddPrinterPage(req, res) {
+        try {
+            const printerBrands = await PrinterModel.getAllPrinterBrands();
+            const sections = await PrinterModel.getAllSections();
+            res.render('AdminPrinter', { printerBrands, sections });
+        } catch (error) {
+            console.error("Error fetching data for add printer page:", error);
+            res.status(500).send("Internal Server Error");
+        }
+    }
 }
 
 

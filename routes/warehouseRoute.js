@@ -20,5 +20,6 @@ router.post('/admin/add-item', isLoggedIn, checkUserType('admin'), upload.single
 router.get('/AdminPrinter', isLoggedIn, checkUserType('admin'), PrinterController.getAllPrinters);
 router.post('/add-printer', isLoggedIn, checkUserType('admin'), express.json(), PrinterController.addPrinter);
 router.post('/delete-printer/:id', PrinterController.deletePrinter); 
-router.post('/add-printer-serial', PrinterController.addPrinterSerial);
+router.post('/add-printer-serial', express.json(), PrinterController.addPrinterSerial);
+
 module.exports = router;
