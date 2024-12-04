@@ -28,3 +28,8 @@ ALTER TABLE `tbl_printer_stock` ADD `toner_c` INT NOT NULL AFTER `id_p_brand`,
        ADD `waste_toner_quantity` INT NOT NULL AFTER `waste_toner`,
         ADD `drum` INT NOT NULL AFTER `waste_toner_quantity`, 
         ADD `drum_quantity` INT NOT NULL AFTER `drum`;
+
+
+////////
+DESCRIBE tbl_printer;
+////////

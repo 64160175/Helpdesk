@@ -15,31 +15,57 @@ class ItemModel {
                 pictureBuffer = null;
             }
 
-    
-            const addItemQuery = 'INSERT INTO tbl_add_item (i_brand, i_picture) VALUES (?, ?)';
-            db.query(addItemQuery, [itemName, pictureBuffer], (error, results) => {    
+            // หา ID ล่าสุด
+            const getLatestIdQuery = 'SELECT MAX(id_add_item) as maxId FROM tbl_add_item';
+            db.query(getLatestIdQuery, (error, results) => {
                 if (error) {
                     return db.rollback(() => {
                         callback(error);
                     });
                 }
-    
-                const id_add_item = results.insertId;
-                const addStockQuery = 'INSERT INTO tbl_item_stock (id_add_item, type, quantity) VALUES (?, ?, ?)';
-                db.query(addStockQuery, [id_add_item, type || null, 0], (error) => {
+
+                const latestId = results[0].maxId || 0;
+                const newId = latestId + 1;
+
+                // เพิ่มรายการใหม่ด้วย ID ที่เพิ่มขึ้น
+                // เพิ่มรายการใหม่ด้วย ID ที่เพิ่มขึ้น
+                const addItemQuery = 'INSERT INTO tbl_add_item (id_add_item, i_brand, i_picture) VALUES (?, ?, ?)';
+                db.query(addItemQuery, [newId, itemName, pictureBuffer], (error, results) => {    
                     if (error) {
                         return db.rollback(() => {
                             callback(error);
                         });
                     }
     
-                    db.commit((err) => {
-                        if (err) {
+                    // หา ID ล่าสุดในตาราง tbl_item_stock
+                    const getLatestStockIdQuery = 'SELECT MAX(id_item_stock) as maxStockId FROM tbl_item_stock';
+                    db.query(getLatestStockIdQuery, (error, stockResults) => {
+                        if (error) {
                             return db.rollback(() => {
-                                callback(err);
+                                callback(error);
                             });
                         }
-                        callback(null, id_add_item);
+
+                        const latestStockId = stockResults[0].maxStockId || 0;
+                        const newStockId = latestStockId + 1;
+
+                        const addStockQuery = 'INSERT INTO tbl_item_stock (id_item_stock, id_add_item, type, quantity) VALUES (?, ?, ?, ?)';
+                        db.query(addStockQuery, [newStockId, newId, type || null, 0], (error) => {
+                            if (error) {
+                                return db.rollback(() => {
+                                    callback(error);
+                                });
+                            }
+    
+                            db.commit((err) => {
+                                if (err) {
+                                    return db.rollback(() => {
+                                        callback(err);
+                                    });
+                                }
+                                callback(null, newId);
+                            });
+                        });
                     });
                 });
             });

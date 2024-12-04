@@ -24,12 +24,24 @@ class PrinterModel {
 
   static addPrinter(printerBrand) {
     return new Promise((resolve, reject) => {
-      const query = 'INSERT INTO tbl_add_printer (p_brand) VALUES (?)';
-      db.query(query, [printerBrand], (error, results) => {
+      // First, get the latest ID
+      const getLatestIdQuery = 'SELECT MAX(id_add_printer) as maxId FROM tbl_add_printer';
+      db.query(getLatestIdQuery, (error, results) => {
         if (error) {
           return reject(error);
         }
-        resolve(results);
+        
+        const latestId = results[0].maxId || 0;
+        const newId = latestId + 1;
+        
+        // Now insert the new printer with the incremented ID
+        const insertQuery = 'INSERT INTO tbl_add_printer (id_add_printer, p_brand) VALUES (?, ?)';
+        db.query(insertQuery, [newId, printerBrand], (error, results) => {
+          if (error) {
+            return reject(error);
+          }
+          resolve(results);
+        });
       });
     });
   }
