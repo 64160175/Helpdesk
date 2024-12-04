@@ -18,11 +18,11 @@ class ItemController {
     static addItem(req, res) {
         const { itemName, type } = req.body;
         let itemPicture = null;
-    
+
         if (req.file) {
             itemPicture = req.file.buffer.toString('base64');
         }
-    
+
         ItemModel.addItem(itemName, itemPicture, type, (error, itemId) => {
             if (error) {
                 console.error('Error adding item:', error);

@@ -34,6 +34,7 @@ const userRoutes = require('./routes/userRoutes'); app.use('/', userRoutes);
 const managerRoutes = require('./routes/managerRoutes'); app.use('/', managerRoutes);
 
 //admin
+const adminRoutes = require('./routes/adminRoutes'); app.use('/', adminRoutes);
 const memberRoutes = require('./routes/memberRoute'); app.use('/', memberRoutes);
 const warehouseRoutes = require('./routes/warehouseRoute'); app.use('/', warehouseRoutes);
 
@@ -41,7 +42,6 @@ const warehouseRoutes = require('./routes/warehouseRoute'); app.use('/', warehou
 app.use(express.json());
 app.use('/member', memberRoutes);
 
-const adminRoutes = require('./routes/adminRoutes'); app.use('/', adminRoutes);
 
 //--------------------------------------------------------------------------
 

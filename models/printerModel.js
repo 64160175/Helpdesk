@@ -20,11 +20,8 @@ class PrinterModel {
     });
   }
 
-
-
   static addPrinter(printerBrand) {
     return new Promise((resolve, reject) => {
-      // First, get the latest ID
       const getLatestIdQuery = 'SELECT MAX(id_add_printer) as maxId FROM tbl_add_printer';
       db.query(getLatestIdQuery, (error, results) => {
         if (error) {
@@ -33,8 +30,6 @@ class PrinterModel {
 
         const latestId = results[0].maxId || 0;
         const newId = latestId + 1;
-
-        // Now insert the new printer with the incremented ID
         const insertQuery = 'INSERT INTO tbl_add_printer (id_add_printer, p_brand) VALUES (?, ?)';
         db.query(insertQuery, [newId, printerBrand], (error, results) => {
           if (error) {
@@ -46,21 +41,6 @@ class PrinterModel {
     });
   }
 
-
-  static updatePrinterStatus(printerId, status) {
-    return new Promise((resolve, reject) => {
-      const sql = `UPDATE tbl_printer SET p_status = ? WHERE id_add_printer = ?`;
-      db.query(sql, [status, printerId], (err, result) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(result);
-        }
-      });
-    });
-  }
-
-
   static updatePrinterStatus(printerId, status) {
     return new Promise((resolve, reject) => {
       const sql = `UPDATE tbl_printer SET p_status = ? WHERE id_printer = ?`;
@@ -71,7 +51,6 @@ class PrinterModel {
           resolve(result);
         }
       });
-
     });
   }
 
@@ -84,11 +63,10 @@ class PrinterModel {
           console.error('Error getting latest ID:', error);
           return reject(error);
         }
-  
+
         const latestId = results[0].maxId || 0;
         const newId = latestId + 1;
-  
-        // Now insert the new printer with the incremented ID
+
         const sql = `INSERT INTO tbl_printer (id_printer, id_p_brand, p_serial, id_emp_section, p_status) VALUES (?, ?, ?, ?, 'active')`;
         db.query(sql, [newId, id_p_brand, p_serial, id_emp_section], (err, result) => {
           if (err) {
@@ -101,7 +79,6 @@ class PrinterModel {
       });
     });
   }
-
 
   static getAllPrinterBrands() {
     return new Promise((resolve, reject) => {
@@ -128,9 +105,7 @@ class PrinterModel {
       });
     });
   }
-
 }
-
 
 module.exports = PrinterModel;
 

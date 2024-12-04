@@ -111,17 +111,27 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <% items.forEach((item, index) => { %>
+                                    <% items.forEach((item, index)=> { %>
                                         <tr>
-                                            <td><%= index + 1 %></td>
-                                            <td><%= item.i_brand %></td>
-                                            <td><%= item.type || '-' %></td>
-                                            <td><%= item.quantity %></td>
                                             <td>
-                                                <button class="btn btn-primary btn-sm" onclick="showAddStockModal('<%= item.id_item_stock %>')">เพิ่ม Stock</button>
+                                                <%= index + 1 %>
+                                            </td>
+                                            <td>
+                                                <%= item.i_brand %>
+                                            </td>
+                                            <td>
+                                                <%= item.type || '-' %>
+                                            </td>
+                                            <td>
+                                                <%= item.quantity %>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-primary btn-sm"
+                                                    onclick="showAddStockModal('<%= item.id_item_stock %>')">เพิ่ม
+                                                    Stock</button>
                                             </td>
                                         </tr>
-                                    <% }); %>
+                                        <% }); %>
                                 </tbody>
                             </table>
                         </div>
@@ -155,18 +165,18 @@
             </div>
         </div>
     </div>
-    
+
     <script>
         function showAddStockModal(itemId) {
             document.getElementById('itemId').value = itemId;
             var modal = new bootstrap.Modal(document.getElementById('addStockModal'));
             modal.show();
         }
-    
+
         function addStock() {
             var itemId = document.getElementById('itemId').value;
             var quantity = document.getElementById('quantity').value;
-    
+
             fetch('/updateStock', {
                 method: 'POST',
                 headers: {
@@ -174,19 +184,19 @@
                 },
                 body: JSON.stringify({ id: itemId, quantity: quantity }),
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert('Stock updated successfully');
-                    location.reload();
-                } else {
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Stock updated successfully');
+                        location.reload();
+                    } else {
+                        alert('Error updating stock');
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
                     alert('Error updating stock');
-                }
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-                alert('Error updating stock');
-            });
+                });
         }
     </script>
     <!-- ------------------ -->

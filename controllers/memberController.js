@@ -54,7 +54,6 @@ class MemberController {
         });
     }
 
-    //เปลี่ยนเป็นอัปเดตข้อมูล DB สำหรับการลบแผนกในนี้แทน
     static deleteSection(req, res) {
         const sectionId = req.body.id_emp_section;
         const query = 'UPDATE tbl_emp_section SET status = ? WHERE id_emp_section = ?';
@@ -63,7 +62,7 @@ class MemberController {
                 console.error('Error updating section status:', err);
                 return res.status(500).send('Error updating section status');
             }
-            res.send('Section status updated to inactive');
+            res.send('ลบข้อมูลแผนกสำเร็จ');
         });
     }
 
@@ -85,7 +84,7 @@ class MemberController {
                 console.error('Error adding section:', err);
                 return res.status(500).send('Error adding section');
             }
-            res.send('Section added successfully');
+            res.send('เพิ่มข้อมูลแผนกใหม่สำเร็จ');
         });
     }
 }

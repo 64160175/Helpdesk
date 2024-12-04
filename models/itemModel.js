@@ -26,18 +26,14 @@ class ItemModel {
 
                 const latestId = results[0].maxId || 0;
                 const newId = latestId + 1;
-
-                // เพิ่มรายการใหม่ด้วย ID ที่เพิ่มขึ้น
-                // เพิ่มรายการใหม่ด้วย ID ที่เพิ่มขึ้น
                 const addItemQuery = 'INSERT INTO tbl_add_item (id_add_item, i_brand, i_picture) VALUES (?, ?, ?)';
-                db.query(addItemQuery, [newId, itemName, pictureBuffer], (error, results) => {    
+                db.query(addItemQuery, [newId, itemName, pictureBuffer], (error, results) => {
                     if (error) {
                         return db.rollback(() => {
                             callback(error);
                         });
                     }
-    
-                    // หา ID ล่าสุดในตาราง tbl_item_stock
+
                     const getLatestStockIdQuery = 'SELECT MAX(id_item_stock) as maxStockId FROM tbl_item_stock';
                     db.query(getLatestStockIdQuery, (error, stockResults) => {
                         if (error) {
@@ -56,7 +52,7 @@ class ItemModel {
                                     callback(error);
                                 });
                             }
-    
+
                             db.commit((err) => {
                                 if (err) {
                                     return db.rollback(() => {

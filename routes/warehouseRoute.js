@@ -11,7 +11,6 @@ const WarehouseController = require('../controllers/warehouseController');
 router.get('/AdminAllStock', isLoggedIn, checkUserType('admin'), WarehouseController.getAllItems);
 router.post('/updateStock', WarehouseController.updateStock);
 
-
 // Route สำหรับหน้าสร้างวัสดุทั่วไป
 router.get('/AdminItem', isLoggedIn, checkUserType('admin'), ItemController.getAdminItemPage);
 router.post('/admin/add-item', isLoggedIn, checkUserType('admin'), upload.single('itemPicture'), ItemController.addItem);

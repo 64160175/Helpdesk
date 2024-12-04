@@ -1,18 +1,18 @@
 const PrinterModel = require('../models/printerModel');
 
 class PrinterController {
-  static async getAllPrinters(req, res) {
-    try {
-        const printers = await PrinterModel.getAllPrinters();
-        const printerBrands = await PrinterModel.getAllPrinterBrands(); // Fetch all printer brands
-        const sections = await PrinterModel.getAllSections(); // Fetch all sections
+    static async getAllPrinters(req, res) {
+        try {
+            const printers = await PrinterModel.getAllPrinters();
+            const printerBrands = await PrinterModel.getAllPrinterBrands(); // Fetch all printer brands
+            const sections = await PrinterModel.getAllSections(); // Fetch all sections
 
-        res.render('AdminPrinter', { printers, printerBrands, sections }); // Pass all three
-    } catch (error) {
-        console.error('Error fetching printers:', error);
-        res.status(500).json({ success: false, message: 'Internal server error' });
+            res.render('AdminPrinter', { printers, printerBrands, sections }); // Pass all three
+        } catch (error) {
+            console.error('Error fetching printers:', error);
+            res.status(500).json({ success: false, message: 'Internal server error' });
+        }
     }
-}
 
     static async addPrinter(req, res) {
         try {
@@ -31,7 +31,6 @@ class PrinterController {
         }
     }
 
-    // Include the deletePrinter method (modified from previous examples)
     static async deletePrinter(req, res) {
         const printerId = req.params.id; // Assuming you'll use a route like /delete-printer/:id
 
@@ -55,8 +54,8 @@ class PrinterController {
             const { id_p_brand, p_serial, id_emp_section } = req.body;
 
             if (!id_p_brand || !p_serial || !id_emp_section) {
-                return res.status(400).json({ 
-                    success: false, 
+                return res.status(400).json({
+                    success: false,
                     message: "Missing required fields",
                     receivedData: req.body
                 });

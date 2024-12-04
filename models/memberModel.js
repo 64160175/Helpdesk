@@ -87,7 +87,6 @@ class MemberModel {
     }
 
     static addSection(sectionName, callback) {
-        // หา ID ล่าสุด
         const findMaxIdQuery = 'SELECT MAX(id_emp_section) as maxId FROM tbl_emp_section';
         db.query(findMaxIdQuery, (err, result) => {
             if (err) {
@@ -97,7 +96,6 @@ class MemberModel {
             const maxId = result[0].maxId || 0;
             const newId = maxId + 1;
 
-            // เพิ่มแผนกใหม่ด้วย ID ที่เพิ่มขึ้น
             const insertQuery = `
                 INSERT INTO tbl_emp_section (id_emp_section, section, status) 
                 VALUES (?, ?, 'active')
