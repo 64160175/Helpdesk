@@ -77,14 +77,27 @@ class PrinterModel {
 
   static addPrinterSerial(id_p_brand, p_serial, id_emp_section) {
     return new Promise((resolve, reject) => {
-      const sql = `INSERT INTO tbl_printer (id_p_brand, p_serial, id_emp_section, p_status) VALUES (?, ?, ?, 'active')`;
-      db.query(sql, [id_p_brand, p_serial, id_emp_section], (err, result) => {
-        if (err) {
-          console.error('SQL Error:', err);
-          reject(err);
-        } else {
-          resolve(result);
+      // First, get the latest ID
+      const getLatestIdQuery = 'SELECT MAX(id_printer) as maxId FROM tbl_printer';
+      db.query(getLatestIdQuery, (error, results) => {
+        if (error) {
+          console.error('Error getting latest ID:', error);
+          return reject(error);
         }
+  
+        const latestId = results[0].maxId || 0;
+        const newId = latestId + 1;
+  
+        // Now insert the new printer with the incremented ID
+        const sql = `INSERT INTO tbl_printer (id_printer, id_p_brand, p_serial, id_emp_section, p_status) VALUES (?, ?, ?, ?, 'active')`;
+        db.query(sql, [newId, id_p_brand, p_serial, id_emp_section], (err, result) => {
+          if (err) {
+            console.error('SQL Error:', err);
+            reject(err);
+          } else {
+            resolve(result);
+          }
+        });
       });
     });
   }
