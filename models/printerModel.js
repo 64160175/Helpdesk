@@ -22,20 +22,57 @@ class PrinterModel {
 
   static addPrinter(printerBrand) {
     return new Promise((resolve, reject) => {
-      const getLatestIdQuery = 'SELECT MAX(id_add_printer) as maxId FROM tbl_add_printer';
-      db.query(getLatestIdQuery, (error, results) => {
-        if (error) {
-          return reject(error);
-        }
-
-        const latestId = results[0].maxId || 0;
-        const newId = latestId + 1;
-        const insertQuery = 'INSERT INTO tbl_add_printer (id_add_printer, p_brand) VALUES (?, ?)';
-        db.query(insertQuery, [newId, printerBrand], (error, results) => {
+      db.beginTransaction((err) => {
+        if (err) return reject(err);
+  
+        const getLatestIdQuery = 'SELECT MAX(id_add_printer) as maxId FROM tbl_add_printer';
+        db.query(getLatestIdQuery, (error, results) => {
           if (error) {
-            return reject(error);
+            return db.rollback(() => reject(error));
           }
-          resolve(results);
+  
+          const latestId = results[0].maxId || 0;
+          const newId = latestId + 1;
+          const insertQuery = 'INSERT INTO tbl_add_printer (id_add_printer, p_brand) VALUES (?, ?)';
+          db.query(insertQuery, [newId, printerBrand], (error, results) => {
+            if (error) {
+              return db.rollback(() => reject(error));
+            }
+  
+            // หา id_printer_stock ที่มากที่สุด
+            const getLatestStockIdQuery = 'SELECT MAX(id_printer_stock) as maxStockId FROM tbl_printer_stock';
+            db.query(getLatestStockIdQuery, (error, stockResults) => {
+              if (error) {
+                return db.rollback(() => reject(error));
+              }
+  
+              const latestStockId = stockResults[0].maxStockId || 0;
+              const tonerTypes = ['cyan', 'magenta', 'yellow', 'black', 'waste_toner', 'drum'];
+              const insertStockQuery = `
+                INSERT INTO tbl_printer_stock 
+                (id_printer_stock, id_p_brand, toner_cmyk, toner_c_quantity, toner_m_quantity, toner_y_quantity, toner_k_quantity, waste_toner_quantity, drum_quantity) 
+                VALUES ?
+              `;
+  
+              const stockValues = tonerTypes.map((type, index) => {
+                const newStockId = latestStockId + index + 1;
+                return [newStockId, newId, type, 0, 0, 0, 0, 0, 0];
+              });
+  
+              db.query(insertStockQuery, [stockValues], (error) => {
+                if (error) {
+                  return db.rollback(() => reject(error));
+                }
+  
+                db.commit((err) => {
+                  if (err) {
+                    return db.rollback(() => reject(err));
+                  }
+                  resolve(results);
+                });
+              });
+            });
+          });
         });
       });
     });
