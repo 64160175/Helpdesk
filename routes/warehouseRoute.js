@@ -9,7 +9,6 @@ const WarehouseController = require('../controllers/warehouseController');
 
 // Route สำหรับหน้าคลังอุปกรณ์ทั้งหมด
 router.get('/AdminAllStock', isLoggedIn, checkUserType('admin'), WarehouseController.getAllItems);
-router.post('/updateStock', WarehouseController.updateStock);
 
 // Route สำหรับหน้าสร้างวัสดุทั่วไป
 router.get('/AdminItem', isLoggedIn, checkUserType('admin'), ItemController.getAdminItemPage);
@@ -20,5 +19,7 @@ router.get('/AdminPrinter', isLoggedIn, checkUserType('admin'), PrinterControlle
 router.post('/add-printer', isLoggedIn, checkUserType('admin'), express.json(), PrinterController.addPrinter);
 router.post('/delete-printer/:id', PrinterController.deletePrinter); 
 router.post('/add-printer-serial', express.json(), PrinterController.addPrinterSerial);
+
+router.post('/updatePrinterStock', WarehouseController.updatePrinterStock);
 
 module.exports = router;

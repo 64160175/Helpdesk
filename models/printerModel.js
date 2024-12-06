@@ -56,7 +56,7 @@ class PrinterModel {
   
               const stockValues = tonerTypes.map((type, index) => {
                 const newStockId = latestStockId + index + 1;
-                return [newStockId, newId, type, 0, 0, 0, 0, 0, 0];
+                return [newStockId, newId, type, null, null, null, null, null, null];
               });
   
               db.query(insertStockQuery, [stockValues], (error) => {

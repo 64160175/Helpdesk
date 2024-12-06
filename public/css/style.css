@@ -13417,3 +13417,18 @@ body {
 .modal-confirm .btn-danger:focus {
   background: #ee3535;
 }
+
+
+
+.toner-badge {
+  display: inline-block;
+  min-width: 90px;
+  padding: 0.35em 0.65em;
+  font-size: 0.75em;
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: 0.25rem;
+}
