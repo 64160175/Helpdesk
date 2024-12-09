@@ -10,14 +10,7 @@ class PrinterStockModel {
         db.query(query, callback);
     }
 
-    static updatePrinterStock(id, quantity, callback) {
-        const query = `
-            UPDATE tbl_printer_stock 
-            SET toner_c_quantity = ?, toner_m_quantity = ?, toner_y_quantity = ?, toner_k_quantity = ?, waste_toner_quantity = ?, drum_quantity = ?
-            WHERE id_printer_stock = ?
-        `;
-        db.query(query, [quantity, quantity, quantity, quantity, quantity, quantity, id], callback);
-    }
+    
 }
 
 module.exports = PrinterStockModel;

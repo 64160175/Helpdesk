@@ -97,28 +97,20 @@
                     </ol>
 
                     <!-- ... previous code ... -->
-                    
+
                     <div class="card-body text-primary">
                         <h5>การจัดการเครื่องปริ้นเตอร์</h5>
                     </div>
-                    
-                    <% 
-                    // Group printers by brand
-                    const printersByBrand = {};
-                    printerStocks.forEach(printer => {
-                        if (!printersByBrand[printer.p_brand]) {
-                            printersByBrand[printer.p_brand] = [];
-                        }
-                        printersByBrand[printer.p_brand].push(printer);
-                    });
-                    
-                    // Loop through each brand
-                    Object.keys(printersByBrand).forEach(brand => {
-                    %>
+
+                    <% const printersByBrand={}; printerStocks.forEach(function(printer) { if
+                        (!printersByBrand[printer.p_brand]) { printersByBrand[printer.p_brand]=[]; }
+                        printersByBrand[printer.p_brand].push(printer); });
+                        Object.keys(printersByBrand).forEach(function(brand) { %>
                         <div class="card mb-4">
                             <div class="card-header ">
                                 <h6 class="mb-0">
-                                    <i class="fas fa-print me-2"></i><%= brand %>
+                                    <i class="fas fa-print me-2"></i>
+                                    <%= brand %>
                                 </h6>
                             </div>
                             <div class="card-body">
@@ -133,94 +125,115 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <% printersByBrand[brand].forEach((printer, index) => { %>
+                                        <% printersByBrand[brand].forEach((printer, index)=> { %>
                                             <tr>
-                                                <td><%= index + 1 %></td>
-                                                <td><%= brand %></td>
                                                 <td>
-                                                    <% if (printer.toner_cmyk === 'cyan') { %>
+                                                    <%= index + 1 %>
+                                                </td>
+                                                <td>
+                                                    <%= brand %>
+                                                </td>
+                                                <td>
+                                                    <% if (printer.toner_cmyk==='cyan' ) { %>
                                                         <span class="badge bg-primary  toner-badge">Cyan</span>
-                                                    <% } else if (printer.toner_cmyk === 'magenta') { %>
-                                                        <span class="badge bg-danger toner-badge">Magenta</span>
-                                                    <% } else if (printer.toner_cmyk === 'yellow') { %>
-                                                        <span class="badge bg-warning text-dark toner-badge">Yellow</span>
-                                                    <% } else if (printer.toner_cmyk === 'black') { %>
-                                                        <span class="badge bg-dark toner-badge">Black</span>
-                                                    <% } else if (printer.toner_cmyk === 'waste_toner') { %>
-                                                        <span class="badge bg-secondary toner-badge">Waste Toner</span>
-                                                    <% } else if (printer.toner_cmyk === 'drum') { %>
-                                                        <span class="badge bg-secondary toner-badge">Drum</span>
-                                                    <% } else { %>
-                                                        <span class="badge bg-light text-dark toner-badge"><%= printer.toner_cmyk %></span>
-                                                    <% } %>
+                                                        <% } else if (printer.toner_cmyk==='magenta' ) { %>
+                                                            <span class="badge bg-danger toner-badge">Magenta</span>
+                                                            <% } else if (printer.toner_cmyk==='yellow' ) { %>
+                                                                <span
+                                                                    class="badge bg-warning text-dark toner-badge">Yellow</span>
+                                                                <% } else if (printer.toner_cmyk==='black' ) { %>
+                                                                    <span class="badge bg-dark toner-badge">Black</span>
+                                                                    <% } else if (printer.toner_cmyk==='waste_toner' ) {
+                                                                        %>
+                                                                        <span
+                                                                            class="badge bg-secondary toner-badge">Waste
+                                                                            Toner</span>
+                                                                        <% } else if (printer.toner_cmyk==='drum' ) { %>
+                                                                            <span
+                                                                                class="badge bg-secondary toner-badge">Drum</span>
+                                                                            <% } else { %>
+                                                                                <span
+                                                                                    class="badge bg-light text-dark toner-badge">
+                                                                                    <%= printer.toner_cmyk %>
+                                                                                </span>
+                                                                                <% } %>
                                                 </td>
                                                 <td>
-                                                    <% if (printer.toner_cmyk === 'cyan') { %>
+                                                    <% if (printer.toner_cmyk==='cyan' ) { %>
                                                         <%= printer.toner_c_quantity || '0' %>
-                                                    <% } else if (printer.toner_cmyk === 'magenta') { %>
-                                                        <%= printer.toner_m_quantity || '0' %>
-                                                    <% } else if (printer.toner_cmyk === 'yellow') { %>
-                                                        <%= printer.toner_y_quantity || '0' %>
-                                                    <% } else if (printer.toner_cmyk === 'black') { %>
-                                                        <%= printer.toner_k_quantity || '0' %>
-                                                    <% } else if (printer.toner_cmyk === 'waste_toner') { %>
-                                                        <%= printer.waste_toner_quantity || '0' %>
-                                                    <% } else if (printer.toner_cmyk === 'drum') { %>
-                                                        <%= printer.drum_quantity || '0' %>
-                                                    <% } %>
+                                                            <% } else if (printer.toner_cmyk==='magenta' ) { %>
+                                                                <%= printer.toner_m_quantity || '0' %>
+                                                                    <% } else if (printer.toner_cmyk==='yellow' ) { %>
+                                                                        <%= printer.toner_y_quantity || '0' %>
+                                                                            <% } else if (printer.toner_cmyk==='black' )
+                                                                                { %>
+                                                                                <%= printer.toner_k_quantity || '0' %>
+                                                                                    <% } else if
+                                                                                        (printer.toner_cmyk==='waste_toner'
+                                                                                        ) { %>
+                                                                                        <%= printer.waste_toner_quantity
+                                                                                            || '0' %>
+                                                                                            <% } else if
+                                                                                                (printer.toner_cmyk==='drum'
+                                                                                                ) { %>
+                                                                                                <%= printer.drum_quantity
+                                                                                                    || '0' %>
+                                                                                                    <% } %>
                                                 </td>
-                                                
+
                                                 <td>
-                                                    <button class="btn btn-primary btn-sm" onclick="showEditPrinterStockModal('<%= printer.id_printer_stock %>')">เพิ่ม Stock</button>
+                                                    <button class="btn btn-primary btn-sm"
+                                                        onclick="showEditPrinterStockModal('<%= printer.id_printer_stock %>')">เพิ่ม
+                                                        Stock</button>
                                                 </td>
                                             </tr>
-                                        <% }); %>
+                                            <% }); %>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
-                    <% }); %>
-                    
-                    <!-- ... rest of the code ... -->
+                        <% }); %>
+
+                            <!-- ... rest of the code ... -->
 
 
-                    <div class="card-body text-primary">
-                        <h5>การจัดการวัสดุทั่วไป</h5>
-                    </div>
-                    <div class="card mb-4">
-                        <div class="card-body">
-                            <table id="itemsTable" class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>ลำดับที่</th>
-                                        <th>ชื่อวัสดุทั่วไป</th>
-                                        <th>จำนวนคงเหลือ</th>
-                                        <th>การดำเนินการ</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <% items.forEach((item, index)=> { %>
-                                        <tr>
-                                            <td>
-                                                <%= index + 1 %>
-                                            </td>
-                                            <td>
-                                                <%= item.i_brand %>
-                                            </td>
-                                            <td>
-                                                <%= item.quantity %>
-                                            </td>
-                                            <td>
-                                                <button class="btn btn-primary btn-sm"
-                                                    onclick="showAddStockModal('<%= item.id_item_stock %>')">เพิ่ม
-                                                    Stock</button>
-                                            </td>
-                                        </tr>
-                                        <% }); %>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                            <div class="card-body text-primary">
+                                <h5>การจัดการวัสดุทั่วไป</h5>
+                            </div>
+                            <div class="card mb-4">
+                                <div class="card-body">
+                                    <table id="itemsTable" class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>ลำดับที่</th>
+                                                <th>ชื่อวัสดุทั่วไป</th>
+                                                <th>จำนวนคงเหลือ</th>
+                                                <th>การดำเนินการ</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <% items.forEach((item, index)=> { %>
+                                                <tr>
+                                                    <td>
+                                                        <%= index + 1 %>
+                                                    </td>
+                                                    <td>
+                                                        <%= item.i_brand %>
+                                                    </td>
+                                                    <td>
+                                                        <%= item.quantity %>
+                                                    </td>
+                                                    <td>
+                                                        <button class="btn btn-primary btn-sm"
+                                                            onclick="showAddStockModal('<%= item.id_item_stock %>')">เพิ่ม
+                                                            Stock</button>
+                                                    </td>
+                                                </tr>
+                                                <% }); %>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                 </div>
             </main>
         </div>
@@ -251,29 +264,6 @@
         </div>
     </div>
 
-
-    <!-- Modal for editing printer stock -->
-    <div class="modal fade" id="editPrinterStockModal" tabindex="-1" aria-labelledby="editPrinterStockModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editPrinterStockModalLabel">แก้ไข Stock เครื่องปริ้นเตอร์</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <input type="hidden" id="printerStockId">
-                    <div class="mb-3">
-                        <label for="printerStockQuantity" class="form-label">จำนวนใหม่</label>
-                        <input type="number" class="form-control" id="printerStockQuantity" min="0">
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
-                    <button type="button" class="btn btn-primary" onclick="updatePrinterStock()">บันทึก</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <script>
         function showAddStockModal(itemId) {
@@ -306,42 +296,6 @@
                     console.error('Error:', error);
                     alert('Error updating stock');
                 });
-
-                function showEditPrinterStockModal(printerStockId) {
-        // Implement the logic to show the edit modal for printer stocks
-        console.log('Edit printer stock:', printerStockId);
-        // You can implement a similar modal as the one for general items
-        var modal = new bootstrap.Modal(document.getElementById('editPrinterStockModal'));
-        document.getElementById('printerStockId').value = printerStockId;
-        modal.show();
-    }
-
-    function updatePrinterStock() {
-        var printerStockId = document.getElementById('printerStockId').value;
-        var quantity = document.getElementById('printerStockQuantity').value;
-
-        fetch('/updatePrinterStock', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ id: printerStockId, quantity: quantity }),
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert('Printer stock updated successfully');
-                location.reload();
-            } else {
-                alert('Error updating printer stock');
-            }
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-            alert('Error updating printer stock');
-        });
-    }
-
         }
     </script>
     <!-- ------------------ -->
