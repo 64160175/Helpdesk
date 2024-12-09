@@ -183,8 +183,9 @@
 
                                                 <td>
                                                     <button class="btn btn-primary btn-sm"
-                                                        onclick="showEditPrinterStockModal('<%= printer.id_printer_stock %>')">เพิ่ม
-                                                        Stock</button>
+                                                        onclick="showEditPrinterStockModal('<%= printer.id_printer_stock %>', '<%= brand %>', '<%= printer.toner_cmyk %>', '<%= printer.toner_c_quantity || printer.toner_m_quantity || printer.toner_y_quantity || printer.toner_k_quantity || printer.waste_toner_quantity || printer.drum_quantity || 0 %>')">
+                                                        เพิ่ม Stock
+                                                    </button>
                                                 </td>
                                             </tr>
                                             <% }); %>
@@ -264,6 +265,44 @@
         </div>
     </div>
 
+    <!-- Modal for editing printer stock -->
+    <div class="modal fade" id="editPrinterStockModal" tabindex="-1" aria-labelledby="editPrinterStockModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editPrinterStockModalLabel">เพิ่ม Stock เครื่องปริ้นเตอร์</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editPrinterStockForm">
+                        <input type="hidden" id="printerStockId">
+                        <div class="mb-3">
+                            <label for="printerBrand" class="form-label">ชื่อปริ้นเตอร์</label>
+                            <input type="text" class="form-control" id="printerBrand" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="tonerType" class="form-label">ประเภท/สี</label>
+                            <input type="text" class="form-control" id="tonerType" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="currentStock" class="form-label">จำนวนคงเหลือปัจจุบัน</label>
+                            <input type="number" class="form-control" id="currentStock" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="addStock" class="form-label">เพิ่ม Stock</label>
+                            <input type="number" class="form-control" id="addStock" min="1">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+                    <button type="button" class="btn btn-primary" onclick="updatePrinterStock()">บันทึก</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <script>
         function showAddStockModal(itemId) {
@@ -297,12 +336,51 @@
                     alert('Error updating stock');
                 });
         }
+
+
+
+        function showEditPrinterStockModal(id, brand, type, currentStock) {
+            document.getElementById('printerStockId').value = id;
+            document.getElementById('printerBrand').value = brand;
+            document.getElementById('tonerType').value = type;
+            document.getElementById('currentStock').value = currentStock;
+            document.getElementById('addStock').value = '';
+
+            var modal = new bootstrap.Modal(document.getElementById('editPrinterStockModal'));
+            modal.show();
+        }
+
+        function updatePrinterStock() {
+            var id = document.getElementById('printerStockId').value;
+            var quantity = document.getElementById('addStock').value;
+
+            fetch('/updatePrinterStock', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ id: id, quantity: quantity }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Stock updated successfully');
+                        location.reload();
+                    } else {
+                        alert('Error updating stock');
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    alert('Error updating stock');
+                });
+        }
     </script>
     <!-- ------------------ -->
-    <!-- SCRIPT -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-        crossorigin="anonymous"></script>
-    <script src="js/sidebar.js"></script>
+    < !--SCRIPT -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+            crossorigin="anonymous"></script>
+        <script src="js/sidebar.js"></script>
 </body>
 
 </html>
