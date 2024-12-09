@@ -344,36 +344,63 @@
             document.getElementById('printerBrand').value = brand;
             document.getElementById('tonerType').value = type;
             document.getElementById('currentStock').value = currentStock;
-            document.getElementById('addStock').value = '';
-
+            document.getElementById('addStock').value = ''; // คงไว้เพื่อล้างค่าเก่า
+        
             var modal = new bootstrap.Modal(document.getElementById('editPrinterStockModal'));
             modal.show();
         }
-
+        
         function updatePrinterStock() {
             var id = document.getElementById('printerStockId').value;
-            var quantity = document.getElementById('addStock').value;
-
+            var tonerType = document.getElementById('tonerType').value;
+            var currentStock = parseInt(document.getElementById('currentStock').value) || 0;
+            var addStock = parseInt(document.getElementById('addStock').value) || 0; 
+        
+            // Log initial values
+            console.log('Initial values:', { id, tonerType, currentStock, addStock });
+        
+            // ตรวจสอบความถูกต้องของข้อมูล
+            if (!id || !tonerType || isNaN(addStock) || addStock <= 0) {
+                alert('กรุณากรอกข้อมูลให้ถูกต้องและครบถ้วน');
+                return;
+            }
+        
+            // คำนวณจำนวน stock ใหม่
+            var newStock = currentStock + addStock;
+        
+            // Log ข้อมูลที่จะส่งไป
+            console.log('Sending data:', { id, tonerType, quantity: newStock });
+        
             fetch('/updatePrinterStock', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ id: id, quantity: quantity }),
+                body: JSON.stringify({ 
+                    id: id, 
+                    tonerType: tonerType, 
+                    quantity: newStock 
+                }),
             })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert('Stock updated successfully');
-                        location.reload();
-                    } else {
-                        alert('Error updating stock');
-                    }
-                })
-                .catch((error) => {
-                    console.error('Error:', error);
-                    alert('Error updating stock');
-                });
+            .then(response => {
+                console.log('Response status:', response.status);
+                return response.json();
+            })
+            .then(data => {
+                // Log ข้อมูลที่ได้รับกลับมา
+                console.log('Received data:', data);
+        
+                if (data.success) {
+                    alert('อัพเดท Stock สำเร็จ');
+                    location.reload();
+                } else {
+                    alert('เกิดข้อผิดพลาดในการอัพเดท Stock: ' + (data.message || 'Unknown error'));
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                alert('เกิดข้อผิดพลาดในการอัพเดท Stock');
+            });
         }
     </script>
     <!-- ------------------ -->
