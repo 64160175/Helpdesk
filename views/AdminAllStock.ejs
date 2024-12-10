@@ -11,6 +11,7 @@
     <link href="/css/style.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- ฟอนต์ Prompt -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -345,62 +346,75 @@
             document.getElementById('tonerType').value = type;
             document.getElementById('currentStock').value = currentStock;
             document.getElementById('addStock').value = ''; // คงไว้เพื่อล้างค่าเก่า
-        
+
             var modal = new bootstrap.Modal(document.getElementById('editPrinterStockModal'));
             modal.show();
         }
-        
+
         function updatePrinterStock() {
             var id = document.getElementById('printerStockId').value;
             var tonerType = document.getElementById('tonerType').value;
             var currentStock = parseInt(document.getElementById('currentStock').value) || 0;
-            var addStock = parseInt(document.getElementById('addStock').value) || 0; 
-        
-            // Log initial values
-            console.log('Initial values:', { id, tonerType, currentStock, addStock });
-        
+            var addStock = parseInt(document.getElementById('addStock').value) || 0;
+
             // ตรวจสอบความถูกต้องของข้อมูล
             if (!id || !tonerType || isNaN(addStock) || addStock <= 0) {
-                alert('กรุณากรอกข้อมูลให้ถูกต้องและครบถ้วน');
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'กรุณากรอกข้อมูลให้ถูกต้องและครบถ้วน',
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
                 return;
             }
-        
+
             // คำนวณจำนวน stock ใหม่
             var newStock = currentStock + addStock;
-        
-            // Log ข้อมูลที่จะส่งไป
-            console.log('Sending data:', { id, tonerType, quantity: newStock });
-        
+
             fetch('/updatePrinterStock', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ 
-                    id: id, 
-                    tonerType: tonerType, 
-                    quantity: newStock 
+                body: JSON.stringify({
+                    id: id,
+                    tonerType: tonerType,
+                    quantity: newStock
                 }),
             })
-            .then(response => {
-                console.log('Response status:', response.status);
-                return response.json();
-            })
-            .then(data => {
-                // Log ข้อมูลที่ได้รับกลับมา
-                console.log('Received data:', data);
-        
-                if (data.success) {
-                    alert('อัพเดท Stock สำเร็จ');
-                    location.reload();
-                } else {
-                    alert('เกิดข้อผิดพลาดในการอัพเดท Stock: ' + (data.message || 'Unknown error'));
-                }
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-                alert('เกิดข้อผิดพลาดในการอัพเดท Stock');
-            });
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'success',
+                            title: 'อัพเดท Stock สำเร็จ',
+                            showConfirmButton: false,
+                            timer: 1500
+                        }).then(() => {
+                            location.reload();
+                        });
+                    } else {
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'error',
+                            title: 'เกิดข้อผิดพลาดในการอัพเดท Stock',
+                            text: data.message || 'Unknown error',
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                    }
+                })
+                .catch((error) => {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'error',
+                        title: 'เกิดข้อผิดพลาดในการอัพเดท Stock',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                });
         }
     </script>
     <!-- ------------------ -->
