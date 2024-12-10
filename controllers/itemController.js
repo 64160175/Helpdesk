@@ -31,6 +31,18 @@ class ItemController {
             res.redirect("/AdminItem");
         });
     }
+
+    //อัปเดต Stock วัสดุทั่วไป
+    static updateStock(req, res) {
+        const { id, quantity } = req.body;
+    
+        ItemModel.updateStock(id, parseInt(quantity), (error, results) => {
+            if (error) {
+                return res.status(500).json({ success: false, message: 'Error updating stock' });
+            }
+            res.json({ success: true, message: 'Stock updated successfully' });
+        });
+    }
 }
 
 module.exports = ItemController;

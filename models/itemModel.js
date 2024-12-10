@@ -68,6 +68,8 @@ class ItemModel {
         });
     }
 
+
+    //แสดงของทั้งหมดใน สร้างวัสดุทั่วไป
     static getAllItems(callback) {
         const query = 'SELECT id_add_item, i_brand, i_picture FROM tbl_add_item ORDER BY id_add_item';
         db.query(query, (error, results) => {
@@ -79,6 +81,15 @@ class ItemModel {
                 i_picture: item.i_picture ? item.i_picture.toString('base64') : null
             }));
             callback(null, itemsWithBase64Images);
+        });
+    }
+
+    //เพิ่ม Stock ใน สร้างวัสดุทั่วไป
+    static updateStock(id, quantity, callback) {
+        const query = 'UPDATE tbl_item_stock SET quantity = quantity + ? WHERE id_item_stock = ?';
+        db.query(query, [quantity, id], (error, results) => {
+            if (error) return callback(error);
+            callback(null, results);
         });
     }
 }

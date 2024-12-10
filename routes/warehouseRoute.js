@@ -21,5 +21,6 @@ router.post('/delete-printer/:id', PrinterController.deletePrinter);
 router.post('/add-printer-serial', express.json(), PrinterController.addPrinterSerial);
 
 router.post('/updatePrinterStock', isLoggedIn, checkUserType('admin'), express.json(), WarehouseController.updatePrinterStock);
+router.post('/updateStock', isLoggedIn, checkUserType('admin'), express.json(), ItemController.updateStock);
 
 module.exports = router;

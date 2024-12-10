@@ -1,5 +1,7 @@
 const db = require('../db');
 
+
+//ส่วนของชื่อปริ้นเตอร์และสิทธ์์ของชื่อปริ้นเตอร์
 class PrinterModel {
   static getAllPrinters() {
     return new Promise((resolve, reject) => {
