@@ -35,7 +35,7 @@
                     <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
                         data-bs-toggle="dropdown" aria-expanded="false">ADMIN </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#!"><i class="fas fa-sign-out-alt fa-fw"></i> ออกจากระบบ</a>
+                        <li><a class="dropdown-item" href="/logout"><i class="fas fa-sign-out-alt fa-fw"></i> ออกจากระบบ</a>
                         </li>
                     </ul>
                 </li>
@@ -70,14 +70,12 @@
                             <div class="sb-nav-link-icon"><i class="fas fa-plus-circle"></i></div>
                             สร้างวัสดุทั่วไป
                         </a>
-
-
                         <div class="sb-sidenav-menu-heading">การจัดการ</div>
                         <a class="nav-link" href="/AdminAllMember">
                             <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
                             ระบบจัดการผู้ใช้งาน
                         </a>
-                        <a class="nav-link" href="reports.html">
+                        <a class="nav-link" href="/AdminReport">
                             <div class="sb-nav-link-icon"><i class="fas fa-chart-line"></i></div>
                             รายงาน
                         </a>
@@ -97,7 +95,6 @@
                         <li class="breadcrumb-item active">คลังอุปกรณ์ทั้งหมด</li>
                     </ol>
 
-                    <!-- ... previous code ... -->
 
                     <div class="card-body text-primary">
                         <h5>การจัดการเครื่องปริ้นเตอร์</h5>
@@ -196,8 +193,6 @@
                         </div>
                         <% }); %>
 
-                            <!-- ... rest of the code ... -->
-
 
                             <div class="card-body text-primary">
                                 <h5>การจัดการวัสดุทั่วไป</h5>
@@ -243,7 +238,7 @@
 
 
 
-    <!-- MODAL -->
+    <!-- MODAL การจัดการวัสดุทั่วไป -->
     <div class="modal fade" id="addStockModal" tabindex="-1" aria-labelledby="addStockModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -266,7 +261,7 @@
         </div>
     </div>
 
-    <!-- Modal for editing printer stock -->
+    <!-- Modal การจัดการเครื่องปริ้นเตอร์ -->
     <div class="modal fade" id="editPrinterStockModal" tabindex="-1" aria-labelledby="editPrinterStockModalLabel"
         aria-hidden="true">
         <div class="modal-dialog">
@@ -304,8 +299,10 @@
         </div>
     </div>
 
-
+    <!-- Scripts -->
     <script>
+
+        //Stock วัสดุทั่วไป
         function showAddStockModal(itemId) {
             document.getElementById('itemId').value = itemId;
             var modal = new bootstrap.Modal(document.getElementById('addStockModal'));
@@ -339,7 +336,7 @@
         }
 
 
-
+        //Stock เครื่องปริ้นเตอร์
         function showEditPrinterStockModal(id, brand, type, currentStock) {
             document.getElementById('printerStockId').value = id;
             document.getElementById('printerBrand').value = brand;
@@ -417,11 +414,9 @@
                 });
         }
     </script>
-    <!-- ------------------ -->
-    < !--SCRIPT -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-            crossorigin="anonymous"></script>
-        <script src="js/sidebar.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous"></script>
+    <script src="js/sidebar.js"></script>
 </body>
 
 </html>

@@ -36,7 +36,7 @@
                     <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
                         data-bs-toggle="dropdown" aria-expanded="false">ADMIN </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#!"><i class="fas fa-sign-out-alt fa-fw"></i> ออกจากระบบ</a>
+                        <li><a class="dropdown-item" href="/logout"><i class="fas fa-sign-out-alt fa-fw"></i> ออกจากระบบ</a>
                         </li>
                     </ul>
                 </li>
@@ -78,7 +78,7 @@
                             <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
                             ระบบจัดการผู้ใช้งาน
                         </a>
-                        <a class="nav-link" href="reports.html">
+                        <a class="nav-link" href="/AdminReport">
                             <div class="sb-nav-link-icon"><i class="fas fa-chart-line"></i></div>
                             รายงาน
                         </a>
@@ -97,7 +97,6 @@
                         <li class="breadcrumb-item">ระบบคลังอุปกรณ์</a>
                         <li class="breadcrumb-item active">เพิ่มเครื่องปริ้นรุ่นใหม่</li>
                     </ol>
-                    <!-- ... (ส่วนหัวของไฟล์ HTML) ... -->
 
                     <div class="card mb-4">
                         <div class="card-header">
@@ -226,6 +225,8 @@
         </div>
     </div>
 
+
+    <!-- Scripts -->
     <script>
         function addNewPrinter() {
             var addPrinterModal = new bootstrap.Modal(document.getElementById('addPrinterModal'));
@@ -294,7 +295,7 @@
             });
         }
 
-
+        
         function addSerial() {
             new bootstrap.Modal(document.getElementById('addSerialModal')).show();
         }

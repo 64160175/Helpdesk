@@ -7,4 +7,10 @@ router.get('/AdminRequestList', isLoggedIn, checkUserType('admin'), (req, res) =
   res.render('AdminRequestList');
 });
 
+router.get('/AdminReport', isLoggedIn, checkUserType('admin'), (req, res) => {
+  res.render('AdminReport');
+});
+
+
+
 module.exports = router;
