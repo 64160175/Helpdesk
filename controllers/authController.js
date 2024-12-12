@@ -1,5 +1,4 @@
 const User = require('../models/authModel');
-
 exports.login = (req, res) => {
   const { username, password } = req.body;
 
@@ -21,7 +20,15 @@ exports.login = (req, res) => {
     }
 
     // Store user information in session
-    req.session.user = user;
+    req.session.user = {
+      id_user: user.id_user,
+      f_name: user.f_name,
+      l_name: user.l_name,
+      u_type: user.u_type,
+      id_emp_section: user.id_emp_section,
+      u_status: user.u_status,
+      email: user.email
+    };
 
     switch (user.u_type) {
       case 'admin':

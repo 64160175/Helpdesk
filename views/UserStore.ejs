@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <link rel="icon" type="image/png" href="/img/icon.png">
+    <title>Home</title>
+    <link href="/css/style.css" rel="stylesheet">
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+
+    <!-- ฟอนต์ Prompt -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+
+<body class="prompt-regular">
+
+    <!-- Navbar TOP -->
+    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-blue">
+        <a class="navbar-brand ps-3" href="/UserHome">ระบบเบิกอุปกรณ์ไอที</a>
+
+        <!-- Navbar-->
+        <div class="ms-auto">
+            <ul class="navbar-nav me-3 me-lg-4">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        แผนก <%= sectionName %>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="/logout"><i class="fas fa-sign-out-alt fa-fw"></i>
+                                ออกจากระบบ</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid px-4">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title mb-4">รายการอุปกรณ์</h5>
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th width="20%">รูปภาพ</th>
+                                        <th>ชื่ออุปกรณ์</th>
+                                        <th width="20%">จำนวน</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><img src="/img/printer_c.png" class="img-fluid" alt="Printer C"
+                                                style="max-width: 80px;"></td>
+                                        <td>ตลับหมึกพิมพ์ - สีฟ้า (Cyan)</td>
+                                        <td>
+                                            <input type="number" class="form-control" value="0" min="0">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><img src="/img/printer_m.png" class="img-fluid" alt="Printer M"
+                                                style="max-width: 80px;"></td>
+                                        <td>ตลับหมึกพิมพ์ - สีชมพู (Magenta)</td>
+                                        <td>
+                                            <input type="number" class="form-control" value="0" min="0">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><img src="/img/printer_y.png" class="img-fluid" alt="Printer Y"
+                                                style="max-width: 80px;"></td>
+                                        <td>ตลับหมึกพิมพ์ - สีเหลือง (Yellow)</td>
+                                        <td>
+                                            <input type="number" class="form-control" value="0" min="0">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><img src="/img/printer_k.png" class="img-fluid" alt="Printer K"
+                                                style="max-width: 80px;"></td>
+                                        <td>ตลับหมึกพิมพ์ - สีดำ (Black)</td>
+                                        <td>
+                                            <input type="number" class="form-control" value="0" min="0">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3">
+                                            <button type="button" class="btn btn-success float-end"
+                                                id="btnSave">บันทึก</button>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+
+    <!-- SCRIPT -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous"></script>
+    <script src="/js/sidebar.js"></script>
+    <script>
+        document.getElementById('btnSave').addEventListener('click', function () {
+            // Add your logic here to handle the save functionality.  
+            // This might include gathering the quantities from the input fields, 
+            // validating the input, and sending data to the server.
+
+            alert("บันทึกข้อมูลเรียบร้อยแล้ว"); // Placeholder - replace with actual save logic.
+        });
+    </script>
+
+
+</body>
+
+</html>
