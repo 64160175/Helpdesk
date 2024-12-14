@@ -23,4 +23,7 @@ router.post('/add-printer-serial', express.json(), PrinterController.addPrinterS
 router.post('/updatePrinterStock', isLoggedIn, checkUserType('admin'), express.json(), WarehouseController.updatePrinterStock);
 router.post('/updateStock', isLoggedIn, checkUserType('admin'), express.json(), ItemController.updateStock);
 
+router.get('/UserStore', isLoggedIn, checkUserType('user'), WarehouseController.getPrinterStockBySection);
+router.get('/printer-stocks', isLoggedIn, checkUserType('user'), WarehouseController.getPrinterStockBySection);
+
 module.exports = router;

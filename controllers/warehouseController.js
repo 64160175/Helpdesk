@@ -51,6 +51,19 @@ class WarehouseController {
             res.status(500).json({ error: 'An error occurred while updating item stock' });
         }
     }
+
+
+    //
+    static async getPrinterStockBySection(req, res) {
+        try {
+            const sectionId = req.session.user.id_emp_section;
+            const printerStocks = await WarehouseModel.getPrinterStockBySection(sectionId);
+            res.json(printerStocks);
+        } catch (error) {
+            console.error('Error fetching printer stocks:', error);
+            res.status(500).send('Internal Server Error');
+        }
+    }
 }
 
 module.exports = WarehouseController;

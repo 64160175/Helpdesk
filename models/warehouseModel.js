@@ -17,6 +17,25 @@ class WarehouseModel {
             });
         });
     }
+
+    //แสดงของทั้งหมดในคลังตามประเภท
+    static getPrinterStockBySection(sectionId) {
+        return new Promise((resolve, reject) => {
+            const query = `
+                SELECT ps.id_p_brand, ap.p_brand, ps.toner_cmyk, ps.toner_c_quantity, ps.toner_m_quantity, 
+                       ps.toner_y_quantity, ps.toner_k_quantity, ps.waste_toner_quantity, ps.drum_quantity
+                FROM tbl_printer_stock ps
+                JOIN tbl_add_printer ap ON ps.id_p_brand = ap.id_add_printer
+                JOIN tbl_printer tp ON ps.id_p_brand = tp.id_p_brand
+                WHERE tp.id_emp_section = ?
+            `;
+            db.query(query, [sectionId], (error, results) => {
+                if (error) return reject(error);
+                resolve(results);
+            });
+        });
+    }
+
 }
 
 module.exports = WarehouseModel;
