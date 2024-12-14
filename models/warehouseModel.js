@@ -18,7 +18,7 @@ class WarehouseModel {
         });
     }
 
-    //แสดงของทั้งหมดในคลังตามประเภท
+    //แสดงของทั้งหมดในคลังตามประเภท สำหรับพิมพ์
     static getPrinterStockBySection(sectionId) {
         return new Promise((resolve, reject) => {
             const query = `
@@ -32,6 +32,25 @@ class WarehouseModel {
             db.query(query, [sectionId], (error, results) => {
                 if (error) return reject(error);
                 resolve(results);
+            });
+        });
+    }
+
+    //แสดงของทั้งหมดในคลังตามประเภท  สำหรับอุปกรณทั่วไป
+    static getGeneralItems() {
+        return new Promise((resolve, reject) => {
+            const query = `
+                SELECT tis.id_item_stock, tai.i_brand, tai.i_picture, tis.quantity, tis.type
+                FROM tbl_item_stock tis
+                JOIN tbl_add_item tai ON tis.id_add_item = tai.id_add_item
+                WHERE tis.type IS NULL OR tis.type = 'general'
+            `;
+            db.query(query, (error, results) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve(results);
+                }
             });
         });
     }

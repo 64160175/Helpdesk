@@ -12988,7 +12988,7 @@ body {
 
 .animated-gradient {
   
-  background: linear-gradient(-45deg, #001A6E, #001A6E,#7BD3EA, #001A6E, #001A6E);
+  background: linear-gradient(-45deg, #4FB1FF, #4FB1FF, #4FB1FF, #4FB1FF,#ffffff, #4FB1FF, #4FB1FF, #4FB1FF, #4FB1FF);
   background-size: 400% 400%;
   animation: gradient 12s ease infinite;
   height: 100vh;
@@ -13436,7 +13436,7 @@ body {
 
 
 
-#itemsTable {
+#itemsTable1 {
   border-collapse: separate;
   border-spacing: 0;
   width: 100%;
@@ -13446,18 +13446,18 @@ body {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-#itemsTable th, #itemsTable td {
+#itemsTable1 th, #itemsTable1 td {
   border: none;
   border-bottom: 1px solid #e0e0e0;
   padding: 15px;
   text-align: left;
 }
 
-#itemsTable thead {
+#itemsTable1 thead {
   background-color: #f5f5f5;
 }
 
-#itemsTable th {
+#itemsTable1 th {
   font-weight: 600;
   color: #333;
   text-transform: uppercase;
@@ -13465,16 +13465,16 @@ body {
   text-align: center;;
 }
 
-#itemsTable tbody tr:nth-child(even) {
+#itemsTable1 tbody tr:nth-child(even) {
   background-color: #fafafa;
 }
 
-#itemsTable tbody tr {
+#itemsTable1 tbody tr {
   position: relative;
   transition: all 0.2s ease;
 }
 
-#itemsTable tbody tr:hover {
+#itemsTable1 tbody tr:hover {
   background-color: #f0f0f0;
   transform: translateY(-2px);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
@@ -13483,17 +13483,19 @@ body {
 
 
 
-#itemsTable tbody tr:last-child td {
+#itemsTable1 tbody tr:last-child td {
   border-bottom: none;
 }
 
-#itemsTable td img {
+#itemsTable1 td img {
   max-width: 70px;
   max-height: 70px;
   border-radius: 4px;
 }
 
-#itemsTable .btn {
+#itemsTable1 .btn {
   padding: 5px 10px;
   font-size: 0.9em;
 }
+
+

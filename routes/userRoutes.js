@@ -59,10 +59,14 @@ router.get('/UserStore', isLoggedIn, checkUserType('user'), async (req, res) => 
       // Fetch printer stocks
       const printerStocks = await WarehouseModel.getPrinterStockBySection(user.id_emp_section);
 
+      // Fetch general items
+      const generalItems = await WarehouseModel.getGeneralItems();
+
       res.render('UserStore', {
           user: user,
           sectionName: sectionName,
-          printerStocks: printerStocks
+          printerStocks: printerStocks,
+          generalItems: generalItems
       });
   } catch (err) {
       console.error('Error fetching data:', err);
