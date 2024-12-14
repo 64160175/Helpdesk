@@ -50,19 +50,27 @@
                     <li class="breadcrumb-item active">คลังอุปกรณ์</li>
                 </ol>
                 
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table" id="itemsTable1">
-                                <thead>
-                                    <tr>
-                                        <th width="20%">รูปภาพ</th>
-                                        <th class="text-start">ชื่ออุปกรณ์</th>
-                                        <th width="20%">คงเหลือ</th>
-                                        <th width="20%">จำนวนที่ต้องการ</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <% printerStocks.forEach(stock => { %>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table" id="itemsTable1">
+                            <thead>
+                                <tr>
+                                    <th width="20%">รูปภาพ</th>
+                                    <th class="text-start">ชื่ออุปกรณ์</th>
+                                    <th width="20%">คงเหลือ</th>
+                                    <th width="20%">จำนวนที่ต้องการ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% printerStocks.forEach(stock => { %>
+                                    <% if (
+                                        stock.toner_c_quantity > 0 ||
+                                        stock.toner_m_quantity > 0 ||
+                                        stock.toner_y_quantity > 0 ||
+                                        stock.toner_k_quantity > 0 ||
+                                        stock.waste_toner_quantity > 0 ||
+                                        stock.drum_quantity > 0
+                                    ) { %>
                                         <tr>
                                             <td class="text-center">
                                                 <% if (stock.toner_c_quantity > 0) { %>
@@ -136,56 +144,39 @@
                                                 </div>
                                             </td>
                                         </tr>
-                                    <% }) %>
-                                </tbody>
-
-                                <!-- ... existing code ... -->
-                                
-                                
-                                            <tbody>
-                                                <!-- Existing printer stocks code -->
-                                                <% printerStocks.forEach(stock => { %>
-                                                    <!-- ... existing printer stock rows ... -->
-                                                <% }) %>
-                                
-                                                <!-- New code for general items -->
-                                                <% generalItems.forEach(item => { %>
-                                                    <tr>
-                                                        <td class="text-center">
-                                                            <% if (item.i_picture) { %>
-                                                                <img src="data:image/png;base64,<%= item.i_picture.toString('base64') %>" alt="<%= item.i_brand %>" style="width: 100%; height: auto; max-width: auto;">
-                                                            <% } else { %>
-                                                                <img src="/img/no-image.png" alt="No Image" style="width: 100%; height: auto; max-width: auto;">
-                                                            <% } %>
-                                                        </td>
-                                                        <td><%= item.i_brand %></td>
-                                                        <td class="text-center"><%= item.quantity %></td>
-                                                        <td>
-                                                            <div class="row g-2 justify-content-center">
-                                                                <div class="col-md-6">
-                                                                    <input type="number" class="form-control text-center" id="general_<%= item.id_item_stock %>" name="general_<%= item.id_item_stock %>" min="0" max="<%= item.quantity %>" value="0">
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                <% }) %>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <!-- ... rest of the code ... -->
-                                </div>
-                                
-                                <!-- ... rest of the file ... -->
-
-                            </table>
-                        </div>
-
-                        
-                        <div class="text-center mt-3">
-                            <button type="button" class="btn btn-success btn-lg " id="btnSave">
-                                <i class="fas fa-paper-plane me-1"></i> ส่งคำขอร้องเบิก
-                            </button>
-                        </div>
+                                    <% } %>
+                                <% }) %>
+                
+                                <% generalItems.forEach(item => { %>
+                                    <% if (item.quantity > 0) { %>
+                                        <tr>
+                                            <td class="text-center">
+                                                <% if (item.i_picture) { %>
+                                                    <img src="data:image/png;base64,<%= item.i_picture.toString('base64') %>" alt="<%= item.i_brand %>" style="width: 100%; height: auto; max-width: auto;">
+                                                <% } else { %>
+                                                    <img src="/img/no-image.png" alt="No Image" style="width: 100%; height: auto; max-width: auto;">
+                                                <% } %>
+                                            </td>
+                                            <td><%= item.i_brand %></td>
+                                            <td class="text-center"><%= item.quantity %></td>
+                                            <td>
+                                                <div class="row g-2 justify-content-center">
+                                                    <div class="col-md-6">
+                                                        <input type="number" class="form-control text-center" id="general_<%= item.id_item_stock %>" name="general_<%= item.id_item_stock %>" min="0" max="<%= item.quantity %>" value="0">
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    <% } %>
+                                <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+                
+                    <div class="text-center mt-3">
+                        <button type="button" class="btn btn-success btn-lg" id="btnSave">
+                            <i class="fas fa-paper-plane me-1"></i> ส่งคำขอร้องเบิก
+                        </button>
                     </div>
                 </div>
             </div>
