@@ -29,7 +29,7 @@ const authRoutes = require('./routes/authRoute'); app.use('/', authRoutes);
 
 //user
 const userRoutes = require('./routes/userRoutes'); app.use('/', userRoutes);
-const orderRoute = require('./routes/orderRoute');app.use('/', orderRoute);
+const orderRoutes = require('./routes/orderRoutes');app.use('/', orderRoutes);
 //manager
 const managerRoutes = require('./routes/managerRoutes'); app.use('/', managerRoutes);
 
@@ -41,7 +41,7 @@ const warehouseRoutes = require('./routes/warehouseRoute'); app.use('/', warehou
 
 app.use(express.json());
 app.use('/member', memberRoutes);
-app.use('/orders', orderRoute);
+app.use('/orders', orderRoutes);
 
 
 //--------------------------------------------------------------------------

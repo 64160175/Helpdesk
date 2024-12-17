@@ -25,15 +25,63 @@ exports.insertOrder = (orderData, callback) => {
     });
 };
 
-exports.insertOrderItems = (orderItems, callback) => {
-    console.log('Inserting order items:', orderItems);
-    const query = 'INSERT INTO tbl_order_item (id_order_item, id_order, i_brand_name, type, quantity) VALUES ?';
-    db.query(query, [orderItems], (err, result) => {
+exports.createOrderWithItems = (orderData, orderItems, callback) => {
+    db.beginTransaction((err) => {
         if (err) {
-            console.error('Error executing query:', err);
             return callback(err, null);
         }
-        console.log('Order items inserted:', result.affectedRows);
-        callback(null, result);
+
+        const getLatestIdQuery = 'SELECT MAX(id_order) as maxId FROM tbl_order';
+        db.query(getLatestIdQuery, (err, results) => {
+            if (err) {
+                return db.rollback(() => {
+                    callback(err, null);
+                });
+            }
+
+            const newOrderId = (results[0].maxId || 0) + 1;
+            const insertOrderQuery = 'INSERT INTO tbl_order (id_order, id_user, o_name, o_email, approve_status, reason, timestamp) VALUES (?, ?, ?, ?, ?, ?, current_timestamp())';
+            
+            db.query(insertOrderQuery, [newOrderId, orderData.id_user, orderData.o_name, orderData.o_email, orderData.approve_status, orderData.reason], (err, result) => {
+                if (err) {
+                    return db.rollback(() => {
+                        callback(err, null);
+                    });
+                }
+
+                const getLatestItemIdQuery = 'SELECT MAX(id_order_item) as maxItemId FROM tbl_order_item';
+                db.query(getLatestItemIdQuery, (err, itemResults) => {
+                    if (err) {
+                        return db.rollback(() => {
+                            callback(err, null);
+                        });
+                    }
+
+                    let latestItemId = itemResults[0].maxItemId || 0;
+                    const insertItemsQuery = 'INSERT INTO tbl_order_item (id_order_item, id_order, i_brand_name, type, quantity) VALUES ?';
+                    const itemsToInsert = orderItems.map(item => {
+                        latestItemId++;
+                        return [latestItemId, newOrderId, item.i_brand_name, item.type, item.quantity];
+                    });
+
+                    db.query(insertItemsQuery, [itemsToInsert], (err, itemResult) => {
+                        if (err) {
+                            return db.rollback(() => {
+                                callback(err, null);
+                            });
+                        }
+
+                        db.commit((err) => {
+                            if (err) {
+                                return db.rollback(() => {
+                                    callback(err, null);
+                                });
+                            }
+                            callback(null, { orderId: newOrderId, itemsInserted: itemResult.affectedRows });
+                        });
+                    });
+                });
+            });
+        });
     });
 };

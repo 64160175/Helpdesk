@@ -2,23 +2,27 @@ const orderModel = require('../models/orderModel');
 
 exports.createOrder = (req, res) => {
     const { requesterName, requesterEmail, additionalNotes, selectedItems } = req.body;
-
-    if (!requesterName || !requesterEmail) {
-        return res.status(400).send('Requester name and email are required.');
-    }
+    const userId = req.session.user.id_user;
 
     const orderData = {
-        id_user: req.session.user.id_user,
+        id_user: userId,
         o_name: requesterName,
         o_email: requesterEmail,
-        approve_status: null, // Set approve_status to null
+        approve_status: null,
         reason: additionalNotes
     };
 
-    orderModel.insertOrder(orderData, (err, result) => {
+    const orderItems = selectedItems.map(item => ({
+        i_brand_name: item.name,
+        type: item.type,
+        quantity: item.quantity
+    }));
+
+    orderModel.createOrderWithItems(orderData, orderItems, (err, result) => {
         if (err) {
-            return res.status(500).send('Error inserting order.');
+            console.error('Error creating order:', err);
+            return res.status(500).json({ error: 'Internal Server Error' });
         }
-        res.send('Order created successfully.');
+        res.status(200).json({ message: 'Order created successfully', orderId: result.orderId });
     });
 };
