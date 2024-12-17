@@ -29,7 +29,7 @@ const authRoutes = require('./routes/authRoute'); app.use('/', authRoutes);
 
 //user
 const userRoutes = require('./routes/userRoutes'); app.use('/', userRoutes);
-
+const orderRoute = require('./routes/orderRoute');app.use('/', orderRoute);
 //manager
 const managerRoutes = require('./routes/managerRoutes'); app.use('/', managerRoutes);
 
@@ -38,9 +38,10 @@ const adminRoutes = require('./routes/adminRoutes'); app.use('/', adminRoutes);
 const memberRoutes = require('./routes/memberRoute'); app.use('/', memberRoutes);
 const warehouseRoutes = require('./routes/warehouseRoute'); app.use('/', warehouseRoutes);
 
-// ลบแผนก
+
 app.use(express.json());
 app.use('/member', memberRoutes);
+app.use('/orders', orderRoute);
 
 
 //--------------------------------------------------------------------------

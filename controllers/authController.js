@@ -22,6 +22,7 @@ exports.login = (req, res) => {
     // Store user information in session
     req.session.user = {
       id_user: user.id_user,
+      username: user.username,
       f_name: user.f_name,
       l_name: user.l_name,
       u_type: user.u_type,

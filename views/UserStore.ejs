@@ -23,7 +23,7 @@
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-blue">
         <a class="navbar-brand ps-3" href="/UserHome">ระบบเบิกอุปกรณ์ไอที</a>
 
-        <!-- Navbar-->
+        <!-- Navbar -->
         <div class="ms-auto">
             <ul class="navbar-nav me-3 me-lg-4">
                 <li class="nav-item dropdown">
@@ -32,8 +32,10 @@
                         แผนก <%= sectionName %>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="/logout"><i class="fas fa-sign-out-alt fa-fw"></i>
-                                ออกจากระบบ</a>
+                        <li>
+                            <a class="dropdown-item" href="/logout">
+                                <i class="fas fa-sign-out-alt fa-fw"></i> ออกจากระบบ
+                            </a>
                         </li>
                     </ul>
                 </li>
@@ -41,6 +43,7 @@
         </div>
     </nav>
 
+    <!-- Main Content -->
     <div id="layoutSidenav_content">
         <main>
             <div class="container-fluid px-4">
@@ -49,7 +52,7 @@
                     <li class="breadcrumb-item"><a href="/UserHome">หน้าหลัก</a></li>
                     <li class="breadcrumb-item active">คลังอุปกรณ์</li>
                 </ol>
-                
+
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table" id="itemsTable1">
@@ -146,7 +149,7 @@
                                         </tr>
                                     <% } %>
                                 <% }) %>
-                
+
                                 <% generalItems.forEach(item => { %>
                                     <% if (item.quantity > 0) { %>
                                         <tr>
@@ -174,10 +177,11 @@
                     </div>
                 
                     <div class="text-center mt-3">
-                        <button type="button" class="btn btn-success btn-lg" id="btnSave">
-                            <i class="fas fa-paper-plane me-1"></i> ส่งคำขอร้องเบิก
-                        </button>
-                    </div>
+    <button type="button" class="btn btn-success btn-lg animated-button" id="btnConfirm">
+        <i class="fas fa-paper-plane me-1"></i> ส่งคำขอร้องเบิก
+    </button>
+</div>
+<br><br><br>
                 </div>
             </div>
         </main>
@@ -185,74 +189,141 @@
 
 
 
+    <!-- Confirmation Modal -->
+<div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmModalLabel">ยืนยันคำขอเบิก</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="requestForm">
+                    <div class="mb-3">
+                        <label for="requesterName" class="form-label">ชื่อผู้ขอ</label>
+                        <input type="text" class="form-control" id="requesterName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="requesterEmail" class="form-label">อีเมล</label>
+                        <input type="email" class="form-control" id="requesterEmail" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">รายการที่ต้องการเบิก</label>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>ชื่อ</th>
+                                    <th>ชนิด/สี</th>
+                                    <th>จำนวน</th>
+                                </tr>
+                            </thead>
+                            <tbody id="selectedItemsList">
+                                <!-- Selected items will be inserted here -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="mb-3">
+                        <label for="additionalNotes" class="form-label">หมายเหตุเพิ่มเติม</label>
+                        <textarea class="form-control" id="additionalNotes" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+                <button type="button" class="btn btn-primary" id="btnSave">ยืนยันการเบิก</button>
+            </div>
+        </div>
+    </div>
+</div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const inputs = document.querySelectorAll('input[type="number"]');
-            inputs.forEach(input => {
-                input.addEventListener('input', function() {
-                    if (this.value < 0) {
-                        this.value = 0;
-                    } else if (this.value > parseInt(this.max)) {
-                        this.value = this.max;
-                    }
-                });
-            });
-    
-            document.getElementById('btnSave').addEventListener('click', function() {
-                const requestData = [];
-                inputs.forEach(input => {
-                    if (input.value > 0) {
-                        requestData.push({
-                            id: input.id,
-                            quantity: input.value
-                        });
-                    }
-                });
-    
-                if (requestData.length === 0) {
-                    alert('กรุณาระบุจำนวนที่ต้องการเบิกอย่างน้อย 1 รายการ');
-                    return;
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const inputs = document.querySelectorAll('input[type="number"]');
+        const confirmModal = new bootstrap.Modal(document.getElementById('confirmModal'));
+        let selectedItems = []; // Define selectedItems in a broader scope
+
+        inputs.forEach(input => {
+            input.addEventListener('input', function() {
+                if (this.value < 0) {
+                    this.value = 0;
+                } else if (this.value > parseInt(this.max)) {
+                    this.value = this.max;
                 }
-    
-                // ส่งข้อมูลไปยังเซิร์ฟเวอร์
-                fetch('/api/request-items', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(requestData)
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert('บันทึกคำขอเบิกเรียบร้อยแล้ว');
-                        // รีเซ็ตฟอร์มหรือรีโหลดหน้า
-                        location.reload();
-                    } else {
-                        alert('เกิดข้อผิดพลาด: ' + data.message);
-                    }
-                })
-                .catch((error) => {
-                    console.error('Error:', error);
-                    alert('เกิดข้อผิดพลาดในการส่งคำขอ');
-                });
             });
         });
-    </script>
+
+        document.getElementById('btnConfirm').addEventListener('click', function() {
+            selectedItems = []; 
+            inputs.forEach(input => {
+                if (input.value > 0) {
+                    const row = input.closest('tr');
+                    const name = row.querySelector('td:nth-child(2)').textContent.trim();
+                    const type = input.id.split('_')[0];
+                    const quantity = input.value;
+                    selectedItems.push({ name, type, quantity });
+                }
+            });
+
+            if (selectedItems.length === 0) {
+                alert('กรุณาเลือกสินค้าที่ต้องการเบิก');
+                return;
+            }
+
+            const selectedItemsList = document.getElementById('selectedItemsList');
+            selectedItemsList.innerHTML = '';
+            selectedItems.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `<td>${item.name}</td><td>${item.type}</td><td>${item.quantity}</td>`;
+                selectedItemsList.appendChild(row);
+            });
+
+            confirmModal.show();
+        });
+
+        document.getElementById('btnSave').addEventListener('click', function() {
+            const requesterName = document.getElementById('requesterName').value;
+            const requesterEmail = document.getElementById('requesterEmail').value;
+            const additionalNotes = document.getElementById('additionalNotes').value;
+
+            if (!requesterName || !requesterEmail) {
+                alert('กรุณากรอกชื่อและอีเมล');
+                return;
+            }
+
+            const orderData = {
+                requesterName,
+                requesterEmail,
+                additionalNotes,
+                selectedItems 
+            };
+
+            fetch('/orders/createOrder', { // Ensure the correct route is used
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(orderData)
+            })
+            .then(response => response.text())
+            .then(data => {
+                alert(data);
+                confirmModal.hide();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('เกิดข้อผิดพลาดในการบันทึกข้อมูล');
+            });
+        });
+    });
+</script>
+
+
     <!-- SCRIPT -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
         crossorigin="anonymous"></script>
     <script src="/js/sidebar.js"></script>
-    <script>
-        document.getElementById('btnSave').addEventListener('click', function () {
-            // Add your logic here to handle the save functionality.  
-            // This might include gathering the quantities from the input fields, 
-            // validating the input, and sending data to the server.
-
-            alert("บันทึกข้อมูลเรียบร้อยแล้ว"); // Placeholder - replace with actual save logic.
-        });
-    </script>
+    
 
 
 </body>
