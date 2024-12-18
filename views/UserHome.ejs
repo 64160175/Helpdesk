@@ -67,7 +67,7 @@
                         <table id="requestTable" class="table table-bordered table-hover">
                             <thead class="light-gray-bg">
                                 <tr>
-                                    <th>ลำดับ <i class="fas fa-sort float-end"></i></th>
+                                    <th class="width=10%">ลำดับ <i class="fas fa-sort float-end"></i></th>
                                     <th>วันที่เบิก <i class="fas fa-sort float-end"></i></th>
                                     <th>ผู้ขอเบิก <i class="fas fa-sort float-end"></i></th>
                                     <th>สถานะการขอเบิก <i class="fas fa-sort float-end"></i></th>
@@ -80,16 +80,28 @@
                                         <td><%= index + 1 %></td>
                                         <td><%= new Date(order.timestamp).toLocaleDateString('th-TH') %></td>
                                         <td><%= order.o_name %></td>
-                                        <td>
-                                            <% if (order.approve_status === null) { %>
-                                                รอดำเนินการ
-                                            <% } else if (order.approve_status === 'approved') { %>
-                                                อนุมัติแล้ว
-                                            <% } else if (order.approve_status === 'rejected') { %>
-                                                ปฏิเสธ
-                                            <% } %>
+                                        <td class="text-center">
+                                            <% let badgeClass, statusText;
+                                               if (order.approve_status === null) {
+                                                   badgeClass = 'bg-warning';
+                                                   statusText = 'รอดำเนินการ';
+                                               } else if (order.approve_status === 'approved') {
+                                                   badgeClass = 'bg-success';
+                                                   statusText = 'อนุมัติแล้ว';
+                                               } else if (order.approve_status === 'rejected') {
+                                                   badgeClass = 'bg-danger';
+                                                   statusText = 'ปฏิเสธ';
+                                               } %>
+                                            <span class="badge <%= badgeClass %>">
+                                                <i class="fas <%= order.approve_status === 'approved' ? 'fa-check' : (order.approve_status === 'rejected' ? 'fa-times' : 'fa-clock') %> me-1"></i>
+                                                <%= statusText %>
+                                            </span>
                                         </td>
-                                        <td><a href="/orderDetails/<%= order.id_order %>">คลิก</a></td>
+                                        <td class="text-center">
+                                            <a href="/orderDetails/<%= order.id_order %>" class="btn btn-primary btn-sm">
+                                                <i class="fas fa-info-circle me-1"></i> รายละเอียด
+                                            </a>
+                                        </td>
                                     </tr>
                                 <% }); %>
                             </tbody>
