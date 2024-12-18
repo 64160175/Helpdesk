@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db');
 const WarehouseModel = require('../models/warehouseModel');
+const orderController = require('../controllers/orderController');
+const OrderModel = require('../models/orderModel'); // เพิ่มการ import OrderModel
 
 
 const isLoggedIn = (req, res, next) => {
@@ -31,9 +33,19 @@ router.get('/UserHome', isLoggedIn, checkUserType('user'), (req, res) => {
       return res.status(500).send('Internal Server Error');
     }
     const sectionName = results[0] ? results[0].section : 'ไม่ระบุ';
-    res.render('UserHome', {
-      user: req.session.user,
-      sectionName: sectionName
+
+    // ดึงข้อมูลรายการคำขอของผู้ใช้
+    OrderModel.getUserOrders(req.session.user.id_user, (err, orders) => {
+      if (err) {
+        console.error('Error fetching user orders:', err);
+        return res.status(500).send('Internal Server Error');
+      }
+
+      res.render('UserHome', {
+        user: req.session.user,
+        sectionName: sectionName,
+        orders: orders // ส่งข้อมูลรายการคำขอไปยัง view
+      });
     });
   });
 });
