@@ -1,7 +1,6 @@
 const db = require('../db');
 
 class OrderModel {
-  // แสดงข้อมูลออร์เดอร์ทั้งหมด
   static getUserOrders(userId, callback) {
     const query = `
       SELECT id_order, o_name, approve_status, timestamp
@@ -10,6 +9,38 @@ class OrderModel {
       ORDER BY timestamp DESC
     `;
     db.query(query, [userId], callback);
+  }
+  
+  static getOrderById(orderId, callback) {
+    const query = 'SELECT * FROM tbl_order WHERE id_order = ?';
+    db.query(query, [orderId], (err, results) => {
+      if (err) return callback(err);
+      callback(null, results[0]);
+    });
+  }
+  
+  static getOrderItemsByOrderId(orderId, callback) {
+    const query = 'SELECT * FROM tbl_order_item WHERE id_order = ?';
+    db.query(query, [orderId], (err, results) => {
+      if (err) return callback(err);
+      callback(null, results);
+    });
+  }
+
+  static getOrderDetails(orderId, callback) {
+    const query = `
+      SELECT o.id_order, o.o_name, o.o_email, o.approve_status, o.reason, oi.i_brand_name, oi.type, oi.quantity
+      FROM tbl_order o
+      JOIN tbl_order_item oi ON o.id_order = oi.id_order
+      WHERE o.id_order = ?
+    `;
+    db.query(query, [orderId], (err, results) => {
+      if (err) {
+        console.error('Error retrieving order details:', err);
+        return callback(err, null);
+      }
+      callback(null, results);
+    });
   }
 
   // เพิ่มข้อมูลออร์เดอร์ใหม่
