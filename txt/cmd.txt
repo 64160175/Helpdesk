@@ -10,6 +10,7 @@ npm install ejs
 ---------------------------
 npm install express-session
 npm install multer
+npm install nodemailer
 nodemon index.js
 
 
