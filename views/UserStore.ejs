@@ -298,17 +298,22 @@
                 selectedItems 
             };
 
-            fetch('/orders/createOrder', { // Ensure the correct route is used
+            fetch('/orders/createOrder', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(orderData)
             })
-            .then(response => response.text())
+            .then(response => response.json())
             .then(data => {
-                alert(data);
-                confirmModal.hide();
+                if (data.success) {
+                    alert('คำขอเบิกถูกส่งเรียบร้อยแล้ว และอีเมลแจ้งเตือนได้ถูกส่งไปยังผู้เกี่ยวข้อง');
+                    confirmModal.hide();
+                    window.location.href = '/UserHome';
+                } else {
+                    alert('เกิดข้อผิดพลาด: ' + data.message);
+                }
             })
             .catch(error => {
                 console.error('Error:', error);
