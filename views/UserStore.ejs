@@ -10,6 +10,7 @@
     <title>Home</title>
     <link href="/css/style.css" rel="stylesheet">
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- ฟอนต์ Prompt -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -236,6 +237,24 @@
     </div>
 </div>
 
+<!-- Success Modal -->
+<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="successModalLabel">สำเร็จ</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                บันทึกข้อมูลเรียบร้อยแล้ว
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="window.location.href='/UserHome'">ตกลง</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -307,17 +326,31 @@
             })
             .then(response => response.json())
             .then(data => {
-                if (data.success) {
-                    alert('คำขอเบิกถูกส่งเรียบร้อยแล้ว และอีเมลแจ้งเตือนได้ถูกส่งไปยังผู้เกี่ยวข้อง');
-                    confirmModal.hide();
-                    window.location.href = '/UserHome';
+                if (data.message && data.message.includes('successfully')) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'สำเร็จ!',
+                        text: 'โปรดรอการยืนยันจากผู้อนุมัติ',
+                        showConfirmButton: false,
+                        timer: 2000
+                    }).then(() => {
+                        window.location.href = '/UserHome';
+                    });
                 } else {
-                    alert('เกิดข้อผิดพลาด: ' + data.message);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'เกิดข้อผิดพลาด',
+                        text: data.message || 'ไม่สามารถดำเนินการได้'
+                    });
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('เกิดข้อผิดพลาดในการบันทึกข้อมูล');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'เกิดข้อผิดพลาด',
+                    text: 'เกิดข้อผิดพลาดในการบันทึกข้อมูล: ' + error.message
+                });
             });
         });
     });

@@ -69,7 +69,7 @@ exports.createOrder = (req, res) => {
     // ส่งอีเมลแจ้งเตือน พร้อมกับ userId
     sendNotificationEmail(requesterName, requesterEmail, selectedItems, additionalNotes, userId);
 
-    res.status(200).json({ message: 'Order created successfully', orderId: result.orderId });
+    res.status(200).json({ message: 'Order created successfullyจ้าาาาาาาาา', orderId: result.orderId });
   });
 };
 
@@ -114,51 +114,57 @@ function sendNotificationEmail(requesterName, requesterEmail, selectedItems, add
       to: managerEmail, 
       subject: 'แจ้งเตือน: มีคำขอเบิกอุปกรณ์ใหม่',
       html: `
-    <table style="font-family: 'Prompt', Arial, sans-serif; width: 90%; margin: 0 auto; border-collapse: collapse; border: 1px solid #0056b3; border-radius: 8px; overflow: hidden;">
+    <table style="font-family: 'Prompt', Arial, sans-serif; width: 100%; max-width: 600px; margin: 0 auto; border-collapse: separate; border-spacing: 0; border: 2px solid #0056b3; border-radius: 12px; overflow: hidden; ">
       <tr>
-        <td style="padding: 20px; background: linear-gradient(135deg, #0056b3, #007bff); text-align: center;">
-          <h1 style="color: #ffffff; margin: 0;">มีคำขอเบิกอุปกรณ์ใหม่</h1>
-        </td>
-      </tr>
-      <tr>
-        <td style="padding: 20px; background-color: #f8f9fa;">
-          <p style="font-size: 16px; color: #333;"><strong>ชื่อผู้ขอ:</strong> ${requesterName}</p>
-          <p style="font-size: 16px; color: #333;"><strong>แผนก:</strong> ${departmentName}</p>
-          <p style="font-size: 16px; color: #333;"><strong>อีเมลผู้ขอ:</strong> ${requesterEmail}</p>
-          <p style="font-size: 16px; color: #333;"><strong>ขอเมื่อวันที่:</strong> ${currentDate}</p>
-        </td>
-      </tr>
-      <tr>
-        <td style=" padding: 20px; background-color: #f8f9fa;">
-          <h3 style="color: #0056b3; border-bottom: 2px solid #0056b3; padding-bottom: 10px;">รายการที่ขอเบิก</h3>
-          <table style="width: 100%; border-collapse: separate; border-spacing: 0; border: 1px solid #f8f9fa; border-radius: 8px; overflow: hidden;">
-            <thead>
-              <tr style="background: linear-gradient(135deg, #0056b3, #007bff);">
-                <th style="padding: 12px; color: white; text-align: left;">ชื่อรายการ</th>
-                <th style="padding: 12px; color: white; text-align: left;">สี/ประเภท</th>
-                <th style="padding: 12px; color: white; text-align: center;">จำนวน</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${selectedItems.map((item, index) => `
-                <tr style="background-color: ${index % 2 === 0 ? '#fffffa' : '#ffffff'};">
-                  <td style="padding: 12px; border-top: 1px solid #dee2e6;">${item.name}</td>
-                  <td style="padding: 12px; border-top: 1px solid #dee2e6;">${item.type}</td>
-                  <td style="padding: 12px; border-top: 1px solid #dee2e6; text-align: center;">${item.quantity} ชิ้น</td>
-                </tr>
-              `).join('')}
-            </tbody>
+        <td">
+          <table style="width: 100%; border-collapse: collapse; border: 1px solid #0056b3; border-radius: 8px; overflow: hidden;">
+            <tr>
+              <td style="padding: 20px; background: linear-gradient(135deg, #0056b3, #007bff); text-align: center;">
+                <h1 style="color: #ffffff; margin: 0;">มีคำขอเบิกอุปกรณ์ใหม่</h1>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding: 20px; background-color: #f8f9fa;">
+                <p style="font-size: 16px; color: #333;"><strong>ชื่อผู้ขอ:</strong> ${requesterName}</p>
+                <p style="font-size: 16px; color: #333;"><strong>แผนก:</strong> ${departmentName}</p>
+                <p style="font-size: 16px; color: #333;"><strong>อีเมลผู้ขอ:</strong> ${requesterEmail}</p>
+                <p style="font-size: 16px; color: #333;"><strong>ขอเมื่อวันที่:</strong> ${currentDate}</p>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding: 20px; background-color: #f8f9fa;">
+                <h3 style="color: #0056b3; border-bottom: 2px solid #0056b3; padding-bottom: 10px;">รายการที่ขอเบิก</h3>
+                <table style="width: 100%; border-collapse: separate; border-spacing: 0; border: 1px solid #f8f9fa; border-radius: 8px; overflow: hidden;">
+                  <thead>
+                    <tr style="background: linear-gradient(135deg, #0056b3, #007bff);">
+                      <th style="padding: 12px; color: white; text-align: left;">ชื่อรายการ</th>
+                      <th style="padding: 12px; color: white; text-align: left;">สี/ประเภท</th>
+                      <th style="padding: 12px; color: white; text-align: center;">จำนวน</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${selectedItems.map((item, index) => `
+                      <tr style="background-color: ${index % 2 === 0 ? '#fffffa' : '#ffffff'};">
+                        <td style="padding: 12px; border-top: 1px solid #dee2e6;">${item.name}</td>
+                        <td style="padding: 12px; border-top: 1px solid #dee2e6;">${item.type}</td>
+                        <td style="padding: 12px; border-top: 1px solid #dee2e6; text-align: center;">${item.quantity} ชิ้น</td>
+                      </tr>
+                    `).join('')}
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding: 20px; text-align: center; background-color: #f8f9fa;">
+                <a href="http://localhost:3000" style="font-size: 16px; display: inline-block; padding: 12px 24px; background-color:rgb(6, 139, 2); color: white; text-decoration: none; border-radius: 5px; font-weight: bold; transition: background-color 0.3s;">กดที่นี่เพื่อดำเนินการต่อ</a>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding: 18px; text-align: center; background-color: #0056b3; color: #ffffff; font-size: 14px;">
+                อีเมลนี้เป็นอีเมลอัตโนมัติ โปรดอย่าตอบกลับ <br> หากมีข้อสงสัย กรุณาติดต่อแผนก IT
+              </td>
+            </tr>
           </table>
-        </td>
-      </tr>
-      <tr>
-        <td style="padding: 20px; text-align: center; background-color: #f8f9fa;">
-          <a href="http://localhost:3000" style="font-size: 16px; display: inline-block; padding: 12px 24px; background-color:rgb(6, 139, 2); color: white; text-decoration: none; border-radius: 5px; font-weight: bold; transition: background-color 0.3s;">กดที่นี่เพื่อดำเนินการต่อ</a>
-        </td>
-      </tr>
-      <tr>
-        <td style="padding: 18px; text-align: center; background-color: #0056b3; color: #ffffff; font-size: 14px;">
-          อีเมลนี้เป็นอีเมลอัตโนมัติ โปรดอย่าตอบกลับ <br> หากมีข้อสงสัย กรุณาติดต่อแผนก IT
         </td>
       </tr>
     </table>
