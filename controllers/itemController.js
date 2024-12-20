@@ -35,7 +35,6 @@ class ItemController {
     //อัปเดต Stock วัสดุทั่วไป
     static updateStock(req, res) {
         const { id, quantity } = req.body;
-    
         ItemModel.updateStock(id, parseInt(quantity), (error, results) => {
             if (error) {
                 return res.status(500).json({ success: false, message: 'Error updating stock' });

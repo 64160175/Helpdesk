@@ -2,7 +2,6 @@ const orderModel = require('../models/orderModel');
 const nodemailer = require('nodemailer');
 const db = require('../db');
 
-
 // แสดงข้อมูลออร์เดอร์ทั้งหมดของผู้ใช้
 exports.getUserHome = (req, res) => {
   const userId = req.session.user.id_user;
@@ -15,7 +14,7 @@ exports.getUserHome = (req, res) => {
 
     res.render('UserHome', {
       user: req.session.user,
-      orders: orders
+      orders: orders,
     });
   });
 };
@@ -23,6 +22,7 @@ exports.getUserHome = (req, res) => {
 // แสดงรายละเอียดออร์เดอร์
 exports.getOrderDetails = (req, res) => {
   const orderId = req.params.id_order;
+
   orderModel.getOrderById(orderId, (err, order) => {
     if (err) {
       console.error('Error fetching order:', err);
@@ -31,11 +31,13 @@ exports.getOrderDetails = (req, res) => {
     if (!order) {
       return res.status(404).send('ไม่พบคำสั่งซื้อ');
     }
+
     orderModel.getOrderItemsByOrderId(orderId, (err, orderItems) => {
       if (err) {
         console.error('Error fetching order items:', err);
         return res.status(500).send('เกิดข้อผิดพลาดในการดึงข้อมูลรายการสินค้า');
       }
+
       res.render('orderDetails', { order: order, orderDetails: orderItems });
     });
   });
@@ -51,13 +53,13 @@ exports.createOrder = (req, res) => {
     o_name: requesterName,
     o_email: requesterEmail,
     approve_status: null,
-    reason: additionalNotes
+    reason: additionalNotes,
   };
 
-  const orderItems = selectedItems.map(item => ({
+  const orderItems = selectedItems.map((item) => ({
     i_brand_name: item.name,
     type: item.type,
-    quantity: item.quantity
+    quantity: item.quantity,
   }));
 
   orderModel.createOrderWithItems(orderData, orderItems, (err, result) => {
@@ -75,7 +77,6 @@ exports.createOrder = (req, res) => {
 
 // ฟังก์ชันส่งอีเมลแจ้งเตือน
 function sendNotificationEmail(requesterName, requesterEmail, selectedItems, additionalNotes, userId) {
-  // ค้นหา id_emp_section, อีเมลของ manager, และชื่อแผนก
   const query = `
     SELECT u.id_emp_section, m.email as manager_email, es.section as department_name
     FROM tbl_user u
@@ -105,70 +106,74 @@ function sendNotificationEmail(requesterName, requesterEmail, selectedItems, add
       secure: false,
       auth: {
         user: '64160175@go.buu.ac.th',
-        pass: 'qlsy gyps ocno xnup'
-      }
+        pass: 'qlsy gyps ocno xnup',
+      },
     });
 
     const mailOptions = {
       from: '"ระบบเบิกอุปกรณ์ไอที" <64160175@go.buu.ac.th>',
-      to: managerEmail, 
+      to: managerEmail,
       subject: 'แจ้งเตือน: มีคำขอเบิกอุปกรณ์ใหม่',
       html: `
-    <table style="font-family: 'Prompt', Arial, sans-serif; width: 100%; max-width: 600px; margin: 0 auto; border-collapse: separate; border-spacing: 0; border: 2px solid #0056b3; border-radius: 12px; overflow: hidden; ">
-      <tr>
-        <td">
-          <table style="width: 100%; border-collapse: collapse; border: 1px solid #0056b3; border-radius: 8px; overflow: hidden;">
-            <tr>
-              <td style="padding: 20px; background: linear-gradient(135deg, #0056b3, #007bff); text-align: center;">
-                <h1 style="color: #ffffff; margin: 0;">มีคำขอเบิกอุปกรณ์ใหม่</h1>
-              </td>
-            </tr>
-            <tr>
-              <td style="padding: 20px; background-color: #f8f9fa;">
-                <p style="font-size: 16px; color: #333;"><strong>ชื่อผู้ขอ:</strong> ${requesterName}</p>
-                <p style="font-size: 16px; color: #333;"><strong>แผนก:</strong> ${departmentName}</p>
-                <p style="font-size: 16px; color: #333;"><strong>อีเมลผู้ขอ:</strong> ${requesterEmail}</p>
-                <p style="font-size: 16px; color: #333;"><strong>ขอเมื่อวันที่:</strong> ${currentDate}</p>
-              </td>
-            </tr>
-            <tr>
-              <td style="padding: 20px; background-color: #f8f9fa;">
-                <h3 style="color: #0056b3; border-bottom: 2px solid #0056b3; padding-bottom: 10px;">รายการที่ขอเบิก</h3>
-                <table style="width: 100%; border-collapse: separate; border-spacing: 0; border: 1px solid #f8f9fa; border-radius: 8px; overflow: hidden;">
-                  <thead>
-                    <tr style="background: linear-gradient(135deg, #0056b3, #007bff);">
-                      <th style="padding: 12px; color: white; text-align: left;">ชื่อรายการ</th>
-                      <th style="padding: 12px; color: white; text-align: left;">สี/ประเภท</th>
-                      <th style="padding: 12px; color: white; text-align: center;">จำนวน</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    ${selectedItems.map((item, index) => `
-                      <tr style="background-color: ${index % 2 === 0 ? '#fffffa' : '#ffffff'};">
-                        <td style="padding: 12px; border-top: 1px solid #dee2e6;">${item.name}</td>
-                        <td style="padding: 12px; border-top: 1px solid #dee2e6;">${item.type}</td>
-                        <td style="padding: 12px; border-top: 1px solid #dee2e6; text-align: center;">${item.quantity} ชิ้น</td>
-                      </tr>
-                    `).join('')}
-                  </tbody>
-                </table>
-              </td>
-            </tr>
-            <tr>
-              <td style="padding: 20px; text-align: center; background-color: #f8f9fa;">
-                <a href="http://localhost:3000" style="font-size: 16px; display: inline-block; padding: 12px 24px; background-color:rgb(6, 139, 2); color: white; text-decoration: none; border-radius: 5px; font-weight: bold; transition: background-color 0.3s;">กดที่นี่เพื่อดำเนินการต่อ</a>
-              </td>
-            </tr>
-            <tr>
-              <td style="padding: 18px; text-align: center; background-color: #0056b3; color: #ffffff; font-size: 14px;">
-                อีเมลนี้เป็นอีเมลอัตโนมัติ โปรดอย่าตอบกลับ <br> หากมีข้อสงสัย กรุณาติดต่อแผนก IT
-              </td>
-            </tr>
-          </table>
-        </td>
-      </tr>
-    </table>
-  `
+        <table style="font-family: 'Prompt', Arial, sans-serif; width: 100%; max-width: 600px; margin: 0 auto; border-collapse: separate; border-spacing: 0; border: 2px solid #0056b3; border-radius: 12px; overflow: hidden;">
+          <tr>
+            <td>
+              <table style="width: 100%; border-collapse: collapse; border: 1px solid #0056b3; border-radius: 8px; overflow: hidden;">
+                <tr>
+                  <td style="padding: 20px; background: linear-gradient(135deg, #0056b3, #007bff); text-align: center;">
+                    <h1 style="color: #ffffff; margin: 0;">มีคำขอเบิกอุปกรณ์ใหม่</h1>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding: 20px; background-color: #f8f9fa;">
+                    <p style="font-size: 16px; color: #333;"><strong>ชื่อผู้ขอ:</strong> ${requesterName}</p>
+                    <p style="font-size: 16px; color: #333;"><strong>แผนก:</strong> ${departmentName}</p>
+                    <p style="font-size: 16px; color: #333;"><strong>อีเมลผู้ขอ:</strong> ${requesterEmail}</p>
+                    <p style="font-size: 16px; color: #333;"><strong>ขอเมื่อวันที่:</strong> ${currentDate}</p>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding: 20px; background-color: #f8f9fa;">
+                    <h3 style="color: #0056b3; border-bottom: 2px solid #0056b3; padding-bottom: 10px;">รายการที่ขอเบิก</h3>
+                    <table style="width: 100%; border-collapse: separate; border-spacing: 0; border: 1px solid #f8f9fa; border-radius: 8px; overflow: hidden;">
+                      <thead>
+                        <tr style="background: linear-gradient(135deg, #0056b3, #007bff);">
+                          <th style="padding: 12px; color: white; text-align: left;">ชื่อรายการ</th>
+                          <th style="padding: 12px; color: white; text-align: left;">สี/ประเภท</th>
+                          <th style="padding: 12px; color: white; text-align: center;">จำนวน</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        ${selectedItems
+                          .map(
+                            (item, index) => `
+                          <tr style="background-color: ${index % 2 === 0 ? '#fffffa' : '#ffffff'};">
+                            <td style="padding: 12px; border-top: 1px solid #dee2e6;">${item.name}</td>
+                            <td style="padding: 12px; border-top: 1px solid #dee2e6;">${item.type}</td>
+                            <td style="padding: 12px; border-top: 1px solid #dee2e6; text-align: center;">${item.quantity} ชิ้น</td>
+                          </tr>
+                        `
+                          )
+                          .join('')}
+                      </tbody>
+                    </table>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding: 20px; text-align: center; background-color: #f8f9fa;">
+                    <a href="http://localhost:3000" style="font-size: 16px; display: inline-block; padding: 12px 24px; background-color:rgb(6, 139, 2); color: white; text-decoration: none; border-radius: 5px; font-weight: bold; transition: background-color 0.3s;">กดที่นี่เพื่อดำเนินการต่อ</a>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding: 18px; text-align: center; background-color: #0056b3; color: #ffffff; font-size: 14px;">
+                    อีเมลนี้เป็นอีเมลอัตโนมัติ โปรดอย่าตอบกลับ <br> หากมีข้อสงสัย กรุณาติดต่อแผนก IT
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      `,
     };
 
     transporter.sendMail(mailOptions, (error, info) => {

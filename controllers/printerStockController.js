@@ -4,7 +4,6 @@ class PrinterStockController {
   static async getAllPrinterStocks(req, res) {
     try {
       const printerStocks = await PrinterStockModel.getAllPrinterStocks();
-      
       // Group printer stocks by printer brand
       const groupedStocks = printerStocks.reduce((acc, stock) => {
         if (!acc[stock.id_p_brand]) {

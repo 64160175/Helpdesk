@@ -10,7 +10,7 @@ class OrderModel {
     `;
     db.query(query, [userId], callback);
   }
-  
+
   static getOrderById(orderId, callback) {
     const query = 'SELECT * FROM tbl_order WHERE id_order = ?';
     db.query(query, [orderId], (err, results) => {
@@ -18,7 +18,7 @@ class OrderModel {
       callback(null, results[0]);
     });
   }
-  
+
   static getOrderItemsByOrderId(orderId, callback) {
     const query = 'SELECT * FROM tbl_order_item WHERE id_order = ?';
     db.query(query, [orderId], (err, results) => {
