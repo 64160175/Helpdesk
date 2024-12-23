@@ -1,4 +1,6 @@
 const User = require('../models/authModel');
+const db = require('../db');
+
 exports.login = (req, res) => {
   const { username, password } = req.body;
 
@@ -19,27 +21,38 @@ exports.login = (req, res) => {
       return res.render('login', { error: 'บัญชีผู้ใช้ไม่ได้เปิดใช้งาน กรุณาติดต่อผู้ดูแลระบบ' });
     }
 
-    // Store user information in session
-    req.session.user = {
-      id_user: user.id_user,
-      username: user.username,
-      f_name: user.f_name,
-      l_name: user.l_name,
-      u_type: user.u_type,
-      id_emp_section: user.id_emp_section,
-      u_status: user.u_status,
-      email: user.email
-    };
+    // Fetch the department name
+    const query = 'SELECT section FROM tbl_emp_section WHERE id_emp_section = ?';
+    db.query(query, [user.id_emp_section], (err, results) => {
+      if (err) {
+        console.error('Error fetching section:', err);
+        return res.status(500).send('Internal Server Error');
+      }
+      const sectionName = results[0] ? results[0].section : 'ไม่ระบุ';
 
-    switch (user.u_type) {
-      case 'admin':
-        return res.redirect('/AdminRequestList');
-      case 'manager':
-        return res.redirect('/ManagerRequestList');
-      case 'user':
-        return res.redirect('/UserHome');
-      default:
-        return res.render('login', { error: 'ไม่มีสิทธิ์เข้าถึง กรุณาติดต่อผู้ดูแลระบบ' });
-    }
+      // Store user information in session
+      req.session.user = {
+        id_user: user.id_user,
+        username: user.username,
+        f_name: user.f_name,
+        l_name: user.l_name,
+        u_type: user.u_type,
+        id_emp_section: user.id_emp_section,
+        u_status: user.u_status,
+        email: user.email,
+        section_name: sectionName 
+      };
+
+      switch (user.u_type) {
+        case 'admin':
+          return res.redirect('/AdminRequestList');
+        case 'manager':
+          return res.redirect('/ManagerRequestList');
+        case 'user':
+          return res.redirect('/UserHome');
+        default:
+          return res.render('login', { error: 'ไม่มีสิทธิ์เข้าถึง กรุณาติดต่อผู้ดูแลระบบ' });
+      }
+    });
   });
 };

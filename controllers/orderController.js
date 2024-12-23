@@ -20,27 +20,36 @@ class OrderController {
   }
 
   static getOrderDetails(req, res) {
-    const orderId = req.params.id_order;
-
-    OrderModel.getOrderById(orderId, (err, order) => {
-      if (err) {
-        console.error('Error fetching order:', err);
-        return res.status(500).send('เกิดข้อผิดพลาดในการดึงข้อมูล');
-      }
-      if (!order) {
-        return res.status(404).send('ไม่พบคำสั่งซื้อ');
-      }
-
-      OrderModel.getOrderItemsByOrderId(orderId, (err, orderItems) => {
+      const orderId = req.params.id_order;
+  
+      OrderModel.getOrderById(orderId, (err, order) => {
         if (err) {
-          console.error('Error fetching order items:', err);
-          return res.status(500).send('เกิดข้อผิดพลาดในการดึงข้อมูลรายการสินค้า');
+          console.error('Error fetching order:', err);
+          return res.status(500).send('เกิดข้อผิดพลาดในการดึงข้อมูล');
         }
-
-        res.render('orderDetails', { order: order, orderDetails: orderItems });
+        if (!order) {
+          return res.status(404).send('ไม่พบคำสั่งซื้อ');
+        }
+  
+        OrderModel.getOrderItemsByOrderId(orderId, (err, orderItems) => {
+          if (err) {
+            console.error('Error fetching order items:', err);
+            return res.status(500).send('เกิดข้อผิดพลาดในการดึงข้อมูลรายการสินค้า');
+          }
+  
+          // Use sectionName from the session
+          const sectionName = req.session.user.section_name || 'Default Section';
+  
+          // Pass the user object to the template
+          res.render('orderDetails', { 
+            order: order, 
+            orderDetails: orderItems, 
+            sectionName: sectionName, 
+            user: req.session.user // Pass the user object
+          });
+        });
       });
-    });
-  }
+    }
 
   static createOrder(req, res) {
     const { requesterName, requesterEmail, additionalNotes, selectedItems } = req.body;

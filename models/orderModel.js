@@ -204,6 +204,16 @@ class OrderModel {
     });
   }
 
+  static updateOrderStatus(orderId, status, callback) {
+    const query = 'UPDATE orders SET approve_status = ? WHERE id = ?';
+    db.query(query, [status, orderId], (err, results) => {
+        if (err) {
+            console.error('Error updating order status:', err);
+            return callback(err);
+        }
+        callback(null, results);
+    });
+}
   
 }
 

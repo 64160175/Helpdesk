@@ -21,14 +21,17 @@
 
     <!-- Navbar TOP -->
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-blue">
-        <a class="navbar-brand ps-3" href="/UserHome">ระบบเบิกอุปกรณ์ไอที</a>
+        <a class="navbar-brand ps-3" href="javascript:history.back()">ระบบเบิกอุปกรณ์ไอที</a>
 
         <!-- Navbar-->
         <div class="ms-auto">
             <ul class="navbar-nav me-3 me-lg-4">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
-                        data-bs-toggle="dropdown" aria-expanded="false">แผนก HR&GA </a>
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <%= user.f_name %>
+                            <%= user.l_name %> - แผนก <%= sectionName %>
+                    </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" href="/logout"><i class="fas fa-sign-out-alt fa-fw"></i>
                                 ออกจากระบบ</a>
@@ -114,6 +117,18 @@
                             </div>
                         </div>
                     </div>
+                    <% if (user && user.u_type === 'manager') { %>
+                        <div class="d-flex justify-content-end mt-3">
+                          <form action="/approveOrder" method="POST" class="me-2">
+                            <input type="hidden" name="orderId" value="<%= order.id_order %>">
+                            <button type="submit" class="btn btn-success">Approve</button>
+                          </form>
+                          <form action="/denyOrder" method="POST">
+                            <input type="hidden" name="orderId" value="<%= order.id_order %>">
+                            <button type="submit" class="btn btn-danger">Deny</button>
+                          </form>
+                        </div>
+                    <% } %>
                 </div>
             </div>
         </main>
