@@ -1,6 +1,7 @@
 const db = require('../db');
 
 class OrderModel {
+  // แสดงรายการคำสั่งซื้อของผู้ใช้งาน #อยู่หน้า UserHome
   static getUserOrders(userId, callback) {
     const query = `
       SELECT id_order, o_name, approve_status, timestamp
@@ -11,6 +12,7 @@ class OrderModel {
     db.query(query, [userId], callback);
   }
 
+  // แสดงรายการคำสั่งซื้อของผู้ใช้งาน #อยู่หน้า orderDetails
   static getOrderById(orderId, callback) {
     const query = 'SELECT * FROM tbl_order WHERE id_order = ?';
     db.query(query, [orderId], (err, results) => {
@@ -19,6 +21,7 @@ class OrderModel {
     });
   }
 
+  // แสดงรายการสินค้าที่เกี่ยวข้องกับคำสั่งซื้อ #อยู่หน้า orderDetails
   static getOrderItemsByOrderId(orderId, callback) {
     const query = 'SELECT * FROM tbl_order_item WHERE id_order = ?';
     db.query(query, [orderId], (err, results) => {
@@ -27,6 +30,7 @@ class OrderModel {
     });
   }
 
+  // แสดงรายละเอียดของคำสั่งซื้อ #อยู่หน้า OrderDetails
   static getOrderDetails(orderId, callback) {
     const query = `
       SELECT o.id_order, o.o_name, o.o_email, o.approve_status, o.reason, oi.i_brand_name, oi.type, oi.quantity
@@ -43,7 +47,7 @@ class OrderModel {
     });
   }
 
-  // เพิ่มข้อมูลออร์เดอร์ใหม่
+  // เพิ่มข้อมูลออร์เดอร์ใหม่  #อยู่หน้า UserStore
   static insertOrder(orderData, callback) {
     const getLatestIdQuery = 'SELECT MAX(id_order) as maxId FROM tbl_order';
     db.query(getLatestIdQuery, (err, results) => {
@@ -66,7 +70,7 @@ class OrderModel {
     });
   }
 
-  // เพิ่มออร์เดอร์พร้อมกับรายการสินค้า
+  // เพิ่มออร์เดอร์พร้อมกับรายการสินค้า #อยู่หน้า UserStore
   static createOrderWithItems(orderData, orderItems, callback) {
     db.beginTransaction((err) => {
       if (err) {
@@ -184,7 +188,7 @@ class OrderModel {
 
 
 
-  //MGR แสดง request ทั้งหมด
+  // แสดง request จาก User ที่ยังไม่อนุมัติ #อยู่หน้า ManagerHome
   static getOrdersByManagerSection(managerSectionId, callback) {
     const query = `
       SELECT o.id_order, o.timestamp, o.approve_status, o.o_name,
@@ -204,6 +208,7 @@ class OrderModel {
     });
   }
 
+  // อนุมัติคำสั่งซื้อ #อยู่หน้า OrderDetails
   static updateOrderStatus(orderId, status, callback) {
     const query = 'UPDATE orders SET approve_status = ? WHERE id = ?';
     db.query(query, [status, orderId], (err, results) => {

@@ -2,6 +2,8 @@ const WarehouseModel = require('../models/warehouseModel');
 const PrinterStockModel = require('../models/printerStockModel');
 
 class WarehouseController {
+
+    // ดึงข้อมูลสต็อกทั้งหมดจากตาราง tbl_add_item และ tbl_add_printer และแสดงผลในหน้า AdminAllStock
     static async getAllItems(req, res) {
         try {
             const items = await WarehouseModel.getAllItems();
@@ -13,6 +15,7 @@ class WarehouseController {
         }
     }
 
+    // อัปเดตสต็อกพิมพ์ในตาราง tbl_add_printer #อยู่หน้า AdminAllStock
     static updatePrinterStock(req, res) {
         const { id, tonerType, quantity } = req.body;
         console.log('Received update request:', { id, tonerType, quantity });
@@ -33,6 +36,7 @@ class WarehouseController {
         });
     }
 
+    // อัปเดตสต็อกสินค้าในตาราง tbl_add_item #อยู่หน้า AdminAllStock
     static async updateItemStock(req, res) {
         try {
             const { id, quantity } = req.body;
@@ -53,7 +57,7 @@ class WarehouseController {
     }
 
 
-    //
+    // ดึงข้อมูลสต็อกพิมพ์ตามส่วนงานของผู้ใช้งาน ตามแผนก #อยู่หน้า AdminAllStock
     static async getPrinterStockBySection(req, res) {
         try {
             const sectionId = req.session.user.id_emp_section;

@@ -1,6 +1,7 @@
 const User = require('../models/authModel');
 const db = require('../db');
 
+// ตรวจสอบการเข้าสู่ระบบของผู้ใช้ โดยตรวจสอบชื่อผู้ใช้และรหัสผ่าน พร้อมเก็บข้อมูลใน session และเปลี่ยนเส้นทางตามบทบาทผู้ใช้ #ใช้หน้า login
 exports.login = (req, res) => {
   const { username, password } = req.body;
 

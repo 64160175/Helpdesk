@@ -1,6 +1,8 @@
 const PrinterStockModel = require('../models/printerStockModel');
 
 class PrinterStockController {
+
+    // ดึงข้อมูลสต็อกเครื่องพิมพ์ทั้งหมดและจัดกลุ่มข้อมูลตามแบรนด์เครื่องพิมพ์ เพื่อแสดงผลในหน้า AdminAllStock
   static async getAllPrinterStocks(req, res) {
     try {
       const printerStocks = await PrinterStockModel.getAllPrinterStocks();

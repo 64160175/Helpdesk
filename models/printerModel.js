@@ -3,6 +3,7 @@ const db = require('../db');
 
 //ส่วนของชื่อปริ้นเตอร์และสิทธ์์ของชื่อปริ้นเตอร์
 class PrinterModel {
+  // ดึงข้อมูลสต็อกเครื่องพิมพ์ทั้งหมดและจัดกลุ่มข้อมูลตามแบรนด์เครื่องพิมพ์ เพื่อแสดงผลในหน้า AdminAllStock
   static getAllPrinters() {
     return new Promise((resolve, reject) => {
       const query = `
@@ -22,6 +23,7 @@ class PrinterModel {
     });
   }
 
+  // เพิ่มชื่อปริ้นเตอร์ใหม่ และอัพเดตข้อมูลในฐานข้อมูล #อยู่หน้า AddPrinter
   static addPrinter(printerBrand) {
     return new Promise((resolve, reject) => {
       db.beginTransaction((err) => {
@@ -80,6 +82,7 @@ class PrinterModel {
     });
   }
 
+  // อัพเดตข้อมูลเครื่องพิมพ์ในฐานข้อมูล ว่าใช้อยู่ไหม #อยู่หน้า AdminAllStock
   static updatePrinterStatus(printerId, status) {
     return new Promise((resolve, reject) => {
       const sql = `UPDATE tbl_printer SET p_status = ? WHERE id_printer = ?`;
@@ -93,6 +96,7 @@ class PrinterModel {
     });
   }
 
+  // เพิ่มซีเรียลเครื่องพิมพ์ใหม่ และอัพเดตข้อมูลในฐานข้อมูล #อยู่หน้า AddPrinterSerial
   static addPrinterSerial(id_p_brand, p_serial, id_emp_section) {
     return new Promise((resolve, reject) => {
       // First, get the latest ID
@@ -119,6 +123,7 @@ class PrinterModel {
     });
   }
 
+  //แสดงข้อมูลสต็อกเครื่องพิมพ์ทั้งหมด #อยู่หน้า AdminAllStock
   static getAllPrinterBrands() {
     return new Promise((resolve, reject) => {
       const sql = 'SELECT * FROM tbl_add_printer';
@@ -132,6 +137,7 @@ class PrinterModel {
     });
   }
 
+  //ดึงแผนกมาใช้ในการเพิ่มเครื่องพิมพ์ #อยู่หน้า AdminPrinter ตรง serial number
   static getAllSections() {
     return new Promise((resolve, reject) => {
       const sql = 'SELECT * FROM tbl_emp_section WHERE status = "active"';

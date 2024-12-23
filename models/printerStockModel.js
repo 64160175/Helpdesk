@@ -1,6 +1,7 @@
 const db = require('../db');
 
 class PrinterStockModel {
+    // ดึงข้อมูลสต็อกเครื่องพิมพ์ทั้งหมดและจัดกลุ่มข้อมูลตามแบรนด์เครื่องพิมพ์  และเพิ่ม STOCK เพื่อแสดงผลในหน้า AdminAllStock
     static updatePrinterStock(id, tonerType, quantity, callback) {
         console.log('Updating printer stock for id:', id, 'with toner type:', tonerType, 'and quantity:', quantity);
         let updateField;
@@ -17,6 +18,7 @@ class PrinterStockModel {
         db.query(query, [quantity, id], callback);
     }
 
+    // ดึงข้อมูลสต็อกเครื่องพิมพ์ทั้งหมดและจัดกลุ่มข้อมูลตามแบรนด์เครื่องพิมพ์  เพื่อแสดงผลในหน้า AdminAllStock
     static getAllPrinterStocks() {
         return new Promise((resolve, reject) => {
             const query = `

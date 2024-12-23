@@ -1,6 +1,7 @@
 const ItemModel = require('../models/itemModel');
 
 class ItemController {
+    // แสดงหน้า AdminItem เพื่อแสดงรายการสินค้า พร้อมส่งข้อมูลไปยัง template #อยู่หน้า AdminItem
     static getAdminItemPage(req, res) {
         ItemModel.getAllItems((err, items) => {
             if (err) {
@@ -11,10 +12,12 @@ class ItemController {
         });
     }
 
+    //แสดงหน้า AddItem เพื่อเพิ่มสินค้า พร้อมส่งข้อมูลไปยัง template #อยู่หน้า AddItem
     static showAddItemForm(req, res) {
         res.render('addItem');
     }
 
+    //เพิ่มสินค้าใหม่ พร้อมส่งข้อมูลไปยัง template #อยู่หน้า AdminItem
     static addItem(req, res) {
         const { itemName, type } = req.body;
         let itemPicture = null;
@@ -32,7 +35,7 @@ class ItemController {
         });
     }
 
-    //อัปเดต Stock วัสดุทั่วไป
+    //แสดงหน้า EditItem เพื่อแก้ไขสินค้า พร้อมส่งข้อมูลไปยัง template #อยู่หน้า EditItem
     static updateStock(req, res) {
         const { id, quantity } = req.body;
         ItemModel.updateStock(id, parseInt(quantity), (error, results) => {

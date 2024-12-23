@@ -1,6 +1,7 @@
 const db = require('../db');
 
 class ItemModel {
+    //เพิ่มของใหม่ใน สร้างวัสดุทั่วไป #แสดงหน้า AddItem
     static addItem(itemName, itemPicture, type, callback) {
         db.beginTransaction((err) => {
             if (err) { return callback(err); }
@@ -69,7 +70,7 @@ class ItemModel {
     }
 
 
-    //แสดงของทั้งหมดใน สร้างวัสดุทั่วไป
+    //แสดงของทั้งหมดใน สร้างวัสดุทั่วไป #แสดงหน้า AddItem
     static getAllItems(callback) {
         const query = 'SELECT id_add_item, i_brand, i_picture FROM tbl_add_item ORDER BY id_add_item';
         db.query(query, (error, results) => {
@@ -84,7 +85,7 @@ class ItemModel {
         });
     }
 
-    //เพิ่ม Stock ใน สร้างวัสดุทั่วไป
+    //เพิ่ม Stock ใน สร้างวัสดุทั่วไป #แสดงหน้า EditItem
     static updateStock(id, quantity, callback) {
         const query = 'UPDATE tbl_item_stock SET quantity = quantity + ? WHERE id_item_stock = ?';
         db.query(query, [quantity, id], (error, results) => {

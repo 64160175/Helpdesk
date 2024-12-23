@@ -121,11 +121,11 @@
                         <div class="d-flex justify-content-end mt-3">
                           <form action="/approveOrder" method="POST" class="me-2">
                             <input type="hidden" name="orderId" value="<%= order.id_order %>">
-                            <button type="submit" class="btn btn-success">Approve</button>
+                            <button type="submit" class="btn btn-success">อนุมัติคำขอ</button>
                           </form>
                           <form action="/denyOrder" method="POST">
                             <input type="hidden" name="orderId" value="<%= order.id_order %>">
-                            <button type="submit" class="btn btn-danger">Deny</button>
+                            <button type="submit" class="btn btn-danger">ปฏิเสธ</button>
                           </form>
                         </div>
                     <% } %>

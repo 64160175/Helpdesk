@@ -3,7 +3,8 @@ const db = require('../db');
 const OrderModel = require('../models/orderModel');
 
 class OrderController {
-  static getUserHome(req, res) {
+    // แสดงหน้า Home ของผู้ใช้งาน โดยดึงข้อมูลคำสั่งซื้อของผู้ใช้งานที่ล็อกอินอยู่ #แสดงหน้า UserHome
+    static getUserHome(req, res) { 
     const userId = req.session.user.id_user;
 
     OrderModel.getUserOrders(userId, (err, orders) => {
@@ -19,7 +20,8 @@ class OrderController {
     });
   }
 
-  static getOrderDetails(req, res) {
+    // ดึงรายละเอียดคำสั่งซื้อเฉพาะรายการ โดยรวมถึงรายการสินค้าที่เกี่ยวข้อง พร้อมส่งข้อมูลไปยัง template #แสดงหน้า OrderDetails
+    static getOrderDetails(req, res) { 
       const orderId = req.params.id_order;
   
       OrderModel.getOrderById(orderId, (err, order) => {
@@ -28,7 +30,7 @@ class OrderController {
           return res.status(500).send('เกิดข้อผิดพลาดในการดึงข้อมูล');
         }
         if (!order) {
-          return res.status(404).send('ไม่พบคำสั่งซื้อ');
+          return res.status(404).send('ไม่พบคำสั่ง');
         }
   
         OrderModel.getOrderItemsByOrderId(orderId, (err, orderItems) => {
@@ -37,21 +39,22 @@ class OrderController {
             return res.status(500).send('เกิดข้อผิดพลาดในการดึงข้อมูลรายการสินค้า');
           }
   
-          // Use sectionName from the session
           const sectionName = req.session.user.section_name || 'Default Section';
   
-          // Pass the user object to the template
           res.render('orderDetails', { 
             order: order, 
             orderDetails: orderItems, 
             sectionName: sectionName, 
-            user: req.session.user // Pass the user object
+            user: req.session.user
           });
         });
       });
     }
 
-  static createOrder(req, res) {
+
+
+  // สร้างคำสั่งซื้อใหม่จากข้อมูลที่ผู้ใช้กรอก พร้อมส่งอีเมลแจ้งเตือน และตอบกลับเมื่อสร้างสำเร็จ #แสดงหน้า UserRequest
+  static createOrder(req, res) { 
     const { requesterName, requesterEmail, additionalNotes, selectedItems } = req.body;
     const userId = req.session.user.id_user;
 
@@ -80,7 +83,7 @@ class OrderController {
       res.status(200).json({ message: 'Order created successfullyจ้าาาาาาาาา', orderId: result.orderId });
     });
   }
-
+  // ส่งอีเมลแจ้งเตือนถึงผู้จัดการแผนกเมื่อมีการสร้างคำขอเบิกใหม่   User-->Manager
   static sendNotificationEmail(requesterName, requesterEmail, selectedItems, additionalNotes, userId) {
     const query = `
       SELECT u.id_emp_section, m.email as manager_email, es.section as department_name
@@ -188,7 +191,7 @@ class OrderController {
   }
 
 
-   //MGR แสดง request ทั้งหมด
+   // แสดงรายการคำขอเบิกอุปกรณ์ทั้งหมดของแผนกที่ผู้จัดการดูแล พร้อมข้อมูลผู้ใช้และแผนก #แสดงหน้า ManagerRequestList
    static getManagerRequestList(req, res) {
     const managerId = req.session.user.id_user;
     const managerSectionId = req.session.user.id_emp_section;

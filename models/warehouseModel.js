@@ -2,7 +2,7 @@ const db = require('../db');
 
 class WarehouseModel {
 
-    //แสดงของทั้งหมดในคลัง
+    //แสดข้อมูลสต็อกสินค้าทั้งหมด #อยู่หน้า AdminAllStock
     static getAllItems() {
         return new Promise((resolve, reject) => {
             const query = `
@@ -18,7 +18,7 @@ class WarehouseModel {
         });
     }
 
-    //แสดงของทั้งหมดในคลังตามประเภท สำหรับพิมพ์
+    //แสดงของทั้งหมดในคลังตามแผนก สำหรับอุปกรณ์พิมพ์
     static getPrinterStockBySection(sectionId) {
         return new Promise((resolve, reject) => {
             const query = `
@@ -36,7 +36,7 @@ class WarehouseModel {
         });
     }
 
-    //แสดงของทั้งหมดในคลังตามประเภท  สำหรับอุปกรณทั่วไป
+    //แสดงของทั้งหมดในคลังตามประเภท  สำหรับอุปกรณ์ทั่วไป
     static getGeneralItems() {
         return new Promise((resolve, reject) => {
             const query = `

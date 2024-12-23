@@ -5,6 +5,7 @@ window.addEventListener('DOMContentLoaded', event => {
     }
 });
 
+// ฟังก์ชันสำหรับการเรียงลำดับตาราง
 function sortTable(columnIndex) {
     const table = document.querySelector("table tbody");
     const rows = Array.from(table.rows);

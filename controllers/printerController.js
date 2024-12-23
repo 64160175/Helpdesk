@@ -1,6 +1,7 @@
 const PrinterModel = require('../models/printerModel');
 
 class PrinterController {
+    // แสดงหน้าแสดงรายการเครื่องพิมพ์ทั้งหมด พร้อมส่งข้อมูลไปยัง template #อยู่หน้า AdminPrinter
     static async getAllPrinters(req, res) {
         try {
             const printers = await PrinterModel.getAllPrinters();
@@ -13,7 +14,7 @@ class PrinterController {
             res.status(500).json({ success: false, message: 'Internal server error' });
         }
     }
-
+    // เพิ่มเครื่องพิมพ์ใหม่ พร้อมบันทึกข้อมูลและเปลี่ยนเส้นทางกลับไปยังหน้า AdminPrinter #อยู่หน้า AdminPrinter
     static async addPrinter(req, res) {
         try {
             const { printerBrand } = req.body;
@@ -31,6 +32,7 @@ class PrinterController {
         }
     }
 
+    // ลบเครื่องพิมพ์ (เปลี่ยนสถานะเป็น inactive) และส่งข้อความแจ้งผลการดำเนินการกลับ #อยู่หน้า AdminPrinter
     static async deletePrinter(req, res) {
         const printerId = req.params.id; // Assuming you'll use a route like /delete-printer/:id
 
@@ -47,6 +49,7 @@ class PrinterController {
         }
     }
 
+    // เพิ่มเลขที่เครื่องพิมพ์ (serial number) ใหม่ และส่งข้อความแจ้งผลการดำเนินการกลับ #อยู่หน้า AdminPrinter
     static async addPrinterSerial(req, res) {
         try {
             console.log('Received body:', req.body); // Log ข้อมูลที่ได้รับ
@@ -69,6 +72,7 @@ class PrinterController {
         }
     }
 
+    // แสดงหน้าเพิ่มเครื่องพิมพ์ใหม่ พร้อมส่งข้อมูลไปยัง template #อยู่หน้า AdminPrinter 
     static async getAddPrinterPage(req, res) {
         try {
             const printerBrands = await PrinterModel.getAllPrinterBrands();
