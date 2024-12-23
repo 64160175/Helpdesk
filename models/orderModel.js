@@ -199,7 +199,7 @@ class OrderModel {
       WHERE s.id_emp_section = ?
       ORDER BY o.timestamp DESC
     `;
-  
+
     db.query(query, [managerSectionId], (err, results) => {
       if (err) {
         return callback(err, null);
@@ -212,14 +212,25 @@ class OrderModel {
   static updateOrderStatus(orderId, status, callback) {
     const query = 'UPDATE orders SET approve_status = ? WHERE id = ?';
     db.query(query, [status, orderId], (err, results) => {
-        if (err) {
-            console.error('Error updating order status:', err);
-            return callback(err);
-        }
-        callback(null, results);
+      if (err) {
+        console.error('Error updating order status:', err);
+        return callback(err);
+      }
+      callback(null, results);
     });
-}
-  
+  }
+
+  static updateOrderStatus(orderId, status, callback) {
+    const query = 'UPDATE tbl_order SET approve_status = ? WHERE id_order = ?';
+    db.query(query, [status, orderId], (err, results) => {
+      if (err) {
+        console.error('Error updating order status:', err);
+        return callback(err);
+      }
+      callback(null, results);
+    });
+  }
+
 }
 
 module.exports = OrderModel;

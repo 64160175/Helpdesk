@@ -3,8 +3,8 @@ const db = require('../db');
 const OrderModel = require('../models/orderModel');
 
 class OrderController {
-    // แสดงหน้า Home ของผู้ใช้งาน โดยดึงข้อมูลคำสั่งซื้อของผู้ใช้งานที่ล็อกอินอยู่ #แสดงหน้า UserHome
-    static getUserHome(req, res) { 
+  // แสดงหน้า Home ของผู้ใช้งาน โดยดึงข้อมูลคำสั่งซื้อของผู้ใช้งานที่ล็อกอินอยู่ #แสดงหน้า UserHome
+  static getUserHome(req, res) {
     const userId = req.session.user.id_user;
 
     OrderModel.getUserOrders(userId, (err, orders) => {
@@ -20,41 +20,41 @@ class OrderController {
     });
   }
 
-    // ดึงรายละเอียดคำสั่งซื้อเฉพาะรายการ โดยรวมถึงรายการสินค้าที่เกี่ยวข้อง พร้อมส่งข้อมูลไปยัง template #แสดงหน้า OrderDetails
-    static getOrderDetails(req, res) { 
-      const orderId = req.params.id_order;
-  
-      OrderModel.getOrderById(orderId, (err, order) => {
+  // ดึงรายละเอียดคำสั่งซื้อเฉพาะรายการ โดยรวมถึงรายการสินค้าที่เกี่ยวข้อง พร้อมส่งข้อมูลไปยัง template #แสดงหน้า OrderDetails
+  static getOrderDetails(req, res) {
+    const orderId = req.params.id_order;
+
+    OrderModel.getOrderById(orderId, (err, order) => {
+      if (err) {
+        console.error('Error fetching order:', err);
+        return res.status(500).send('เกิดข้อผิดพลาดในการดึงข้อมูล');
+      }
+      if (!order) {
+        return res.status(404).send('ไม่พบคำสั่ง');
+      }
+
+      OrderModel.getOrderItemsByOrderId(orderId, (err, orderItems) => {
         if (err) {
-          console.error('Error fetching order:', err);
-          return res.status(500).send('เกิดข้อผิดพลาดในการดึงข้อมูล');
+          console.error('Error fetching order items:', err);
+          return res.status(500).send('เกิดข้อผิดพลาดในการดึงข้อมูลรายการสินค้า');
         }
-        if (!order) {
-          return res.status(404).send('ไม่พบคำสั่ง');
-        }
-  
-        OrderModel.getOrderItemsByOrderId(orderId, (err, orderItems) => {
-          if (err) {
-            console.error('Error fetching order items:', err);
-            return res.status(500).send('เกิดข้อผิดพลาดในการดึงข้อมูลรายการสินค้า');
-          }
-  
-          const sectionName = req.session.user.section_name || 'Default Section';
-  
-          res.render('orderDetails', { 
-            order: order, 
-            orderDetails: orderItems, 
-            sectionName: sectionName, 
-            user: req.session.user
-          });
+
+        const sectionName = req.session.user.section_name || 'Default Section';
+
+        res.render('orderDetails', {
+          order: order,
+          orderDetails: orderItems,
+          sectionName: sectionName,
+          user: req.session.user
         });
       });
-    }
+    });
+  }
 
 
 
   // สร้างคำสั่งซื้อใหม่จากข้อมูลที่ผู้ใช้กรอก พร้อมส่งอีเมลแจ้งเตือน และตอบกลับเมื่อสร้างสำเร็จ #แสดงหน้า UserRequest
-  static createOrder(req, res) { 
+  static createOrder(req, res) {
     const { requesterName, requesterEmail, additionalNotes, selectedItems } = req.body;
     const userId = req.session.user.id_user;
 
@@ -191,11 +191,11 @@ class OrderController {
   }
 
 
-   // แสดงรายการคำขอเบิกอุปกรณ์ทั้งหมดของแผนกที่ผู้จัดการดูแล พร้อมข้อมูลผู้ใช้และแผนก #แสดงหน้า ManagerRequestList
-   static getManagerRequestList(req, res) {
+  // แสดงรายการคำขอเบิกอุปกรณ์ทั้งหมดของแผนกที่ผู้จัดการดูแล พร้อมข้อมูลผู้ใช้และแผนก #แสดงหน้า ManagerRequestList
+  static getManagerRequestList(req, res) {
     const managerId = req.session.user.id_user;
     const managerSectionId = req.session.user.id_emp_section;
-  
+
     // ดึงข้อมูลแผนกของผู้ใช้
     const sectionQuery = 'SELECT section FROM tbl_emp_section WHERE id_emp_section = ?';
     db.query(sectionQuery, [managerSectionId], (err, sectionResults) => {
@@ -204,16 +204,16 @@ class OrderController {
         return res.status(500).send('Internal Server Error');
       }
       const sectionName = sectionResults[0] ? sectionResults[0].section : 'ไม่ระบุ';
-  
+
       // ดึงข้อมูลคำขอ
       OrderModel.getOrdersByManagerSection(managerSectionId, (err, orders) => {
         if (err) {
           console.error('Error fetching manager orders:', err);
           return res.status(500).send('Internal Server Error');
         }
-    
+
         console.log('orders:', JSON.stringify(orders, null, 2)); // เพิ่มบรรทัดนี้
-    
+
         res.render('ManagerRequestList', {
           user: req.session.user,
           sectionName: sectionName,
@@ -222,6 +222,31 @@ class OrderController {
       });
     });
   }
+
+
+  static approveRequestByManager(req, res) {
+    const orderId = req.body.orderId;
+    const action = req.body.action;
+    let approveStatus;
+
+    if (action === 'approve') {
+      approveStatus = 'mgr_approve';
+    } else if (action === 'deny') {
+      approveStatus = 'mgr_deny';
+    } else {
+      return res.status(400).send('Invalid action');
+    }
+
+    OrderModel.updateOrderStatus(orderId, approveStatus, (err, results) => {
+      if (err) {
+        console.error('Error updating order status:', err);
+        return res.status(500).send('Internal Server Error');
+      }
+      res.redirect('/ManagerRequestList');
+    });
+  }
+
+
 
 }
 

@@ -7,4 +7,6 @@ router.post('/createOrder', isLoggedIn, checkUserType('user'), OrderController.c
 router.get('/orderDetails/:id_order', OrderController.getOrderDetails);
 router.get('/ManagerRequestList', isLoggedIn, checkUserType('manager'), OrderController.getManagerRequestList);
 
+router.post('/approveRequestByManager', isLoggedIn, checkUserType('manager'), OrderController.approveRequestByManager);
+
 module.exports = router;
