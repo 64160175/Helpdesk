@@ -1,6 +1,6 @@
 const db = require('../db');
 
-class OrderModel {
+class orderModel {
   static getUserOrders(userId, callback) {
     const query = `
       SELECT id_order, o_name, approve_status, timestamp
@@ -181,6 +181,30 @@ class OrderModel {
       });
     });
   }
+
+
+
+  //MGR แสดง request ทั้งหมด
+  static getOrdersByManagerSection(managerSectionId, callback) {
+    const query = `
+      SELECT o.id_order, o.timestamp, o.approve_status, o.o_name,
+             s.section as section_name
+      FROM tbl_order o
+      JOIN tbl_user u ON o.id_user = u.id_user
+      JOIN tbl_emp_section s ON u.id_emp_section = s.id_emp_section
+      WHERE s.id_emp_section = ?
+      ORDER BY o.timestamp DESC
+    `;
+  
+    db.query(query, [managerSectionId], (err, results) => {
+      if (err) {
+        return callback(err, null);
+      }
+      callback(null, results);
+    });
+  }
+
+  
 }
 
-module.exports = OrderModel;
+module.exports = orderModel;

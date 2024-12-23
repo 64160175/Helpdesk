@@ -66,94 +66,16 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>2023/10/01</td>
-                                        <td>สมชาย</td>
-                                        <td>การเงิน</td>
-                                        <td>รอดำเนินการ</td>
-                                        <td><a href="#">คลิก</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>2023/10/02</td>
-                                        <td>สมหญิง</td>
-                                        <td>การตลาด</td>
-                                        <td>อนุมัติแล้ว</td>
-                                        <td><a href="#">คลิก</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>2023/10/03</td>
-                                        <td>สมปอง</td>
-                                        <td>ไอที</td>
-                                        <td>ปฏิเสธ</td>
-                                        <td><a href="#">คลิก</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td>4</td>
-                                        <td>2023/10/04</td>
-                                        <td>สมศรี</td>
-                                        <td>บุคคล</td>
-                                        <td>รอดำเนินการ</td>
-                                        <td><a href="#">คลิก</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td>5</td>
-                                        <td>2023/10/05</td>
-                                        <td>สมหมาย</td>
-                                        <td>บัญชี</td>
-                                        <td>อนุมัติแล้ว</td>
-                                        <td><a href="#">คลิก</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td>6</td>
-                                        <td>2023/10/06</td>
-                                        <td>สมจิตร</td>
-                                        <td>การเงิน</td>
-                                        <td>รอดำเนินการ</td>
-                                        <td><a href="#">คลิก</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td>7</td>
-                                        <td>2023/10/07</td>
-                                        <td>สมใจ</td>
-                                        <td>การตลาด</td>
-                                        <td>ปฏิเสธ</td>
-                                        <td><a href="#">คลิก</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td>8</td>
-                                        <td>2023/10/08</td>
-                                        <td>สมศักดิ์</td>
-                                        <td>ไอที</td>
-                                        <td>อนุมัติแล้ว</td>
-                                        <td><a href="#">คลิก</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td>9</td>
-                                        <td>2023/10/09</td>
-                                        <td>สมฤดี</td>
-                                        <td>บุคคล</td>
-                                        <td>รอดำเนินการ</td>
-                                        <td><a href="#">คลิก</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td>10</td>
-                                        <td>2023/10/10</td>
-                                        <td>สมพงษ์</td>
-                                        <td>บัญชี</td>
-                                        <td>อนุมัติแล้ว</td>
-                                        <td><a href="#">คลิก</a></td>
-                                    </tr>
-                                    <tr>
-                                        <td>11</td>
-                                        <td>2023/10/10</td>
-                                        <td>สมพงษ์</td>
-                                        <td>บัญชี</td>
-                                        <td>อนุมัติแล้ว</td>
-                                        <td><a href="#">คลิก</a></td>
-                                    </tr>
+                                    <% orders.forEach((order, index) => { %>
+                                        <tr>
+                                            <td><%= index + 1 %></td>
+                                            <td><%= new Date(order.timestamp).toLocaleString('th-TH') %></td>
+                                            <td><%= order.o_name %></td>
+                                            <td><%= order.section_name %></td>
+                                            <td><%= order.approve_status || 'รอดำเนินการ' %></td>
+                                            <td><a href="/orderDetails/<%= order.id_order %>">คลิก</a></td>
+                                        </tr>
+                                    <% }); %>
                                 </tbody>
                             </table>
                         </div>
