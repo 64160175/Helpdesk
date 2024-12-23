@@ -10,7 +10,7 @@
     <title>ManagerRequestList</title>
     <link href="/css/style.css" rel="stylesheet">
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
-    
+
     <!-- ฟอนต์ Prompt -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -66,33 +66,25 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <% orders.forEach((order, index) => { %>
-                                        <tr>
-                                            <td><%= index + 1 %></td>
-                                            <td><%= new Date(order.timestamp).toLocaleString('th-TH') %></td>
-                                            <td><%= order.o_name %></td>
-                                            <td><%= order.section_name %></td>
-                                            <td>
-                                                <% let badgeClass, statusText;
-                                                if (order.approve_status === null) {
-                                                    badgeClass = 'bg-warning';
-                                                    statusText = 'รอดำเนินการ';
-                                                } else if (order.approve_status === 'mgr_approve') {
-                                                    badgeClass = 'bg-success';
-                                                    statusText = 'อนุมัติแล้ว';
-                                                } else if (order.approve_status === 'mgr_deny') {
-                                                    badgeClass = 'bg-danger';
-                                                    statusText = 'ปฏิเสธ';
-                                                } %>
-                                                <span class="badge <%= badgeClass %>"><%= statusText %></span>
-                                            </td>
-                                            <td class="text-center">
-                                                <a href="/orderDetails/<%= order.id_order %>" class="btn btn-primary btn-sm">
-                                                    <i class="fas fa-info-circle me-1"></i> กดเพื่อดำเนินการต่อ
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    <% }); %>
+                                    <% orders.forEach((order, index) => { 
+                                        if (order.approve_status === null) { %>
+                                            <tr>
+                                                <td><%= index + 1 %></td>
+                                                <td><%= new Date(order.timestamp).toLocaleString('th-TH') %></td>
+                                                <td><%= order.o_name %></td>
+                                                <td><%= order.section_name %></td>
+                                                <td>
+                                                    <span class="badge bg-warning">รอดำเนินการ</span>
+                                                </td>
+                                                <td class="text-center">
+                                                    <a href="/orderDetails/<%= order.id_order %>"
+                                                        class="btn btn-primary btn-sm">
+                                                        <i class="fas fa-info-circle me-1"></i> กดเพื่อดำเนินการต่อ
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        <% } 
+                                    }); %>
                                 </tbody>
                             </table>
                         </div>
@@ -101,6 +93,66 @@
             </main>
         </div>
     </div>
+
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid px-4">
+                <h4 class="mt-4">คำร้องขอที่ดำเนินการแล้ว</h4>
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <i class="fas fa-tasks me-1"></i>
+                        รายการคำขอ
+                    </div>
+                    <div class="card-body">
+                        <table id="requestTable1" class="table table-bordered table-hover">
+                            <thead class="light-gray-bg">
+                                <tr>
+                                    <th>ลำดับ <i class="fas fa-sort float-end"></i></th>
+                                    <th>วันที่เบิก <i class="fas fa-sort float-end"></i></th>
+                                    <th>ผู้ขอเบิก <i class="fas fa-sort float-end"></i></th>
+                                    <th>แผนก <i class="fas fa-sort float-end"></i></th>
+                                    <th>สถานะการขอเบิก <i class="fas fa-sort float-end"></i></th>
+                                    <th>รายละเอียด</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% orders.forEach((order, index) => {
+                                    if (order.approve_status === 'mgr_approve' || order.approve_status === 'mgr_deny') { %>
+                                        <tr>
+                                            <td><%= index + 1 %></td>
+                                            <td><%= new Date(order.timestamp).toLocaleString('th-TH') %></td>
+                                            <td><%= order.o_name %></td>
+                                            <td><%= order.section_name %></td>
+                                            <td>
+                                                <% let badgeClass, statusText;
+                                                if (order.approve_status === 'mgr_approve') {
+                                                    badgeClass = 'bg-success';
+                                                    statusText = 'อนุมัติแล้ว';
+                                                } else if (order.approve_status === 'mgr_deny') {
+                                                    badgeClass = 'bg-danger';
+                                                    statusText = 'ปฏิเสธ';
+                                                } %>
+                                                <span class="badge <%= badgeClass %>">
+                                                    <%= statusText %>
+                                                </span>
+                                            </td>
+                                            <td class="text-center">
+                                                <a href="/orderDetails/<%= order.id_order %>" class="btn btn-primary btn-sm">
+                                                    <i class="fas fa-info-circle me-1"></i> กดเพื่อดูรายละเอียด
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    <% } 
+                                }); %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    
 
     <!-- SCRIPT -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"

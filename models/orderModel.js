@@ -186,8 +186,6 @@ class OrderModel {
     });
   }
 
-
-
   // แสดง request จาก User ที่ยังไม่อนุมัติ #อยู่หน้า ManagerHome
   static getOrdersByManagerSection(managerSectionId, callback) {
     const query = `
@@ -208,18 +206,7 @@ class OrderModel {
     });
   }
 
-  // อนุมัติคำสั่งซื้อ #อยู่หน้า OrderDetails
-  static updateOrderStatus(orderId, status, callback) {
-    const query = 'UPDATE orders SET approve_status = ? WHERE id = ?';
-    db.query(query, [status, orderId], (err, results) => {
-      if (err) {
-        console.error('Error updating order status:', err);
-        return callback(err);
-      }
-      callback(null, results);
-    });
-  }
-
+  // อนุมัติคำสั่งซื้อ #อยู่หน้า OrderDetails ของ Manager
   static updateOrderStatus(orderId, status, callback) {
     const query = 'UPDATE tbl_order SET approve_status = ? WHERE id_order = ?';
     db.query(query, [status, orderId], (err, results) => {

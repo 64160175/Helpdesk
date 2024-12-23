@@ -5,6 +5,14 @@ window.addEventListener('DOMContentLoaded', event => {
     }
 });
 
+window.addEventListener('DOMContentLoaded', event => {
+    const requestTable1 = document.getElementById('requestTable1');
+    if (requestTable1) {
+        new simpleDatatables.DataTable(requestTable1);
+    }
+});
+
+
 // ฟังก์ชันสำหรับการเรียงลำดับตาราง
 function sortTable(columnIndex) {
     const table = document.querySelector("table tbody");

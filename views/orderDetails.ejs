@@ -129,7 +129,7 @@
                                 </div>
                             </div>
                         </div>
-                        <% if (user && user.u_type === 'manager') { %>
+                        <% if (user && user.u_type === 'manager' && order.approve_status === null) { %>
                             <div class="card-footer bg-light">
                                 <div class="d-flex justify-content-center">
                                     <form action="/approveRequestByManager" method="POST" class="me-2">

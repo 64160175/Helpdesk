@@ -212,7 +212,6 @@ class OrderController {
           return res.status(500).send('Internal Server Error');
         }
 
-        console.log('orders:', JSON.stringify(orders, null, 2)); // เพิ่มบรรทัดนี้
 
         res.render('ManagerRequestList', {
           user: req.session.user,
