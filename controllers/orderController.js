@@ -1,12 +1,12 @@
 const nodemailer = require('nodemailer');
 const db = require('../db');
-const orderModel = require('../models/orderModel');
+const OrderModel = require('../models/orderModel');
 
-class orderController {
+class OrderController {
   static getUserHome(req, res) {
     const userId = req.session.user.id_user;
 
-    orderModel.getUserOrders(userId, (err, orders) => {
+    OrderModel.getUserOrders(userId, (err, orders) => {
       if (err) {
         console.error('Error fetching user orders:', err);
         return res.status(500).send('Internal Server Error');
@@ -22,7 +22,7 @@ class orderController {
   static getOrderDetails(req, res) {
     const orderId = req.params.id_order;
 
-    orderModel.getOrderById(orderId, (err, order) => {
+    OrderModel.getOrderById(orderId, (err, order) => {
       if (err) {
         console.error('Error fetching order:', err);
         return res.status(500).send('เกิดข้อผิดพลาดในการดึงข้อมูล');
@@ -31,7 +31,7 @@ class orderController {
         return res.status(404).send('ไม่พบคำสั่งซื้อ');
       }
 
-      orderModel.getOrderItemsByOrderId(orderId, (err, orderItems) => {
+      OrderModel.getOrderItemsByOrderId(orderId, (err, orderItems) => {
         if (err) {
           console.error('Error fetching order items:', err);
           return res.status(500).send('เกิดข้อผิดพลาดในการดึงข้อมูลรายการสินค้า');
@@ -60,7 +60,7 @@ class orderController {
       quantity: item.quantity,
     }));
 
-    orderModel.createOrderWithItems(orderData, orderItems, (err, result) => {
+    OrderModel.createOrderWithItems(orderData, orderItems, (err, result) => {
       if (err) {
         console.error('Error creating order:', err);
         return res.status(500).json({ error: 'Internal Server Error' });
@@ -194,7 +194,7 @@ class orderController {
       const sectionName = sectionResults[0] ? sectionResults[0].section : 'ไม่ระบุ';
   
       // ดึงข้อมูลคำขอ
-      orderModel.getOrdersByManagerSection(managerSectionId, (err, orders) => {
+      OrderModel.getOrdersByManagerSection(managerSectionId, (err, orders) => {
         if (err) {
           console.error('Error fetching manager orders:', err);
           return res.status(500).send('Internal Server Error');
@@ -213,4 +213,4 @@ class orderController {
 
 }
 
-module.exports = orderController;
+module.exports = OrderController;

@@ -48,3 +48,14 @@ ser.js:433:10) {
   index: 0,
   sql: 'INSERT INTO tbl_order (id_user, o_email, o_name, approve_status, reason, timestamp) VALUES (5, NULL, NULL, NULL, NULL, current_timestamp())'
 }
+
+
+orders: [
+  {
+    "id_order": 2,
+    "timestamp": "2024-12-23T01:34:49.000Z",
+    "approve_status": null,
+    "o_name": "กฤษณะ ทองบุญเหลือ",
+    "section_name": "Human Resource & General Affairs"
+  }
+]

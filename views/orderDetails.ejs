@@ -69,9 +69,20 @@
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <strong><i class="fas fa-check-circle me-2"></i>สถานะ:</strong> 
-                                        <span class="fa-fade  badge <%= order.approve_status ? (order.approve_status === 'อนุมัติ' ? 'bg-success' : 'bg-danger') : 'bg-warning' %>">
-                                            <%= order.approve_status ? order.approve_status : 'รอการอนุมัติ' %>
-                                        </span>
+                                        <% 
+                                        let badgeClass, statusText;
+                                        if (order.approve_status === null) {
+                                            badgeClass = 'bg-warning';
+                                            statusText = 'รอดำเนินการ';
+                                        } else if (order.approve_status === 'mgr_approve') {
+                                            badgeClass = 'bg-success';
+                                            statusText = 'อนุมัติแล้ว';
+                                        } else if (order.approve_status === 'mgr_deny') {
+                                            badgeClass = 'bg-danger';
+                                            statusText = 'ปฏิเสธ';
+                                        } 
+                                        %>
+                                        <span class="badge <%= badgeClass %>"><%= statusText %></span>
                                     </div>
                                     <div class="mb-3">
                                         <strong><i class="fas fa-comment me-2"></i>หมายเหตุเพิ่มเติม:</strong> 

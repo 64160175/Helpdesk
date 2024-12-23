@@ -85,10 +85,10 @@
                                                if (order.approve_status === null) {
                                                    badgeClass = 'bg-warning';
                                                    statusText = 'รอดำเนินการ';
-                                               } else if (order.approve_status === 'approved') {
+                                               } else if (order.approve_status === 'mgr_approve') {
                                                    badgeClass = 'bg-success';
                                                    statusText = 'อนุมัติแล้ว';
-                                               } else if (order.approve_status === 'rejected') {
+                                               } else if (order.approve_status === 'mgr_deny') {
                                                    badgeClass = 'bg-danger';
                                                    statusText = 'ปฏิเสธ';
                                                } %>

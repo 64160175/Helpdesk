@@ -1,6 +1,6 @@
 const db = require('../db');
 
-class orderModel {
+class OrderModel {
   static getUserOrders(userId, callback) {
     const query = `
       SELECT id_order, o_name, approve_status, timestamp
@@ -207,4 +207,4 @@ class orderModel {
   
 }
 
-module.exports = orderModel;
+module.exports = OrderModel;
