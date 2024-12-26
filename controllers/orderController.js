@@ -359,8 +359,66 @@ class OrderController {
           to: requesterEmail,
           subject: 'แจ้งเตือน: คำขอเบิกอุปกรณ์ถูกปฏิเสธ',
           html: `
-            <p>คำขอเบิกอุปกรณ์ของคุณถูกปฏิเสธ</p>
-            <p>หากมีข้อสงสัย กรุณาติดต่อแผนก IT</p>
+            <table style="font-family: 'Prompt', Arial, sans-serif; width: 100%; max-width: 600px; margin: 0 auto; border-collapse: separate; border-spacing: 0; border: 2px solid #dc3545; border-radius: 12px; overflow: hidden;">
+              <tr>
+                <td>
+                  <table style="width: 100%; border-collapse: collapse; border: 1px solid #dc3545; border-radius: 8px; overflow: hidden;">
+                    <tr>
+                      <td style="padding: 20px; background: linear-gradient(135deg, #dc3545,rgb(255, 104, 116)); text-align: center;">
+                        <h1 style="color: #ffffff; margin: 0;">แจ้งเตือน: คำขอเบิกอุปกรณ์ถูกปฏิเสธ</h1>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style="padding: 20px; background-color: #fff; font-size: 16px; color: #333;">
+                        <p>เรียน คุณ${requesterName},</p>
+                        <p>คำขอเบิกอุปกรณ์ของคุณได้ถูกปฏิเสธ</p>
+                        <p>รายละเอียด:</p>
+                        <ul>
+                          <li>ชื่อผู้ขอ: <strong>${requesterName}</strong></li>
+                          <li>แผนก: <strong>${requesterDepartment}</strong></li>
+                          <li>อีเมล: <strong>${requesterEmail}</strong></li>
+                        </ul>
+                        <p>หากคุณมีข้อสงสัยเกี่ยวกับการปฏิเสธนี้ กรุณาติดต่อผู้จัดการของคุณหรือแผนก IT เพื่อขอข้อมูลเพิ่มเติม</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style="padding: 20px; background-color: #f8f9fa;">
+                        <h3 style="color: #dc3545; border-bottom: 2px solid #dc3545; padding-bottom: 10px;">รายการอุปกรณ์ที่ขอเบิก:</h3>
+                        <table style="width: 100%; border-collapse: separate; border-spacing: 0; border: 1px solid #f8f9fa; border-radius: 8px; overflow: hidden;">
+                          <thead>
+                            <tr style="background: linear-gradient(135deg, #dc3545, rgb(255, 104, 116));">
+                              <th style="padding: 12px; color: white; text-align: left;">อุปกรณ์</th>
+                              <th style="padding: 12px; color: white; text-align: left;">ประเภท</th>
+                              <th style="padding: 12px; color: white; text-align: center;">จำนวน</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            ${orderDetails.map((item, index) => `
+                              <tr style="background-color: ${index % 2 === 0 ? '#fff5f5' : '#ffffff'};">
+                                <td style="padding: 12px; border-top: 1px solid #dee2e6;">${item.i_brand_name}</td>
+                                <td style="padding: 12px; border-top: 1px solid #dee2e6;">${item.type}</td>
+                                <td style="padding: 12px; border-top: 1px solid #dee2e6; text-align: center;">${item.quantity} ชิ้น</td>
+                              </tr>
+                            `).join('')}
+                          </tbody>
+                        </table>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style="padding: 20px; text-align: center; background-color: #f8f9fa;">
+                        <a href="http://localhost:3000" style="font-size: 16px; display: inline-block; padding: 12px 24px; background-color: #dc3545; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; transition: background-color 0.3s;">ดูรายละเอียดคำขอ</a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style="padding: 18px; text-align: center; background-color: #dc3545; color: #ffffff; font-size: 14px;">
+                        อีเมลนี้เป็นการแจ้งเตือนอัตโนมัติ กรุณาอย่าตอบกลับ 
+                        หากมีข้อสงสัย กรุณาติดต่อแผนก IT
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
           `,
         };
       } else {
