@@ -222,7 +222,7 @@ class OrderController {
     });
   }
 
-
+  // ดึงข้อมูลคำขอทั้งหมดของแผนกที่ผู้จัดการดูแล พร้อมข้อมูลผู้ใช้และแผนก #แสดงหน้า ManagerRequestList
   static approveRequestByManager(req, res) {
     const orderId = req.body.orderId;
     const action = req.body.action;
@@ -245,6 +245,7 @@ class OrderController {
     });
   }
 
+  // การจัดการการอนุมัติคำขอของผู้จัดการ #แสดงหน้า ManagerRequestList
   static handleRequestApproval(req, res) {
     const { orderId, action } = req.body;
   
@@ -281,10 +282,8 @@ class OrderController {
           user: '64160175@go.buu.ac.th',
           pass: 'qlsy gyps ocno xnup',
         },
-        logger: true,
-        debug: true,
       });
-
+      // ส่งอีเมลแจ้งเตือนถึงผู้ขอเมื่อคำขอถูกอนุมัติหรือปฏิเสธ 
       let mailOptions;
       if (action === 'approve') {
         mailOptions = {
@@ -319,7 +318,7 @@ class OrderController {
                           <thead>
                             <tr style="background: linear-gradient(135deg, #0056b3, #007bff);">
                               <th style="padding: 12px; color: white; text-align: left;">อุปกรณ์</th>
-                              <th style="padding: 12px; color: white; text-align: left;">ประเภท</th>
+                              <th style="padding: 12px; color: white; text-align: left;">ประเภท/สี</th>
                               <th style="padding: 12px; color: white; text-align: center;">จำนวน</th>
                             </tr>
                           </thead>
@@ -388,7 +387,7 @@ class OrderController {
                           <thead>
                             <tr style="background: linear-gradient(135deg, #dc3545, rgb(255, 104, 116));">
                               <th style="padding: 12px; color: white; text-align: left;">อุปกรณ์</th>
-                              <th style="padding: 12px; color: white; text-align: left;">ประเภท</th>
+                              <th style="padding: 12px; color: white; text-align: left;">ประเภท/สี</th>
                               <th style="padding: 12px; color: white; text-align: center;">จำนวน</th>
                             </tr>
                           </thead>
@@ -436,6 +435,8 @@ class OrderController {
       });
     });
   }
+
+
 
 
 }
