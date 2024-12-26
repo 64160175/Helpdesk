@@ -1,9 +1,10 @@
+const db = require('../db');
 const express = require('express');
 const router = express.Router();
-
-const db = require('../db');
-
 const { isLoggedIn, checkUserType } = require('../middlewares/authMiddleware');
+const OrderController = require('../controllers/orderController');
+
+router.post('/approveRequestByManager', isLoggedIn, checkUserType('manager'), OrderController.approveRequestByManager);
 
 router.get('/ManagerRequestList', isLoggedIn, checkUserType('manager'), (req, res) => {
     // ดึงข้อมูลแผนกของผู้ใช้
@@ -20,7 +21,5 @@ router.get('/ManagerRequestList', isLoggedIn, checkUserType('manager'), (req, re
         });
     });
 });
-
-
 
 module.exports = router;
