@@ -247,28 +247,32 @@ class OrderController {
 
   static handleRequestApproval(req, res) {
     const { orderId, action } = req.body;
-
+  
     const query = `
-      SELECT o.o_name, o.o_email, o.approve_status, oi.i_brand_name, oi.type, oi.quantity
+      SELECT o.o_name, o.o_email, o.approve_status, oi.i_brand_name, oi.type, oi.quantity, u.id_emp_section, es.section
       FROM tbl_order o
       JOIN tbl_order_item oi ON o.id_order = oi.id_order
+      JOIN tbl_user u ON o.id_user = u.id_user
+      JOIN tbl_emp_section es ON u.id_emp_section = es.id_emp_section
       WHERE o.id_order = ?
     `;
-
+  
     db.query(query, [orderId], (err, results) => {
       if (err) {
         console.error('Error retrieving order details:', err);
         return res.status(500).send('Internal Server Error');
       }
-
+  
       if (results.length === 0) {
         return res.status(404).send('Order not found');
       }
-
+  
       const orderDetails = results;
       const requesterEmail = orderDetails[0].o_email;
       const requesterName = orderDetails[0].o_name;
-
+      const requesterDepartment = orderDetails[0].section;
+  
+  
       const transporter = nodemailer.createTransport({
         host: 'smtp.gmail.com',
         port: 587,
@@ -288,46 +292,62 @@ class OrderController {
           to: '64160175@go.buu.ac.th', // Admin email address
           subject: 'แจ้งเตือน: คำขอเบิกอุปกรณ์ได้รับการอนุมัติจากผู้จัดการ',
           html: `
-            <table width="100%" cellpadding="0" cellspacing="0" style="max-width: 600px; margin: 0 auto; font-family: Arial, sans-serif;">
+            <table style="font-family: 'Prompt', Arial, sans-serif; width: 100%; max-width: 600px; margin: 0 auto; border-collapse: separate; border-spacing: 0; border: 2px solid #0056b3; border-radius: 12px; overflow: hidden;">
               <tr>
-                <td style="background-color: #0056b3; padding: 20px; text-align: center;">
-                  <h1 style="color: #ffffff; margin: 0;">แจ้งเตือนการอนุมัติคำขอเบิกอุปกรณ์</h1>
-                </td>
-              </tr>
-              <tr>
-                <td style="padding: 20px; background-color: #f8f9fa;">
-                  <p style="font-size: 16px; color: #333;">คำขอเบิกอุปกรณ์จาก <strong>${requesterName}</strong> ได้รับการอนุมัติจากผู้จัดการแล้ว</p>
-                  <h3 style="color: #0056b3; border-bottom: 2px solid #0056b3; padding-bottom: 10px;">รายละเอียดคำขอ:</h3>
-                  <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
-                    <thead>
-                      <tr style="background-color: #0056b3; color: white;">
-                        <th style="padding: 10px; text-align: left;">อุปกรณ์</th>
-                        <th style="padding: 10px; text-align: left;">ประเภท</th>
-                        <th style="padding: 10px; text-align: center;">จำนวน</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      ${orderDetails.map((item, index) => `
-                        <tr style="background-color: ${index % 2 === 0 ? '#f2f2f2' : '#ffffff'};">
-                          <td style="padding: 10px;">${item.i_brand_name}</td>
-                          <td style="padding: 10px;">${item.type}</td>
-                          <td style="padding: 10px; text-align: center;">${item.quantity} ชิ้น</td>
-                        </tr>
-                      `).join('')}
-                    </tbody>
+                <td>
+                  <table style="width: 100%; border-collapse: collapse; border: 1px solid #0056b3; border-radius: 8px; overflow: hidden;">
+                    <tr>
+                      <td style="padding: 20px; background: linear-gradient(135deg, #0056b3, #007bff); text-align: center;">
+                        <h1 style="color: #ffffff; margin: 0;">แจ้งเตือนการอนุมัติคำขอเบิกอุปกรณ์</h1>
+                      </td>
+                    </tr>
+                    <tr>
+                    <td style="padding: 20px; background-color: #f8f9fa; font-size: 16px; color: #333;">
+                      <p>
+                        คำขอเบิกอุปกรณ์จาก <strong>${requesterName}</strong>
+                      </p>
+                      <p>แผนก: <strong>${requesterDepartment}</strong></p>
+                      <p>อีเมล: <strong>${requesterEmail}</strong></p>
+                      <p>ได้รับการอนุมัติจากผู้จัดการแล้ว</p>
+                    </td>
+                    
+                    </tr>
+                    <tr>
+                      <td style="padding: 20px; background-color: #f8f9fa;">
+                        <h3 style="color: #0056b3; border-bottom: 2px solid #0056b3; padding-bottom: 10px;">รายละเอียดคำขอ:</h3>
+                        <table style="width: 100%; border-collapse: separate; border-spacing: 0; border: 1px solid #f8f9fa; border-radius: 8px; overflow: hidden;">
+                          <thead>
+                            <tr style="background: linear-gradient(135deg, #0056b3, #007bff);">
+                              <th style="padding: 12px; color: white; text-align: left;">อุปกรณ์</th>
+                              <th style="padding: 12px; color: white; text-align: left;">ประเภท</th>
+                              <th style="padding: 12px; color: white; text-align: center;">จำนวน</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            ${orderDetails.map((item, index) => `
+                              <tr style="background-color: ${index % 2 === 0 ? '#fffffa' : '#ffffff'};">
+                                <td style="padding: 12px; border-top: 1px solid #dee2e6;">${item.i_brand_name}</td>
+                                <td style="padding: 12px; border-top: 1px solid #dee2e6;">${item.type}</td>
+                                <td style="padding: 12px; border-top: 1px solid #dee2e6; text-align: center;">${item.quantity} ชิ้น</td>
+                              </tr>
+                            `).join('')}
+                          </tbody>
+                        </table>
+                        <p style="font-size: 16px; color: #333; margin-top: 20px;">กรุณาดำเนินการจัดเตรียมอุปกรณ์ตามรายการข้างต้น</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style="padding: 20px; text-align: center; background-color: #f8f9fa;">
+                        <a href="http://localhost:3000" style="font-size: 16px; display: inline-block; padding: 12px 24px; background-color: #28a745; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; transition: background-color 0.3s;">ดูรายการคำขอทั้งหมด</a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style="padding: 18px; text-align: center; background-color: #0056b3; color: #ffffff; font-size: 14px;">
+                        อีเมลนี้เป็นการแจ้งเตือนอัตโนมัติ กรุณาอย่าตอบกลับ<br>
+                        หากมีข้อสงสัย กรุณาติดต่อแผนก IT
+                      </td>
+                    </tr>
                   </table>
-                  <p style="font-size: 16px; color: #333; margin-top: 20px;">กรุณาดำเนินการจัดเตรียมอุปกรณ์ตามรายการข้างต้น</p>
-                </td>
-              </tr>
-              <tr>
-                <td style="padding: 20px; text-align: center; background-color: #f8f9fa;">
-                  <a href="http://localhost:3000/AdminRequestList" style="font-size: 16px; display: inline-block; padding: 12px 24px; background-color: #28a745; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">ดูรายการคำขอทั้งหมด</a>
-                </td>
-              </tr>
-              <tr>
-                <td style="padding: 20px; text-align: center; background-color: #0056b3; color: #ffffff; font-size: 14px;">
-                  อีเมลนี้เป็นการแจ้งเตือนอัตโนมัติ กรุณาอย่าตอบกลับ<br>
-                  หากมีข้อสงสัย กรุณาติดต่อแผนก IT
                 </td>
               </tr>
             </table>
